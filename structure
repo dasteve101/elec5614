@@ -1,0 +1,23 @@
+Overview of the system:
+
+Simulate a hydo dam scheme.
+
+Multiple dams =>
+Moving water downhill makes electricity
+Moving it uphill take energy
+
+Must supply water and power
+Demand for water varies
+Demand for power varies
+
+Additional water flowing into other dams varies (rivers)
+
+Soft requirement for water flowing downstream
+=> prefer not too much (flooding) and not too little (river dries up)
+
+Mechanism:
+Generator or Pump
+Assume linear relationship => p = aw + b 
+p = power generated, w = litres/sec
+
+
