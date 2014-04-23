@@ -1,60 +1,57 @@
 
+public class Dam {
+	private int count = 0;
+	private float capacity = 0;
+	private float level = 0;
+	private River outputRiver;
 
-public class Dam{
-    private int count = 0;
-    private float capacity = 0;
-    private float level = 0;
-    private River outputRiver;
-
-    public Dam(int count, float capacity, float initialLevel, River myRiver){
-	this.count = count;
-	this.capacity = capacity;
-	this.level = initialLevel;
-	this.outputRiver = myRiver;
-    }
-
-    public boolean inputWater(float waterIn){
-	if( level + waterIn < capacity){
-	    level += waterIn;
-	    return true;
+	public Dam(int count, float capacity, float initialLevel, River myRiver) {
+		this.count = count;
+		this.capacity = capacity;
+		this.level = initialLevel;
+		this.outputRiver = myRiver;
 	}
-	else{
-	    float excess = level + waterIn - capacity;
-	    // TODO: send the excess water down the river
-	    return false;
+
+	public boolean inputWater(float waterIn) {
+		if (level + waterIn < capacity) {
+			level += waterIn;
+			return true;
+		} else {
+			float excess = level + waterIn - capacity;
+			// TODO: send the excess water down the river
+			return false;
+		}
 	}
-    }
 
-    public boolean outputWater(float waterOut){
-	if(level > waterOut){
-	    level = level - waterOut;
-	    return true;
+	public boolean outputWater(float waterOut) {
+		if (level > waterOut) {
+			level = level - waterOut;
+			return true;
+		} else {
+			level = 0;
+			// set Dry flag?
+			return false;
+		}
 	}
-	else{
-	    level = 0;
-	    // set Dry flag?
-	    return false;
+
+	public float getLevel() {
+		return level;
 	}
-    }
 
-    public float getLevel(void){
-	return level;
-    }
+	public float getCapacity() {
+		return capacity;
+	}
 
-    public float getCapacity(void){
-	return capacity;
-    }
+	public float getRemaining() {
+		return (capacity - level);
+	}
 
-    public float getRemaining(void){
-	return (capacity - level);
-    }
+	public float getPercentage() {
+		return (level / capacity) * 100;
+	}
 
-    public float getPercentage(void){
-	return (level/capacity)*100;
-    }
-
-    public River getOutputRiver(void){
-	return outputRiver;
-    }
+	public River getOutputRiver() {
+		return outputRiver;
+	}
 
 }
