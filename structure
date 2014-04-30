@@ -1,6 +1,6 @@
 Overview of the system:
 
-Simulate a hydo dam scheme.
+Simulate a hydro dam scheme.
 
 Multiple dams =>
 Moving water downhill makes electricity
@@ -20,4 +20,32 @@ Generator or Pump
 Assume linear relationship => p = aw + b 
 p = power generated, w = litres/sec
 
+-------------------------------------------------------------
+## Chris' addition.
+
+- The system will simulate a network of interconnected dams.
+
+- Various 'demands' are placed on the dam network in the form of water and power demand.
+
+- Water demand is met by transporting water from one dam to another dam. The second (receiving) dam 
+is at a higher altitude than the first (source) dam. This requires an input of energy into the system.
+
+- Power demand is met by transporting water from one dam to another dam. The second (receiving) dam
+is at a lower altitude that the first (source) dam. This requires the transportation of water through 
+a generator to generate electricity.
+
+- Depending on where the dam is situated in the network, the water a dam receives comes from 
+either: another dam, rain, river/s, or a mixutre of everything previously mentioned.
+
+- For the transportation of water (from a lower altitude to a higher altitude), a pump is used.
+
+- For the transportation of water (from a higher altitude to a lower altitude) to meet power 
+demands, a generator is used.
+
+- For all the calculations invloving the transportation of water, the following equation shall be assumed:
+p = aw + b
+where p = power generated, w = litres/sec.
+
+- As a soft requirement, the water flowing through a river must be controlled. This is done to prevent
+flooding (too much water flow) and prevent the river drying up (too little water flow).
 
