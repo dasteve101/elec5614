@@ -1,3 +1,5 @@
+package physicalObjects;
+
 /*
  * This is a dam object.
  * It stores 'capacity' water, it has 'level' of water currently

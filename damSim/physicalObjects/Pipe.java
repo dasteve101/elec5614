@@ -1,3 +1,5 @@
+package physicalObjects;
+
 /*
  * This class implements a pipe between two Connectable objects
  * The pipe has some max power to input into the pump.

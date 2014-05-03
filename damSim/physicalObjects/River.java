@@ -1,3 +1,5 @@
+package physicalObjects;
+
 /*
  * This is the river object. Water flows into it from the dams
  * The river has a 'length' which is how far water flows
