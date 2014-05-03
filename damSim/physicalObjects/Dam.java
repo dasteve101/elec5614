@@ -60,7 +60,7 @@ public class Dam implements Connectable{
     
     public float genPower(float litres){
     	litres = this.waterOut(litres);
-    	if(maxWaterForPwr <= litres)
+    	if(maxWaterForPwr >= litres)
     		return this.wattsperlitre*litres;
     	return this.wattsperlitre*maxWaterForPwr;
     }
