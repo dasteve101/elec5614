@@ -13,7 +13,7 @@ public interface Connectable{
     
     // Send water downstream
     float waterOut(float litres);
-
+    
     // Add water
     void waterIn(float litres);
     

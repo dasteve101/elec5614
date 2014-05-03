@@ -38,13 +38,6 @@ public class River implements Connectable {
     	return flow;
     }
 
-    public boolean setFlow(float newFlow){
-    	flow = newFlow;
-    	if(flow > max || flow < min)
-    		return false;
-    	return 	true;
-    }
-
     public boolean isInDrought(){
     	if( flow < min )
     		return true;

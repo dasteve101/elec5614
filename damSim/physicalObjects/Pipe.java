@@ -9,10 +9,10 @@ public class Pipe{
     private float max = 0;
     private float litresperwatt = 0;
     private boolean pumpBlown = false;
-    private Connectable uphill = null;
-    private Connectable downhill = null;
+    private Dam uphill = null;
+    private Dam downhill = null;
     
-    public Pipe(float max, float coeff, Connectable uphill, Connectable downhill){
+    public Pipe(float max, float coeff, Dam uphill, Dam downhill){
 		this.max = max;
 		this.litresperwatt = coeff;
 		this.uphill = uphill;
@@ -27,12 +27,12 @@ public class Pipe{
 		float litres = watts*litresperwatt;
 		if(up){
 			// check that there is enough water to pump out
-			litres = downhill.waterOut(litres);
+			litres = downhill.pumpOut(litres);
 			uphill.waterIn(litres);
 		}
 		else{
 			// check that there is enough water to pump out
-			litres = uphill.waterOut(litres);
+			litres = uphill.pumpOut(litres);
 			downhill.waterIn(litres);
 		}
 		return litres;
