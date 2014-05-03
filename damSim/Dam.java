@@ -1,18 +1,16 @@
+/*
+ * This is a dam object.
+ * It stores 'capacity' water, it has 'level' of water currently
+ * The count is for an identifier
+ * It must have a downstream where water goes when it overflows
+ */
 public class Dam implements Connectable{
     private int count = 0;
     private float capacity = 0;
     private float level = 0;
     private Connectable downstream;
     private boolean overflowed = false;
-    
-    public Dam(int count, float capacity, float initialLevel){
-    	this.count = count;
-    	this.capacity = capacity;
-    	this.level = initialLevel;
-    	this.downstream = null;
-    	this.overflowed = false;
-    }
-    
+     
     public Dam(int count, float capacity, float initialLevel, Connectable downstream){
     	this.count = count;
     	this.capacity = capacity;
@@ -41,6 +39,7 @@ public class Dam implements Connectable{
     	return (level/capacity)*100;
     }
     
+    // Get the amount of water overflowed from the dam
     public boolean getOverflowed(){
     	return overflowed;
     }
@@ -64,15 +63,14 @@ public class Dam implements Connectable{
 	}
 
 	@Override
-	public void waterOut(float litres) {
+	public float waterOut(float litres) {
 		if(level >= litres){
 			level -= litres;
-			downstream.waterIn(litres);	
+			return litres;	
 		}
-		else{
-			downstream.waterIn(level);
-			level = 0;			
-		}
+		litres = level;
+		level = 0;
+		return litres;
 	}
 
 	@Override

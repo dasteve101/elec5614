@@ -1,7 +1,6 @@
-
 /*
  * This file is used as a standard interface.
- * All overflow water must go somewhere and this is where
+ * All overflow water must go somewhere and this specifies where
  */
 public interface Connectable{
     
@@ -12,7 +11,7 @@ public interface Connectable{
     Connectable getDownstream();
     
     // Send water downstream
-    void waterOut(float litres);
+    float waterOut(float litres);
 
     // Add water
     void waterIn(float litres);

@@ -1,5 +1,11 @@
-
-public class River implements Connectable, Incrementable {
+/*
+ * This is the river object. Water flows into it from the dams
+ * The river has a 'length' which is how far water flows
+ * The flow is a moving average. There is a max (flood) and min (drought)
+ * flow in the river. The river sums in 'tmpSum' the water in for that timestep
+ * and adjusts the flow each time Step.
+ */
+public class River implements Connectable {
     private float max;         // Max L/s
     private float min;         // Min L/s
     private float flow;        // Litres/sec
@@ -47,10 +53,9 @@ public class River implements Connectable, Incrementable {
     }
     
     public void timeStep(){
-    	flow *= (length - 1)/length;
-    	flow += tmpSum;
-    	tmpSum = 0;
     	this.waterOut(flow);
+    	flow = (tmpSum + flow*(length - 1))/length;
+    	tmpSum = 0;
     }
 
 	@Override
@@ -64,8 +69,10 @@ public class River implements Connectable, Incrementable {
 	}
 
 	@Override
-	public void waterOut(float litres) {
-		out.waterIn(litres);
+	public float waterOut(float litres) {
+		if(out != null)
+			out.waterIn(litres);
+		return litres;
 	}
 
 	@Override
