@@ -68,10 +68,12 @@ public class Dam implements Connectable{
 	public float waterOut(float litres) {
 		if(level >= litres){
 			level -= litres;
+			downstream.waterIn(litres);
 			return litres;	
 		}
 		litres = level;
 		level = 0;
+		downstream.waterIn(litres);
 		return litres;
 	}
 
@@ -85,5 +87,12 @@ public class Dam implements Connectable{
 			downstream.waterIn(excess);
 			this.overflowed = true;
 		}
+	}
+	
+	public void printObj(){
+		System.out.println("Dam " + count);
+		System.out.println("Capacity:" + capacity);
+		System.out.println("Level:" + level);
+		System.out.println("Overflowed:" + overflowed);
 	}
 }

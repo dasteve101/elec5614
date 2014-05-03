@@ -16,4 +16,6 @@ public interface Connectable{
 
     // Add water
     void waterIn(float litres);
+    
+    void printObj();
 }

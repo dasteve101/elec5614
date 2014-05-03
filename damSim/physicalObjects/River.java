@@ -8,6 +8,7 @@ package physicalObjects;
  * and adjusts the flow each time Step.
  */
 public class River implements Connectable {
+	private int count;
     private float max;         // Max L/s
     private float min;         // Min L/s
     private float flow;        // Litres/sec
@@ -15,7 +16,8 @@ public class River implements Connectable {
     private float length;      // Water travels 1 unit length/sec
     private float tmpSum = 0;  // Sum all the water for this timestep
     
-    public River(float max, float min, float initialFlow, float length){
+    public River(int count, float max, float min, float initialFlow, float length){
+    	this.count =  count;
     	this.max = max;
     	this.min = min;
     	this.flow = initialFlow;
@@ -23,7 +25,8 @@ public class River implements Connectable {
     	out = null;
     }
 
-    public River(float max, float min, float initialFlow, float length, Connectable out){
+    public River(int count, float max, float min, float initialFlow, float length, Connectable out){
+    	this.count = count;
     	this.max = max;
     	this.min = min;
     	this.flow = initialFlow;
@@ -80,5 +83,13 @@ public class River implements Connectable {
 	@Override
 	public void waterIn(float litres) {
 		tmpSum += litres;
+	}
+	
+	public void printObj(){
+		System.out.println("River " + count);
+		System.out.println("Max:" + max);
+		System.out.println("Min:" + min);
+		System.out.println("Length:" + length);
+		System.out.println("Flow:" + flow);
 	}
 }
