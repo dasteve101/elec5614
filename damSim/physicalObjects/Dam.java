@@ -5,6 +5,7 @@ package physicalObjects;
  * It stores 'capacity' water, it has 'level' of water currently
  * The count is for an identifier
  * It must have a downstream where water goes when it overflows
+ * Should be generalised to more than one river out?
  */
 public class Dam implements Connectable{
     private int count = 0;
