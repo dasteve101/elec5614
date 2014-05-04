@@ -3,7 +3,7 @@ package physicalObjects;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-/*
+/**
  * This class is used to hold all the objects
  */
 public class SnowyScheme {
@@ -15,6 +15,9 @@ public class SnowyScheme {
 	private float waterDemand;
 	private float lewayInDemand;
 	
+	/**
+	 * @param waterSupplyPoint
+	 */
 	public SnowyScheme(Dam waterSupplyPoint){
 		ocean = new River(-1, 0, 0, 0, 1);
 		objList = new ArrayList<Connectable>();
@@ -23,27 +26,45 @@ public class SnowyScheme {
 		lewayInDemand = (float) 0.05; // +/- 5%
 	}
 	
+	/**
+	 * @return
+	 */
 	public Connectable getOcean(){
 		return ocean;
 	}
 	
+	/**
+	 * @param waterSupplyPoint
+	 */
 	public void setWaterSupply(Dam waterSupplyPoint){
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
 	
+	/**
+	 * @param c
+	 */
 	public void addObject(Connectable c){
 		objList.add(c);
 	}
 	
+	/**
+	 * @param c
+	 */
 	public void addObjects(Connectable c[]){
 		for(int i = 0; i < c.length; i++)
 			objList.add(c[i]);
 	}
 
+	/**
+	 * @return
+	 */
 	public ArrayList<Connectable> getObjects(){
 		return objList;
 	}
 	
+	/**
+	 * @return
+	 */
 	private int countDams(){
 		Iterator<Connectable> it = objList.iterator();
 		int count = 0;
@@ -55,6 +76,9 @@ public class SnowyScheme {
 		return count;
 	}
 	
+	/**
+	 * @return
+	 */
 	private int countPipes(){
 		Iterator<Connectable> it = objList.iterator();
 		int count = 0;
@@ -66,6 +90,11 @@ public class SnowyScheme {
 		return count;
 	}
 	
+	// Extend to rivers too??
+	/**
+	 * @param rainInDams
+	 * @throws Exception
+	 */
 	public void rainfall(ArrayList<Float> rainInDams) throws Exception{
 		if(countDams() != rainInDams.size())
 			throw new Exception("Incorrect size of array");
@@ -78,6 +107,11 @@ public class SnowyScheme {
 		}
 	}
 	
+	/**
+	 * @param waterOut
+	 * @return
+	 * @throws Exception
+	 */
 	public float generatePower(ArrayList<Float> waterOut) throws Exception{
 		if(countDams() != waterOut.size())
 			throw new Exception("Incorrect size of array");
@@ -93,6 +127,11 @@ public class SnowyScheme {
 		return power;
 	}
 	
+	/**
+	 * @param waterOut
+	 * @return
+	 * @throws Exception
+	 */
 	public float waterOut(ArrayList<Float> waterOut) throws Exception{
 		if(countDams() != waterOut.size())
 			throw new Exception("Incorrect size of array");
@@ -107,6 +146,9 @@ public class SnowyScheme {
 		return water;
 	}
 	
+	/**
+	 * 
+	 */
 	private void timeStepRivers(){
 		Iterator<Connectable> it = objList.iterator();
 		while(it.hasNext()){
@@ -116,6 +158,10 @@ public class SnowyScheme {
 		}
 	}
 	
+	/**
+	 * @param powerIn
+	 * @throws Exception
+	 */
 	public void pumpPowers(ArrayList<Float> powerIn) throws Exception{
 		if(countPipes() != powerIn.size())
 			throw new Exception("Incorrect size of array");
@@ -137,6 +183,13 @@ public class SnowyScheme {
 		}
 	}
 	
+	/**
+	 * @param rain
+	 * @param waterForPower
+	 * @param waterOut
+	 * @param pumpPower
+	 * @throws Exception
+	 */
 	public void increment(ArrayList<Float> rain, ArrayList<Float> waterForPower, ArrayList<Float> waterOut, ArrayList<Float> pumpPower) throws Exception{
 		powerOut = 0;
 		rainfall(rain);
@@ -153,8 +206,21 @@ public class SnowyScheme {
 		waterSupplyPoint.pumpOut(waterDemand);
 	}
 	
-	// Check all connections and water flow
+	/**
+	 * Check all connections and water flow
+	 * @return
+	 */
 	public boolean validateModel(){
+		/*
+		 *  Invalid Models (Water does not end up at ocean)
+		 *  Dam does not have output
+		 *  Check none are connected to null
+		 *  Pipes connect one object only
+		 *  River does not go to dam or ocean
+		 *  Levels all start > 0
+		 *  Min < max always
+		 *  any others?
+		 */
 		return false;
 	}
 }

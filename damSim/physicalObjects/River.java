@@ -7,6 +7,10 @@ package physicalObjects;
  * flow in the river. The river sums in 'tmpSum' the water in for that timestep
  * and adjusts the flow each time Step.
  */
+/**
+ * @author stephen
+ *
+ */
 public class River implements Connectable {
 	private int count;
     private float max;         // Max L/s
@@ -16,6 +20,13 @@ public class River implements Connectable {
     private float length;      // Water travels 1 unit length/sec
     private float tmpSum = 0;  // Sum all the water for this timestep
     
+    /**
+     * @param count
+     * @param max
+     * @param min
+     * @param initialFlow
+     * @param length
+     */
     public River(int count, float max, float min, float initialFlow, float length){
     	this.count =  count;
     	this.max = max;
@@ -25,6 +36,14 @@ public class River implements Connectable {
     	out = null;
     }
 
+    /**
+     * @param count
+     * @param max
+     * @param min
+     * @param initialFlow
+     * @param length
+     * @param out
+     */
     public River(int count, float max, float min, float initialFlow, float length, Connectable out){
     	this.count = count;
     	this.max = max;
@@ -34,22 +53,34 @@ public class River implements Connectable {
     	this.out = out;
     }
     
+    /**
+     * @return
+     */
     public float getFlow(){
     	return flow;
     }
 
+    /**
+     * @return
+     */
     public boolean isInDrought(){
     	if( flow < min )
     		return true;
     	return false;
     }
 
+    /**
+     * @return
+     */
     public boolean isInFlood(){
 		if( flow > max )
 		    return true;
 		return false;
     }
     
+    /**
+     * 
+     */
     public void timeStep(){
     	this.waterOut(flow);
     	flow = (tmpSum + flow*(length - 1))/length;

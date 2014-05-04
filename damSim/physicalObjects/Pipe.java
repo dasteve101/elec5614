@@ -1,9 +1,10 @@
 package physicalObjects;
 
-/*
+/**
  * This class implements a pipe between two Connectable objects
  * The pipe has some max power to input into the pump.
- * It pumps water between two dams based on "watts" of power input 
+ * It pumps water between two dams based on "watts" of power input
+ * The pipe connects two Connectable objects together
  */
 public class Pipe{
     private float max = 0;
@@ -12,6 +13,13 @@ public class Pipe{
     private Dam uphill = null;
     private Dam downhill = null;
     
+    
+    /**
+     * @param max
+     * @param coeff
+     * @param uphill
+     * @param downhill
+     */
     public Pipe(float max, float coeff, Dam uphill, Dam downhill){
 		this.max = max;
 		this.litresperwatt = coeff;
@@ -19,6 +27,11 @@ public class Pipe{
 		this.downhill = downhill;
     }
 
+    /**
+     * @param watts
+     * @param up
+     * @return
+     */
     public float pump(float watts, boolean up){
 		if(watts > max || pumpBlown){
 		    pumpBlown = true;

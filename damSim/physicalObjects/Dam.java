@@ -16,6 +16,14 @@ public class Dam implements Connectable{
     private float wattsperlitre;
     private float maxWaterForPwr;
      
+    /**
+     * @param count
+     * @param capacity
+     * @param initialLevel
+     * @param downstream
+     * @param coeff
+     * @param maxPwr
+     */
     public Dam(int count, float capacity, float initialLevel, Connectable downstream, float coeff, float maxPwr){
     	this.count = count;
     	this.capacity = capacity;
@@ -26,39 +34,67 @@ public class Dam implements Connectable{
     	this.maxWaterForPwr = maxPwr;
     }	
 
+    /**
+     * @return
+     */
     public int getID(){
     	return count;
     }
     
+    /**
+     * @return
+     */
     public float getLevel(){
     	return level;
     }
 
+    /**
+     * @return
+     */
     public float getCapacity(){
     	return capacity;
     }
 
+    /**
+     * @return
+     */
     public float getRemaining(){
     	return (capacity - level);
     }
 
+    /**
+     * @return
+     */
     public float getPercentage(){
     	return (level/capacity)*100;
     }
     
     // Get the amount of water overflowed from the dam
+    /**
+     * @return
+     */
     public boolean getOverflowed(){
     	return overflowed;
     }
     
+    /**
+     * 
+     */
     public void resetOverflowed(){
     	overflowed = false;
     }
     
+    /**
+     * @return
+     */
     public boolean isDry(){
     	return (level == 0);
     }
     
+    /**
+     * @param litres
+     * @return
+     */
     public float genPower(float litres){
     	litres = this.waterOut(litres);
     	if(maxWaterForPwr >= litres)
@@ -66,6 +102,10 @@ public class Dam implements Connectable{
     	return this.wattsperlitre*maxWaterForPwr;
     }
 
+    /**
+     * @param litres
+     * @return
+     */
     public float pumpOut(float litres){
     	if(level >= litres){
 			level -= litres;
@@ -111,6 +151,7 @@ public class Dam implements Connectable{
 		}
 	}
 	
+	@Override
 	public void printObj(){
 		System.out.println("Dam " + count);
 		System.out.println("Capacity:" + capacity);
