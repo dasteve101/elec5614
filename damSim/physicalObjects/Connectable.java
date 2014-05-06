@@ -4,38 +4,36 @@ package physicalObjects;
  * All overflow water must go somewhere and this specifies where
  */
 /**
- * @author stephen
+ * 
  *
  */
-public interface Connectable{
+public abstract class Connectable{
     
     /**
      * Where the water flows from this object
      * @param downstream
      */
-    void connectTo(Connectable downstream);
+    public abstract void connectTo(Connectable downstream);
 
     /**
      * Get the downstream object
      * @return
      */
-    Connectable getDownstream();
+    public abstract Connectable getDownstream();
+
+    /**
+     * @param litres
+     */
+    protected abstract void waterIn(float litres);
     
     /**
-     * Send water downstream
      * @param litres
      * @return
      */
-    float waterOut(float litres);
-    
-    /**
-     * Add water
-     * @param litres
-     */
-    void waterIn(float litres);
+    protected abstract float waterOut(float litres);
     
     /**
      * 
      */
-    void printObj();
+    public abstract void printObj();
 }
