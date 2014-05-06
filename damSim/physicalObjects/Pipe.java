@@ -15,10 +15,10 @@ public class Pipe{
     
     
     /**
-     * @param max
-     * @param coeff
-     * @param uphill
-     * @param downhill
+     * @param max - Max amount of power inputted
+     * @param coeff - water = coeff*power
+     * @param uphill - the Dam to pump to (if up = true)
+     * @param downhill - the Dam to pump from (if up = true)
      */
     public Pipe(float max, float coeff, Dam uphill, Dam downhill){
 		this.max = max;
@@ -27,9 +27,31 @@ public class Pipe{
 		this.downhill = downhill;
     }
 
+    public float getMax(){
+    	return max;
+    }
+    
+    public Dam getUphill(){
+    	return uphill;
+    }
+    
+    public Dam getDownhill(){
+    	return downhill;
+    }
+    
+    public float getCoeff(){
+    	return litresperwatt;
+    }
+    
+    public float estimateLitres(float power){
+    	if(power > max)
+    		return max*litresperwatt;
+    	return power*litresperwatt;
+    }
+    
     /**
-     * @param watts
-     * @param up
+     * @param watts - power to put in the pump
+     * @param up - direction to pump
      * @return
      */
     public float pump(float watts, boolean up){

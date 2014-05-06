@@ -21,11 +21,11 @@ public class River extends Connectable {
     private float tmpSum = 0;  // Sum all the water for this timestep
     
     /**
-     * @param count
-     * @param max
-     * @param min
-     * @param initialFlow
-     * @param length
+     * @param count - An id
+     * @param max - A max value before flooding
+     * @param min - A min value before drought
+     * @param initialFlow - What the river starts at
+     * @param length - Length of the river
      */
     public River(int count, float max, float min, float initialFlow, float length){
     	this.count =  count;

@@ -17,20 +17,12 @@ public class Dam extends Connectable {
 	private float maxWaterForPwr;
 
 	/**
-	 * @param count
-	 *            Variable used as an identifier.
-	 * @param capacity
-	 *            The maximum water capacity of the dam.
-	 * @param initialLevel
-	 *            The water level of the dam starts with this value.
-	 * @param downstream
-	 *            Variable representing where water flows when the dam is
-	 *            overflowing.
-	 * @param coeff
-	 *            Coefficient of the power-water equation (used to determine
-	 *            power generated per litre of water).
-	 * @param maxPwr
-	 *            TODO - clarify what this variable represents.
+	 * @param count - Variable used as an identifier.
+	 * @param capacity - The maximum water capacity of the dam.
+	 * @param initialLevel - The water level of the dam starts with this value.
+	 * @param downstream - Variable representing where water flows when the dam is overflowing.
+	 * @param coeff - Coefficient of the power-water equation (used to determine power generated per litre of water).
+	 * @param maxPwr - max power the generator in the dam can produce 
 	 */
 	public Dam(int count, float capacity, float initialLevel,
 			Connectable downstream, float coeff, float maxPwr) {
@@ -106,8 +98,7 @@ public class Dam extends Connectable {
 	/**
 	 * Generate power based on the amount of litres released.
 	 * 
-	 * @param litres
-	 *            Amount of water to be released.
+	 * @param litres - Amount of water to be released.
 	 * @return
 	 */
 	protected float genPower(float litres) {

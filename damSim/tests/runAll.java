@@ -49,6 +49,7 @@ public class runAll {
 		Dam higherDam = new Dam(1, 10000, 2000, upHill, (float) 0.3, 1000);
 		Pipe pipeBetween = new Pipe(300, (float) 0.5, higherDam, lastDam);
 		SnowyScheme snowWhite = new SnowyScheme(lastDam);
+		riverOut.connectTo(snowWhite.getOcean());
 		snowWhite.addDam(higherDam);
 		snowWhite.addDam(lastDam);
 		snowWhite.addPipe(pipeBetween);
