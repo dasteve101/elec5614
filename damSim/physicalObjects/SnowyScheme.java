@@ -76,6 +76,20 @@ public class SnowyScheme {
 		return count;
 	}
 	
+	/**
+	 * @return
+	 */
+	private int countPipes(){
+		Iterator<Connectable> it = objList.iterator();
+		int count = 0;
+		while(it.hasNext()){
+			Connectable c = it.next();
+			if(c instanceof Pipe)
+				count++;
+		}
+		return count;
+	}
+	
 	// Extend to rivers too??
 	/**
 	 * This method puts the rain in the dams, rivers too?
@@ -90,7 +104,7 @@ public class SnowyScheme {
 		while(it.hasNext()){
 			Connectable c = it.next();
 			if(c instanceof Dam)
-				((Dam) c).waterIn(r.next());
+				c.waterIn(r.next());
 		}
 	}
 	
@@ -150,7 +164,8 @@ public class SnowyScheme {
 	 * @throws Exception
 	 */
 	public void pumpPowers(ArrayList<Float> powerIn) throws Exception{
-		
+		if(countPipes() != powerIn.size())
+			throw new Exception("Incorrect size of array");
 		Iterator<Connectable> it = objList.iterator();
 		Iterator<Float> w = powerIn.iterator();
 		while(it.hasNext()){

@@ -1,14 +1,17 @@
 package physicalObjects;
 
-/**
+/*
  * This is the river object. Water flows into it from the dams
  * The river has a 'length' which is how far water flows
  * The flow is a moving average. There is a max (flood) and min (drought)
  * flow in the river. The river sums in 'tmpSum' the water in for that timestep
  * and adjusts the flow each time Step.
+ */
+/**
+ * @author stephen
  *
  */
-public class River extends Connectable {
+public class River implements Connectable {
 	private int count;
     private float max;         // Max L/s
     private float min;         // Min L/s
@@ -78,7 +81,7 @@ public class River extends Connectable {
     /**
      * 
      */
-    protected void timeStep(){
+    public void timeStep(){
     	this.waterOut(flow);
     	flow = (tmpSum + flow*(length - 1))/length;
     	tmpSum = 0;
@@ -95,14 +98,14 @@ public class River extends Connectable {
 	}
 
 	@Override
-	protected float waterOut(float litres) {
+	public float waterOut(float litres) {
 		if(out != null)
 			out.waterIn(litres);
 		return litres;
 	}
 
 	@Override
-	protected void waterIn(float litres) {
+	public void waterIn(float litres) {
 		tmpSum += litres;
 	}
 	

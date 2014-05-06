@@ -7,7 +7,7 @@ package physicalObjects;
  * It must have a downstream where water goes when it overflows
  * Should be generalised to more than one river out?
  */
-public class Dam extends Connectable{
+public class Dam implements Connectable{
     private int count = 0;
     private float capacity = 0;
     private float level = 0;
@@ -80,7 +80,7 @@ public class Dam extends Connectable{
     /**
      * 
      */
-    protected void resetOverflowed(){
+    public void resetOverflowed(){
     	overflowed = false;
     }
     
@@ -95,7 +95,7 @@ public class Dam extends Connectable{
      * @param litres
      * @return
      */
-    protected float genPower(float litres){
+    public float genPower(float litres){
     	litres = this.waterOut(litres);
     	if(maxWaterForPwr >= litres)
     		return this.wattsperlitre*litres;
@@ -106,7 +106,7 @@ public class Dam extends Connectable{
      * @param litres
      * @return
      */
-    protected float pumpOut(float litres){
+    public float pumpOut(float litres){
     	if(level >= litres){
 			level -= litres;
 			return litres;	
@@ -116,15 +116,18 @@ public class Dam extends Connectable{
 		return litres;
     }
     
+	@Override
 	public void connectTo(Connectable downstream) {
 		this.downstream = downstream;
 	}
 
+	@Override
 	public Connectable getDownstream() {
 		return this.downstream;
 	}
 
-	protected float waterOut(float litres) {
+	@Override
+	public float waterOut(float litres) {
 		if(level >= litres){
 			level -= litres;
 			downstream.waterIn(litres);
@@ -136,7 +139,8 @@ public class Dam extends Connectable{
 		return litres;
 	}
 
-	protected void waterIn(float litres) {
+	@Override
+	public void waterIn(float litres) {
 		if((level + litres) <= capacity)
 			level += litres;
 		else{
