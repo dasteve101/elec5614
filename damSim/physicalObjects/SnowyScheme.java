@@ -92,6 +92,7 @@ public class SnowyScheme {
 	
 	// Extend to rivers too??
 	/**
+	 * This method puts the rain in the dams, rivers too?
 	 * @param rainInDams
 	 * @throws Exception
 	 */
