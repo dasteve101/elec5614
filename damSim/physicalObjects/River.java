@@ -81,7 +81,7 @@ public class River extends Connectable {
     /**
      * 
      */
-    public void timeStep(){
+    protected void timeStep(){
     	this.waterOut(flow);
     	flow = (tmpSum + flow*(length - 1))/length;
     	tmpSum = 0;
@@ -98,14 +98,14 @@ public class River extends Connectable {
 	}
 
 	@Override
-	public float waterOut(float litres) {
+	protected float waterOut(float litres) {
 		if(out != null)
 			out.waterIn(litres);
 		return litres;
 	}
 
 	@Override
-	public void waterIn(float litres) {
+	protected void waterIn(float litres) {
 		tmpSum += litres;
 	}
 	

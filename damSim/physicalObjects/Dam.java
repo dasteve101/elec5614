@@ -90,7 +90,7 @@ public class Dam extends Connectable {
 	/**
      * 
      */
-	public void resetOverflowed() {
+	protected void resetOverflowed() {
 		overflowed = false;
 	}
 
@@ -110,7 +110,7 @@ public class Dam extends Connectable {
 	 *            Amount of water to be released.
 	 * @return
 	 */
-	public float genPower(float litres) {
+	protected float genPower(float litres) {
 		litres = this.waterOut(litres); // Determine how many litres can be
 										// released (either litres or the amount
 										// left in the dam).
@@ -132,7 +132,7 @@ public class Dam extends Connectable {
 	 * @param litres
 	 * @return
 	 */
-	public float pumpOut(float litres) {
+	protected float pumpOut(float litres) {
 		if (level >= litres) { 	// If the current level of the dam is greater
 								// than or equal to the amount to be released,
 			level -= litres; // then decrease the level of the dam by litres,
@@ -156,7 +156,7 @@ public class Dam extends Connectable {
 	}
 
 	@Override
-	public float waterOut(float litres) {
+	protected float waterOut(float litres) {
 		if (level >= litres) { // If the level of the dam is greater than or equal to the amount that is to be released,
 			level -= litres; // then decrease the level of the dam by 'litres',
 			downstream.waterIn(litres); // send the water down stream via the connector,
@@ -173,7 +173,7 @@ public class Dam extends Connectable {
 	 * 			Amount of water to be stored in the dam.
 	 */
 	@Override
-	public void waterIn(float litres) {
+	protected void waterIn(float litres) {
 		if ((level + litres) <= capacity)	// If the sum of the water sent into the dam and the level of the dam is not greater than the capacity of the dam,
 			level += litres;				// then the level of the dam is increased by the value of 'litres'.
 		else {											// Otherwise,
