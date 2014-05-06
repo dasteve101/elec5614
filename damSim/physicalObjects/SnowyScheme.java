@@ -1,6 +1,7 @@
 package physicalObjects;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 /**
@@ -10,8 +11,10 @@ public class SnowyScheme {
 	private River ocean;
 	private float powerOut;
 	private Dam waterSupplyPoint;
-	private ArrayList<Connectable> objList; 
-	private float powerDemand;
+	private List<Dam> dams;
+	private List<River> rivers;
+	private List<Pipe> pipes;
+	//private float powerDemand;
 	private float waterDemand;
 	private float lewayInDemand;
 	
@@ -20,7 +23,9 @@ public class SnowyScheme {
 	 */
 	public SnowyScheme(Dam waterSupplyPoint){
 		ocean = new River(-1, 0, 0, 0, 1);
-		objList = new ArrayList<Connectable>();
+		dams = new ArrayList<Dam>();
+		rivers = new ArrayList<River>();
+		pipes = new ArrayList<Pipe>();
 		powerOut = 0;
 		this.waterSupplyPoint = waterSupplyPoint;
 		lewayInDemand = (float) 0.05; // +/- 5%
@@ -39,56 +44,16 @@ public class SnowyScheme {
 	public void setWaterSupply(Dam waterSupplyPoint){
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
-	
-	/**
-	 * @param c
-	 */
-	public void addObject(Connectable c){
-		objList.add(c);
-	}
-	
-	/**
-	 * @param c
-	 */
-	public void addObjects(Connectable c[]){
-		for(int i = 0; i < c.length; i++)
-			objList.add(c[i]);
-	}
+    public void addDam (Dam dam){
+    	dams.add(dam);
+    }
+    public void addRiver(River river){
+    	rivers.add(river);
+    }
+    public void addPipe(Pipe pipe){
+    	pipes.add(pipe);
+    }
 
-	/**
-	 * @return
-	 */
-	public ArrayList<Connectable> getObjects(){
-		return objList;
-	}
-	
-	/**
-	 * @return
-	 */
-	private int countDams(){
-		Iterator<Connectable> it = objList.iterator();
-		int count = 0;
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Dam)
-				count++;
-		}
-		return count;
-	}
-	
-	/**
-	 * @return
-	 */
-	private int countPipes(){
-		Iterator<Connectable> it = objList.iterator();
-		int count = 0;
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Pipe)
-				count++;
-		}
-		return count;
-	}
 	
 	// Extend to rivers too??
 	/**
@@ -96,16 +61,14 @@ public class SnowyScheme {
 	 * @param rainInDams
 	 * @throws Exception
 	 */
-	public void rainfall(ArrayList<Float> rainInDams) throws Exception{
-		if(countDams() != rainInDams.size())
+	public void rainfall(List<Float> rainInDams) throws Exception{
+		if(dams.size() != rainInDams.size())
 			throw new Exception("Incorrect size of array");
-		Iterator<Connectable> it = objList.iterator();
-		Iterator<Float> r = rainInDams.iterator();
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Dam)
-				c.waterIn(r.next());
+		for(int i =0 ; i <dams.size()-1;i++){
+			dams.get(i).waterIn(rainInDams.get(i));
+		
 		}
+
 	}
 	
 	/**
@@ -113,16 +76,14 @@ public class SnowyScheme {
 	 * @return
 	 * @throws Exception
 	 */
-	public float generatePower(ArrayList<Float> waterOut) throws Exception{
-		if(countDams() != waterOut.size())
+	public float generatePower(List<Float> waterOut) throws Exception{
+		if(dams.size() != waterOut.size())
 			throw new Exception("Incorrect size of array");
 		float power = 0;
-		Iterator<Connectable> it = objList.iterator();
-		Iterator<Float> w = waterOut.iterator();
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Dam)
-				power += ((Dam) c).genPower(w.next());
+		
+	
+        for(int i= 0; i <=dams.size()-1;i++){
+				power += dams.get(i).genPower(waterOut.get(i));
 		}
 		powerOut += power;
 		return power;
@@ -133,16 +94,14 @@ public class SnowyScheme {
 	 * @return
 	 * @throws Exception
 	 */
-	public float waterOut(ArrayList<Float> waterOut) throws Exception{
-		if(countDams() != waterOut.size())
+	public float waterOut(List<Float> waterOut) throws Exception{
+		if(dams.size() != waterOut.size())
 			throw new Exception("Incorrect size of array");
 		float water = 0;
-		Iterator<Connectable> it = objList.iterator();
-		Iterator<Float> w = waterOut.iterator();
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Dam)
-				water += c.waterOut(w.next());
+		
+	
+		for(int i =0; i <=dams.size()-1;i ++){
+				water += dams.get(i).waterOut(waterOut.get(i));
 		}
 		return water;
 	}
@@ -151,11 +110,8 @@ public class SnowyScheme {
 	 * 
 	 */
 	private void timeStepRivers(){
-		Iterator<Connectable> it = objList.iterator();
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof River)
-				((River) c).timeStep();
+		for(int i =0; i <=rivers.size()-1; i++){
+				rivers.get(i).timeStep();
 		}
 	}
 	
@@ -163,26 +119,24 @@ public class SnowyScheme {
 	 * @param powerIn
 	 * @throws Exception
 	 */
-	public void pumpPowers(ArrayList<Float> powerIn) throws Exception{
-		if(countPipes() != powerIn.size())
+	public void pumpPowers(List<Float> powerIn) throws Exception{
+		if(pipes.size() != powerIn.size())
 			throw new Exception("Incorrect size of array");
-		Iterator<Connectable> it = objList.iterator();
-		Iterator<Float> w = powerIn.iterator();
-		while(it.hasNext()){
-			Connectable c = it.next();
-			if(c instanceof Dam){
-				float powerToPump = w.next();
+		
+
+		for(int i =0;i <=dams.size()-1; i++){
+				float powerToPump = powerIn.get(i);
 				if(powerOut - powerToPump >= 0){
-					c.waterOut(powerToPump);
+					dams.get(i).waterOut(powerToPump);
 					powerOut -= powerToPump;
 				}
 				else{
-					c.waterOut(powerOut);
+					dams.get(i).waterOut(powerOut);
 					powerOut = 0;
 				}
 			}
 		}
-	}
+	
 	
 	/**
 	 * @param rain
@@ -191,13 +145,13 @@ public class SnowyScheme {
 	 * @param pumpPower
 	 * @throws Exception
 	 */
-	public void increment(ArrayList<Float> rain, ArrayList<Float> waterForPower, ArrayList<Float> waterOut, ArrayList<Float> pumpPower) throws Exception{
+	public void increment(List<Float> rain, List<Float> waterForPower, List<Float> waterOut, List<Float> pumpPower, float powerDemand) throws Exception{
 		powerOut = 0;
 		rainfall(rain);
 		generatePower(waterForPower);
 		waterOut(waterOut);
 		timeStepRivers();
-		pumpPowers(pumpPower);
+		//pumpPowers(pumpPower);
 		// Check demand of power and water are met
 		if(powerOut < powerDemand*(1-lewayInDemand) || powerOut > powerDemand*(1+lewayInDemand) )
 			System.out.println("Power demand not met: Needed " + powerDemand + " and got " + powerOut);
