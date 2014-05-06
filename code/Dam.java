@@ -37,7 +37,7 @@ public class Dam {
 	public float getLevel() {
 		return level;
 	}
-
+//Return the capacity value of the specified Dam
 	public float getCapacity() {
 		return capacity;
 	}
