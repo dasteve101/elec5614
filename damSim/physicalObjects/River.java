@@ -11,7 +11,7 @@ package physicalObjects;
  * @author stephen
  *
  */
-public class River implements Connectable {
+public class River extends Connectable {
 	private int count;
     private float max;         // Max L/s
     private float min;         // Min L/s

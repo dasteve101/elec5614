@@ -7,7 +7,7 @@ package physicalObjects;
  * It must have a downstream where water goes when it overflows
  * Should be generalised to more than one river out?
  */
-public class Dam implements Connectable {
+public class Dam extends Connectable {
 	private int count = 0;
 	private float capacity = 0;
 	private float level = 0;
