@@ -94,6 +94,14 @@ public class Dam extends Connectable {
 	public boolean isDry() {
 		return (level == 0);
 	}
+	
+	public float getMaxWaterForPower(){
+		return maxWaterForPwr;
+	}
+	
+	public float getWattsPerLitre(){
+		return wattsperlitre;
+	}
 
 	/**
 	 * Generate power based on the amount of litres released.

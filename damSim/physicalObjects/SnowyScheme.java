@@ -44,16 +44,48 @@ public class SnowyScheme {
 	public void setWaterSupply(Dam waterSupplyPoint){
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
+	
+    /**
+     * @param dam - dam to add to object
+     */
     public void addDam (Dam dam){
     	dams.add(dam);
     }
+    
+    /**
+     * @return - dams stored in this object
+     */
+    public List<Dam> getDams(){
+    	return dams;
+    }
+    
+    /**
+     * @param river - river to add to object
+     */
     public void addRiver(River river){
     	rivers.add(river);
     }
+    
+    /**
+     * @return - rivers stored in this object
+     */
+    public List<River> getRivers(){
+    	return rivers;
+    }
+    
+    /**
+     * @param pipe - pipe to add to object
+     */
     public void addPipe(Pipe pipe){
     	pipes.add(pipe);
     }
 
+    /**
+     * @return - pipes stored in this object
+     */
+    public List<Pipe> getPipes(){
+    	return pipes;
+    }
 	
 	// Extend to rivers too??
 	/**
@@ -61,7 +93,7 @@ public class SnowyScheme {
 	 * @param rainInDams
 	 * @throws Exception
 	 */
-	public void rainfall(List<Float> rainInDams) throws Exception{
+	protected void rainfall(List<Float> rainInDams) throws Exception{
 		if(dams.size() != rainInDams.size())
 			throw new Exception("Incorrect size of array");
 		for(int i =0 ; i <dams.size()-1;i++){
@@ -76,7 +108,7 @@ public class SnowyScheme {
 	 * @return
 	 * @throws Exception
 	 */
-	public float generatePower(List<Float> waterOut) throws Exception{
+	protected float generatePower(List<Float> waterOut) throws Exception{
 		if(dams.size() != waterOut.size())
 			throw new Exception("Incorrect size of array");
 		float power = 0;
@@ -94,7 +126,7 @@ public class SnowyScheme {
 	 * @return
 	 * @throws Exception
 	 */
-	public float waterOut(List<Float> waterOut) throws Exception{
+	protected float waterOut(List<Float> waterOut) throws Exception{
 		if(dams.size() != waterOut.size())
 			throw new Exception("Incorrect size of array");
 		float water = 0;
@@ -119,7 +151,7 @@ public class SnowyScheme {
 	 * @param powerIn
 	 * @throws Exception
 	 */
-	public void pumpPowers(List<Float> powerIn) throws Exception{
+	protected void pumpPowers(List<Float> powerIn) throws Exception{
 		if(pipes.size() != powerIn.size())
 			throw new Exception("Incorrect size of array");
 		
@@ -163,6 +195,7 @@ public class SnowyScheme {
 	
 	/**
 	 * Check all connections and water flow
+	 * Recursive?
 	 * @return
 	 */
 	public boolean validateModel(){
@@ -176,6 +209,35 @@ public class SnowyScheme {
 		 *  Min < max always
 		 *  any others?
 		 */
-		return false;
+		if(waterSupplyPoint == null || !dams.contains(waterSupplyPoint))
+			return false;
+		for(int i = 0; i < dams.size()-1; i++){
+			if(dams.get(i).getDownstream() == null)
+				return false;
+			if(dams.get(i).getLevel() < 0 || dams.get(i).getLevel() > dams.get(i).getCapacity())
+				return false;
+			if(dams.get(i).getMaxWaterForPower() < 0)
+				return false;
+			if(dams.get(i).getWattsPerLitre() < 0)
+				return false;
+		}
+		for(int i = 0; i < rivers.size() - 1; i++){
+			if(rivers.get(i).getDownstream() == null)
+				return false;
+			if(rivers.get(i).getMax() < rivers.get(i).getMin())
+				return false;
+			if(rivers.get(i).getLength() < 1)
+				return false;
+			if(rivers.get(i).getFlow() < 0)
+				return false;
+		}
+		for(int i = 0; i < pipes.size() - 1; i++){
+			if(pipes.get(i).getDownhill() == null || pipes.get(i).getUphill() == null)
+				return false;
+			if(pipes.get(i).getCoeff() < 0 || pipes.get(i).getMax() < 0)
+				return false;
+		}
+		
+		return true;
 	}
 }

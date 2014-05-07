@@ -78,6 +78,18 @@ public class River extends Connectable {
 		return false;
     }
     
+    public float getMax(){
+    	return max;
+    }
+    
+    public float getMin(){
+    	return min;
+    }
+    
+    public float getLength(){
+    	return length;
+    }
+    
     /**
      * 
      */
