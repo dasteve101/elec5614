@@ -56,7 +56,7 @@ public class runAll {
 		snowWhite.addDam(lastDam);
 		snowWhite.addPipe(pipeBetween);
 		snowWhite.addRiver(upHill);
-		
+		/* Simulate one time step of the Snowy Scheme using the increment method. */
 		snowWhite.increment(Arrays.asList(1.0f,2.0f), Arrays.asList(900.0f,900.0f), Arrays.asList(100.0f,100.0f), Arrays.<Float>asList(),500);
 		
 		

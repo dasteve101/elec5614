@@ -168,8 +168,7 @@ public class Dam extends Connectable {
 	}
 	
 	/**
-	 * @param litres 
-	 * 			Amount of water to be stored in the dam.
+	 * @param litres - Amount of water to be stored in the dam.
 	 */
 	@Override
 	protected void waterIn(float litres) {
