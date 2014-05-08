@@ -98,7 +98,7 @@ public class SnowyScheme {
 	protected void rainfall(List<Float> rainInDams) throws Exception {
 		if (dams.size() != rainInDams.size())
 			throw new Exception("Incorrect size of array");
-		for (int i = 0; i < dams.size(); i++) {
+		for (int i = 0; i <= dams.size() - 1; i++) {
 			dams.get(i).waterIn(rainInDams.get(i));
 
 		}
