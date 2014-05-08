@@ -5,12 +5,16 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import physicalObjects.*;
 
 public class Gui extends JFrame {
 
@@ -59,5 +63,31 @@ public class Gui extends JFrame {
 		setSize(600, 400); // "this" JFrame sets initial size
 		setVisible(true); // "this" JFrame shows
 	}
-
+	
+	/**
+	 * This function sorts topographically the snowy scheme
+	 * This is used so that it can be determined where to display stuff
+	 * @param snowy
+	 * @return
+	 */
+	private List<TreeSet<Connectable>> getLayers(SnowyScheme snowy){
+		List<TreeSet<Connectable>> layers = new ArrayList<TreeSet<Connectable>>();
+		TreeSet<Connectable> visited = new TreeSet<Connectable>();
+		List<Connectable> all = snowy.getRiversAndDams();
+		int layer = 0;
+		layers.add(new TreeSet<Connectable>());
+		layers.get(layer).add(snowy.getOcean()); // Bottom layer is always ocean
+		layer++;
+		while(visited.size() != all.size()){
+			layers.add(new TreeSet<Connectable>());
+			for(Connectable c : all){
+				if(!visited.contains(c) && layers.get(layer-1).contains(c.getDownstream())){
+					visited.add(c);
+					layers.get(layer).add(c);
+				}
+			}
+			layer++;
+		}
+		return layers;
+	}
 }
