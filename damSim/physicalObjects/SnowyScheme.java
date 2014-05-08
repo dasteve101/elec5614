@@ -46,7 +46,6 @@ public class SnowyScheme {
 	public void setWaterSupply(Dam waterSupplyPoint) {
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
-<<<<<<< HEAD
 
 	/**
 	 * @param dam - dam to add to object

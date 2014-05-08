@@ -17,15 +17,6 @@ public class runAll {
 		SnowyScheme snowWhite = new SnowyScheme(lastDam);						// Create a pseudo Snowy Mountain Scheme.
 		riverOut.connectTo(snowWhite.getOcean());								// Connect riverOut to the ocean.
 		/* Add all the dam objects to the snowWhite scheme */
-		River riverOut = new River(0, 1000, 0 , 100, 10); // River from dam to ocean
-		Dam lastDam = new Dam(0, 10000, 2000, riverOut, (float) 0.3, 1000);
-
-		River upHill = new River(1, 1000, 100 , 500, 10, null);
-		Dam higherDam = new Dam(1, 10000, 2000, upHill, (float) 0.3, 1000);
-		upHill.connectTo(lastDam);
-		Pipe pipeBetween = new Pipe(300, (float) 0.5, higherDam, lastDam);
-		SnowyScheme snowWhite = new SnowyScheme(lastDam);
-		riverOut.connectTo(snowWhite.getOcean());
 		snowWhite.addDam(higherDam);
 		snowWhite.addDam(lastDam);
 		snowWhite.addPipe(pipeBetween);
