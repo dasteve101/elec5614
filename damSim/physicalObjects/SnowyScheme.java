@@ -237,7 +237,50 @@ public class SnowyScheme {
 			if(pipes.get(i).getCoeff() < 0 || pipes.get(i).getMax() < 0)
 				return false;
 		}
-		
+		ArrayList<Connectable> completedIndexs = new ArrayList<Connectable>();
+		for(int i = 0; i < dams.size() - 1; i++){
+			completedIndexs = recursiveDFS(dams.get(i), completedIndexs, null);
+			if(!completedIndexs.contains(dams.get(i)))
+				return false;
+		}
+		for(int i = 0; i < rivers.size() - 1; i++){
+			completedIndexs = recursiveDFS(rivers.get(i), completedIndexs, null);
+			if(!completedIndexs.contains(rivers.get(i)))
+				return false;
+		}
+		// All conditions have been checked, must be valid
 		return true;
+	}
+	
+	/**
+	 * This performs a DFS on the nodes to check all 'roads lead to Rome/Ocean'
+	 * @param damOrRiver - The object to check
+	 * @param completedIndexs - A list of already check objects
+	 * @param tmpList - A list of objects checked in this iteration
+	 * @return
+	 */
+	private ArrayList<Connectable> recursiveDFS(Connectable damOrRiver, ArrayList<Connectable> completedIndexs, ArrayList<Connectable> tmpList){
+		if(completedIndexs.contains(damOrRiver))
+			return completedIndexs; // If it has already been solved, stop
+		// If it is trivial stop
+		if(damOrRiver.getDownstream().equals(getOcean())){
+			completedIndexs.add(damOrRiver);
+			if(!tmpList.equals(null))
+				completedIndexs.addAll(tmpList);
+			return completedIndexs;
+		}
+		// If this is the first, create the list and check the next one
+		if(tmpList.equals(null)){
+			tmpList = new ArrayList<Connectable>();
+			tmpList.add(damOrRiver);
+			return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);
+		}
+		// tmpList is not null
+		// If damOrRiver has already been checked we can stop
+		if(tmpList.contains(damOrRiver))
+			return completedIndexs; // There is a loop somewhere so not valid
+		// Not the first and hasn't been checked
+		tmpList.add(damOrRiver);
+		return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);
 	}
 }
