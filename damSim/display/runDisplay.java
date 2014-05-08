@@ -1,5 +1,7 @@
 package display;
 
+import javax.swing.SwingUtilities;
+
 import physicalObjects.*;
 
 /**
@@ -11,8 +13,12 @@ public class runDisplay {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new Gui(); // Let the constructor do the job
+			}
+		});
 	}
 
 }
