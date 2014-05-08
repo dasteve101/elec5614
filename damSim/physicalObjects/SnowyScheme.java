@@ -194,17 +194,16 @@ public class SnowyScheme {
 		//pumpPowers(pumpPower);
 		// Check demand of power and water are met
 		if(powerOut < powerDemand*(1-lewayInDemand) || powerOut > powerDemand*(1+lewayInDemand) )
-			System.out.println("Power demand not met: Needed " + powerDemand + " and got " + powerOut);
+			System.out.println("Power demand not met: Needed " + powerDemand + "+/-" + (lewayInDemand*100) + "% and got " + powerOut);
 		if(waterSupplyPoint.getLevel() < waterDemand*(1-lewayInDemand))
-			System.out.println("Water demand not met: Needed " + waterDemand + " and got " + waterOut);
+			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterOut);
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
 	}
 	
 	/**
 	 * Check all connections and water flow
-	 * Recursive?
-	 * @return
+	 * @return - valid/invalid model
 	 */
 	public boolean validateModel(){
 		/*
@@ -261,7 +260,7 @@ public class SnowyScheme {
 	}
 	
 	/**
-	 * This performs a DFS on the nodes to check all 'roads lead to Rome/Ocean'
+	 * This performs a recursive DFS on the nodes to check all 'roads lead to Rome/Ocean'
 	 * It uses a TreeSet to sort the objects
 	 * @param damOrRiver - The object to check
 	 * @param completedIndexs - A list of already check objects
@@ -270,19 +269,21 @@ public class SnowyScheme {
 	 */
 	private TreeSet<Connectable> recursiveDFS(Connectable damOrRiver, TreeSet<Connectable> completedIndexs, TreeSet<Connectable> tmpList){
 		if(completedIndexs.contains(damOrRiver)){
-			if(!tmpList.equals(null))
+			if(tmpList != null)
 				completedIndexs.addAll(tmpList);
 			return completedIndexs; // If it has already been solved, stop
 		}
+		if(damOrRiver.getDownstream() == null)
+			return completedIndexs;
 		// If it is trivial stop
 		if(damOrRiver.getDownstream().equals(getOcean())){
 			completedIndexs.add(damOrRiver);
-			if(!tmpList.equals(null))
+			if(tmpList != null)
 				completedIndexs.addAll(tmpList);
 			return completedIndexs;
 		}
 		// If this is the first, create the list and check the next one
-		if(tmpList.equals(null)){
+		if(tmpList == null){
 			tmpList = new TreeSet<Connectable>();
 			tmpList.add(damOrRiver);
 			return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);

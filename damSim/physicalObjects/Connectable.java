@@ -7,7 +7,7 @@ package physicalObjects;
  * @author stephen
  *
  */
-public abstract class Connectable{
+public abstract class Connectable implements Comparable<Connectable>{
     
     /**
      * Where the water flows from this object
@@ -35,7 +35,11 @@ public abstract class Connectable{
     protected abstract void waterIn(float litres);
     
     /**
-     * 
+     * @return 
      */
-    public abstract void printObj();
+    public abstract String toString();
+    
+	public int compareTo(Connectable arg0) {
+    	return this.hashCode() - arg0.hashCode();
+	}
 }
