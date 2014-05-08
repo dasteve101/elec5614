@@ -65,7 +65,7 @@ public class Gui extends JFrame {
 	}
 	
 	/**
-	 * This function sorts topographically the snowy scheme
+	 * This function sorts topologically the snowy scheme
 	 * This is used so that it can be determined where to display stuff
 	 * @param snowy
 	 * @return
