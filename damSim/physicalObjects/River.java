@@ -37,12 +37,12 @@ public class River extends Connectable {
     }
 
     /**
-     * @param count
-     * @param max
-     * @param min
-     * @param initialFlow
-     * @param length
-     * @param out
+     * @param count - An id
+     * @param max - A max value before flooding
+     * @param min - A min value before drought
+     * @param initialFlow - What the river starts at
+     * @param length - Length of the river
+     * @param out - Where the water flow goes.
      */
     public River(int count, float max, float min, float initialFlow, float length, Connectable out){
     	this.count = count;

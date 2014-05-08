@@ -19,7 +19,7 @@ public class SnowyScheme {
 	private float lewayInDemand;
 	
 	/**
-	 * @param waterSupplyPoint
+	 * @param waterSupplyPoint - The dam object that is used to determine whether or not water demand is met.
 	 */
 	public SnowyScheme(Dam waterSupplyPoint){
 		ocean = new River(-1, 0, 0, 0, 1);
@@ -32,7 +32,7 @@ public class SnowyScheme {
 	}
 	
 	/**
-	 * @return
+	 * @return The ocean connected to this scheme.
 	 */
 	public Connectable getOcean(){
 		return ocean;
@@ -87,7 +87,7 @@ public class SnowyScheme {
     	return pipes;
     }
 	
-	// Extend to rivers too??
+	// TODO - Extend to rivers too??
 	/**
 	 * This method puts the rain in the dams, rivers too?
 	 * @param rainInDams
