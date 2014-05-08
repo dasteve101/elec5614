@@ -121,11 +121,12 @@ public class River extends Connectable {
 		tmpSum += litres;
 	}
 	
-	public void printObj(){
-		System.out.println("River " + count);
-		System.out.println("Max:" + max);
-		System.out.println("Min:" + min);
-		System.out.println("Length:" + length);
-		System.out.println("Flow:" + flow);
+	public String toString(){
+		String val ="River " + count;
+		val += "\nMax:" + max;
+		val += "\nMin:" + min;
+		val += "\nLength:" + length;
+		val += "\nFlow:" + flow;
+		return val;
 	}
 }

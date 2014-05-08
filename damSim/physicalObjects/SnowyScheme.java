@@ -3,6 +3,7 @@ package physicalObjects;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 /**
  * This class is used to hold all the objects
@@ -45,6 +46,7 @@ public class SnowyScheme {
 	public void setWaterSupply(Dam waterSupplyPoint) {
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
+<<<<<<< HEAD
 
 	/**
 	 * @param dam - dam to add to object
@@ -184,21 +186,17 @@ public class SnowyScheme {
 		timeStepRivers();
 		// pumpPowers(pumpPower);
 		// Check demand of power and water are met
-		if (powerOut < powerDemand * (1 - lewayInDemand)
-				|| powerOut > powerDemand * (1 + lewayInDemand))
-			System.out.println("Power demand not met: Needed " + powerDemand
-					+ " and got " + powerOut);
-		if (waterSupplyPoint.getLevel() < waterDemand * (1 - lewayInDemand))
-			System.out.println("Water demand not met: Needed " + waterDemand
-					+ " and got " + waterOut);
+		if(powerOut < powerDemand*(1-lewayInDemand) || powerOut > powerDemand*(1+lewayInDemand) )
+			System.out.println("Power demand not met: Needed " + powerDemand + "+/-" + (lewayInDemand*100) + "% and got " + powerOut);
+		if(waterSupplyPoint.getLevel() < waterDemand*(1-lewayInDemand))
+			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterOut);
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
 	}
 
 	/**
-	 * Check all connections and water flow Recursive?
-	 * 
-	 * @return
+	 * Check all connections and water flow
+	 * @return - valid/invalid model
 	 */
 	public boolean validateModel() {
 		/*
@@ -237,7 +235,56 @@ public class SnowyScheme {
 			if (pipes.get(i).getCoeff() < 0 || pipes.get(i).getMax() < 0)
 				return false;
 		}
-
+		TreeSet<Connectable> completedIndexs = new TreeSet<Connectable>();
+		for(int i = 0; i < dams.size() - 1; i++){
+			completedIndexs = recursiveDFS(dams.get(i), completedIndexs, null);
+			if(!completedIndexs.contains(dams.get(i)))
+				return false;
+		}
+		for(int i = 0; i < rivers.size() - 1; i++){
+			completedIndexs = recursiveDFS(rivers.get(i), completedIndexs, null);
+			if(!completedIndexs.contains(rivers.get(i)))
+				return false;
+		}
+		// All conditions have been checked, must be valid
 		return true;
+	}
+	
+	/**
+	 * This performs a recursive DFS on the nodes to check all 'roads lead to Rome/Ocean'
+	 * It uses a TreeSet to sort the objects
+	 * @param damOrRiver - The object to check
+	 * @param completedIndexs - A list of already check objects
+	 * @param tmpList - A list of objects checked in this iteration
+	 * @return
+	 */
+	private TreeSet<Connectable> recursiveDFS(Connectable damOrRiver, TreeSet<Connectable> completedIndexs, TreeSet<Connectable> tmpList){
+		if(completedIndexs.contains(damOrRiver)){
+			if(tmpList != null)
+				completedIndexs.addAll(tmpList);
+			return completedIndexs; // If it has already been solved, stop
+		}
+		if(damOrRiver.getDownstream() == null)
+			return completedIndexs;
+		// If it is trivial stop
+		if(damOrRiver.getDownstream().equals(getOcean())){
+			completedIndexs.add(damOrRiver);
+			if(tmpList != null)
+				completedIndexs.addAll(tmpList);
+			return completedIndexs;
+		}
+		// If this is the first, create the list and check the next one
+		if(tmpList == null){
+			tmpList = new TreeSet<Connectable>();
+			tmpList.add(damOrRiver);
+			return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);
+		}
+		// tmpList is not null
+		// If damOrRiver has already been checked we can stop
+		if(tmpList.contains(damOrRiver))
+			return completedIndexs; // There is a loop somewhere so not valid
+		// Not the first and hasn't been checked
+		tmpList.add(damOrRiver);
+		return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);
 	}
 }

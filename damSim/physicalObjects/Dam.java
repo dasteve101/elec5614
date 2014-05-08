@@ -183,10 +183,11 @@ public class Dam extends Connectable {
 	}
 
 	@Override
-	public void printObj() {
-		System.out.println("Dam " + count);
-		System.out.println("Capacity:" + capacity);
-		System.out.println("Level:" + level);
-		System.out.println("Overflowed:" + overflowed);
+	public String toString() {
+		String val = "Dam " + count;
+		val += "\nCapacity:" + capacity;
+		val += "\nLevel:" + level;
+		val += "\nOverflowed:" + overflowed;
+		return val;
 	}
 }
