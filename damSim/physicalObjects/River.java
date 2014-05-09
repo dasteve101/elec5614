@@ -11,7 +11,7 @@ package physicalObjects;
  * @author stephen
  *
  */
-public class River implements Connectable {
+public class River extends Connectable {
 	private int count;
     private float max;         // Max L/s
     private float min;         // Min L/s
@@ -21,11 +21,11 @@ public class River implements Connectable {
     private float tmpSum = 0;  // Sum all the water for this timestep
     
     /**
-     * @param count
-     * @param max
-     * @param min
-     * @param initialFlow
-     * @param length
+     * @param count - An id
+     * @param max - A max value before flooding
+     * @param min - A min value before drought
+     * @param initialFlow - What the river starts at
+     * @param length - Length of the river
      */
     public River(int count, float max, float min, float initialFlow, float length){
     	this.count =  count;
@@ -37,12 +37,12 @@ public class River implements Connectable {
     }
 
     /**
-     * @param count
-     * @param max
-     * @param min
-     * @param initialFlow
-     * @param length
-     * @param out
+     * @param count - An id
+     * @param max - A max value before flooding
+     * @param min - A min value before drought
+     * @param initialFlow - What the river starts at
+     * @param length - Length of the river
+     * @param out - Where the water flow goes.
      */
     public River(int count, float max, float min, float initialFlow, float length, Connectable out){
     	this.count = count;
@@ -78,10 +78,22 @@ public class River implements Connectable {
 		return false;
     }
     
+    public float getMax(){
+    	return max;
+    }
+    
+    public float getMin(){
+    	return min;
+    }
+    
+    public float getLength(){
+    	return length;
+    }
+    
     /**
      * 
      */
-    public void timeStep(){
+    protected void timeStep(){
     	this.waterOut(flow);
     	flow = (tmpSum + flow*(length - 1))/length;
     	tmpSum = 0;
@@ -98,22 +110,23 @@ public class River implements Connectable {
 	}
 
 	@Override
-	public float waterOut(float litres) {
+	protected float waterOut(float litres) {
 		if(out != null)
 			out.waterIn(litres);
 		return litres;
 	}
 
 	@Override
-	public void waterIn(float litres) {
+	protected void waterIn(float litres) {
 		tmpSum += litres;
 	}
 	
-	public void printObj(){
-		System.out.println("River " + count);
-		System.out.println("Max:" + max);
-		System.out.println("Min:" + min);
-		System.out.println("Length:" + length);
-		System.out.println("Flow:" + flow);
+	public String toString(){
+		String val ="River " + count;
+		val += "\nMax:" + max;
+		val += "\nMin:" + min;
+		val += "\nLength:" + length;
+		val += "\nFlow:" + flow;
+		return val;
 	}
 }

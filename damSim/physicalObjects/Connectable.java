@@ -7,35 +7,39 @@ package physicalObjects;
  * @author stephen
  *
  */
-public interface Connectable{
+public abstract class Connectable implements Comparable<Connectable>{
     
     /**
      * Where the water flows from this object
      * @param downstream
      */
-    void connectTo(Connectable downstream);
+    public abstract void connectTo(Connectable downstream);
 
     /**
      * Get the downstream object
      * @return
      */
-    Connectable getDownstream();
+    public abstract Connectable getDownstream();
     
     /**
      * Send water downstream
      * @param litres
      * @return
      */
-    float waterOut(float litres);
+    protected abstract float waterOut(float litres);
     
     /**
      * Add water
      * @param litres
      */
-    void waterIn(float litres);
+    protected abstract void waterIn(float litres);
     
     /**
-     * 
+     * @return 
      */
-    void printObj();
+    public abstract String toString();
+    
+	public int compareTo(Connectable arg0) {
+    	return this.hashCode() - arg0.hashCode();
+	}
 }

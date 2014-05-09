@@ -22,30 +22,48 @@ p = power generated, w = litres/sec
 
 -------------------------------------------------------------
 ## Chris' addition.
+## Revised to reflect what was discussed in the 2014-05-02 meeting.
 
 - The system will simulate a network of interconnected dams.
 
 - Various 'demands' are placed on the dam network in the form of water and power demand.
 
-- Water demand is met by transporting water from one dam to another dam. The second (receiving) dam 
-is at a higher altitude than the first (source) dam. This requires an input of energy into the system.
+- Power demand is placed on all of the dams, i.e. the demand met is the sum of all the power generated
+by all the dams against the power demand on the whole network.
+
+- Water demand is met by transporting water from one dam to another dam. This requires an input of energy into the system.
+Water can be transported from one dam to another via a channel connection. The amount of water demand met by the system
+is determined by the amount of water following from the bottom dam.
+
+- Transport of water via a channel connection (in any direction) requires power.
 
 - Power demand is met by transporting water from one dam to another dam. The second (receiving) dam
 is at a lower altitude that the first (source) dam. This requires the transportation of water through 
 a generator to generate electricity.
 
-- Depending on where the dam is situated in the network, the water a dam receives comes from 
-either: another dam, rain, river/s, or a mixutre of everything previously mentioned.
-
-- For the transportation of water (from a lower altitude to a higher altitude), a pump is used.
+- Depending on where the dam is situated in the network, the water a dam receives water from 
+either: another dam (via a channel), rain, river/s, or a mixutre of everything previously mentioned.
 
 - For the transportation of water (from a higher altitude to a lower altitude) to meet power 
-demands, a generator is used.
+demands, a generator is used. This water flows down a river after passing the generator.
 
 - For all the calculations invloving the transportation of water, the following equation shall be assumed:
 p = aw + b
 where p = power generated, w = litres/sec.
 
+- Each dam has an upper limit on the amount of power it can generate per litre of water. When this limit is met, excess
+water is drained into other connecting dams via the channels.
+
 - As a soft requirement, the water flowing through a river must be controlled. This is done to prevent
 flooding (too much water flow) and prevent the river drying up (too little water flow).
+
+- Two software components make up the system. One component is the dam network system (with all the sensors, actuators, and simulated
+dams) and the other component is the real-time system. The real-time component queries the virtual sensors in the dam 
+network system and decides what actions to send to the dam network system.
+
+- Order of operation of the dam network system:
+   1. Input water
+   2. Down stream water via generators and rivers
+   3. Water transportation via the channels/pipes
+   4. Check the demand on water and power
 
