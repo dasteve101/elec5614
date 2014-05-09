@@ -124,14 +124,15 @@ public class SnowyScheme {
 			throw new Exception("Incorrect size of array");
 		
 
-		for(int i =0;i <=dams.size()-1; i++){
+		for(int i =0;i <=pipes.size()-1; i++){
 				float powerToPump = powerIn.get(i);
 				if(powerOut - powerToPump >= 0){
-					dams.get(i).waterOut(powerToPump);
+					//up???
+					pipes.get(i).pump(powerToPump, true);
 					powerOut -= powerToPump;
 				}
 				else{
-					dams.get(i).waterOut(powerOut);
+					pipes.get(i).pump(powerToPump, true);
 					powerOut = 0;
 				}
 			}

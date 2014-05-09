@@ -53,9 +53,11 @@ public class runAll {
 		snowWhite.addDam(lastDam);
 		snowWhite.addPipe(pipeBetween);
 		snowWhite.addRiver(upHill);
-		
-		snowWhite.increment(Arrays.asList(1.0f,2.0f), Arrays.asList(900.0f,900.0f), Arrays.asList(100.0f,100.0f), Arrays.<Float>asList(),500);
-		
-		
+		snowWhite.addRiver(riverOut);
+		higherDam.printObj();
+		lastDam.printObj();
+		snowWhite.increment(Arrays.asList(1.0f,2.0f), Arrays.asList(900.0f,900.0f), Arrays.asList(100.0f,100.0f), Arrays.asList(100.0f),500);
+		higherDam.printObj();
+		lastDam.printObj();
 	}
 }
