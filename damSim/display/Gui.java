@@ -43,7 +43,13 @@ public class Gui extends JFrame {
 			System.err.println("damImg could not be created");
 		}
 		
-		JButton btnCount = new JButton("Increment");
+		JButton bt
+		asdsad
+		asd
+		asd
+		as
+		das
+		dnCount = new JButton("Increment");
 		cp.add(btnCount);
 
 		// Allocate an anonymous instance of an anonymous inner class that
