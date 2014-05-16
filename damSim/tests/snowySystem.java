@@ -1,7 +1,6 @@
 package tests;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import physicalObjects.*;
 
 public class snowySystem {
@@ -30,69 +29,63 @@ public class snowySystem {
 	     * @param out - Where the water flow goes.
 	     */
 		
-		
-		/*			//dam to ocean river
-		River riverOut = new River(7, 1000, 0 , 100, 10);
-	
-		//Starting River
-		River hightoBlowering = new River(6, 1000, 100 , 500, 10, blowering);
-		
-		
-		Dam blowering = new Dam(0, 1628000, 0, hightoBlowering , (float)0.3, 80); 
-		Dam talbingo = new Dam(1, 921400, 0, , (float)0.3, 1500); 		
-		Dam tumut2 = new Dam(2, 2677, 0, , (float)0.3, 286); 		
-		Dam tumut1 = new Dam(3, 52793, 0, , (float)0.3, 330); 		
-		Dam guthega = new Dam(4, 1604, 0, , (float)0.3, 60);
-		Dam murray2 = new Dam(5, 2344, 0, , (float)0.3, 550);
-		Dam murray1 = new Dam(6, 2344, 0, , (float)0.3, 950);  //a power station with no dam :(
-		
-		/* Setup a basic river scheme */		
+		// Dams
+		Dam blowering = new Dam(0, 1628000, 0, null , (float)0.3, 80); 
+		Dam talbingo = new Dam(1, 921400, 0, null, (float)0.3, 1500); 		
+		Dam tumut2 = new Dam(2, 2677, 0, null, (float)0.3, 286); 		
+		Dam tumut1 = new Dam(3, 52793, 0, null, (float)0.3, 330); 		
+		Dam guthega = new Dam(4, 1604, 0, null, (float)0.3, 60);
+		Dam murray = new Dam(5, 2344, 0, null, (float)0.3, 1500);
+		Dam jounama = new Dam(6, 43542, 0, null, (float)0.3, 0);
+		Dam tooma = new Dam(7, 28124, 0, null, (float)0.3, 0);
+		Dam happyJacks = new Dam(8, 271, 0, null, (float)0.3, 0);
+		Dam tangara = new Dam(9, 254099, 0, null, (float)0.3, 0);
+		Dam eucumbene = new Dam(10, 4798400, 0, null, (float)0.3, 0);
+		Dam jindabyne = new Dam(11, 688287, 0, null, (float)0.3, 0);
+		Dam islandBendDam = new Dam(12, 3084, 0, null, (float)0.3, 0);
+		Dam geehi = new Dam(13, 21093, 0, null, (float)0.3, 0);
+		Dam khancoban = new Dam(14, 26643, 0, null, (float)0.3, 0);
 
-	
-		//basic setup
-		///////////////////////I STILL HAVE TO ADD RIVER LENGTH
-		/*
-		River bloweringRes = new River(0, 100, 0 , blowering, 100, talbingo);
-		River talbingoRes = new River(1, 100, 0 , talbingo, 100, tumut2);
-		River tumutRiver = new River(2, 100, 0 , tumut2, 100, tumut1);
-		River haupttunnelEucumbene = new River(3, 100, 0, tumut1, 100, guthega);
-		River haupttunnelSnowy = new River(4, 100, 0 , guthega, 100, murray1);
-		River murrayRiver = new River(5, 100, 0 , muray1, 100, murray2);
+		SnowyScheme scheme = new SnowyScheme(murray);
 		
-
-
-		
-		
-		
-		SnowyScheme snowWhite = new SnowyScheme(lastDam);
-		
-		riverOut.connectTo(snowWhite.getOcean());	// Connect riverOut to the ocean.
-		*/
-		/* Add all the dam objects to the snowWhite scheme */
-		/*
-		snowWhite.addDam(blowering);
-		snowWhite.addDam(talbingo);
-		snowWhite.addDam(tumut2);
-		snowWhite.addDam(tumut1);
-		snowWhite.addDam(guthega);
-		snowWhite.addDam(murray2);
-		snowWhite.addDam(murray1);
-
-		snowWhite.addRiver(hightoBlowering);
-		snowWhite.addRiver(riverOut);
-		snowWhite.addRiver(bloweringRes);
-		snowWhite.addRiver(talbingoRes);
-		snowWhite.addRiver(tumutRiver);
-		snowWhite.addRiver(haupttunnelEucumbene);
-		snowWhite.addRiver(haupttunnelSnowy);
-		snowWhite.addRiver(murrayRiver);
-
-
-		snowWhite.addRiver(riverOut);
+		// Rivers
+		River hightoBlowering = new River(6, 1000, 100 , 500, 10, scheme.getOcean()); // From blowering to ocean
+		blowering.connectTo(hightoBlowering);
+		River junamaToblowering = new River(0, 100, 0 , 500, 100, blowering);
+		jounama.connectTo(junamaToblowering);
+		River talbingoTojunama = new River(1, 100, 0 , 500, 100, jounama);
+		talbingo.connectTo(talbingoTojunama);
+		River tumutToTalbingo = new River(2, 100, 0 , 500, 100, talbingo);
+		tumut2.connectTo(tumutToTalbingo);
+		River tumutToTamut = new River(2, 100, 0 , 500, 100, tumut2);
+		tumut1.connectTo(tumutToTamut);
+		River toomaToTumut = new River(3, 100, 0, 50, 100, tumut1);
+		tooma.connectTo(toomaToTumut);
+		River happyJToTumut = new River(3, 100, 0, 50, 100, tumut1);
+		happyJacks.connectTo(happyJToTumut);
+		Pipe eucumbeneToHappyJ = new Pipe(0 ,0 , eucumbene, happyJacks);
+		River tangaraToEucumbene = new River(4, 100, 0 , 50, 100, eucumbene);
+		tangara.connectTo(tangaraToEucumbene);
+		River eucumbeneToJindabyne = new River(4, 100, 0 , 50, 100, jindabyne);
+		eucumbene.connectTo(eucumbeneToJindabyne);
+		River snowyRiver = new River(4, 100, 0 , 50, 100, scheme.getOcean());
+		jindabyne.connectTo(snowyRiver);
+		Pipe jindabyneToIsland = new Pipe(0, 0, islandBendDam, jindabyne);
+		Pipe eucumbeneToIsland = new Pipe(0, 0, islandBendDam, eucumbene);
+		River guthegaToIsland = new River(4, 100, 0 , 50, 100, islandBendDam);
+		guthega.connectTo(guthegaToIsland);
+		River islandToGeehi = new River(5, 100, 0 , 50, 100, geehi);
+		islandBendDam.connectTo(islandToGeehi);
+		River geehiToMurray = new River(5, 100, 0 , 50, 100, murray);
+		geehi.connectTo(geehiToMurray);
+		River murrayToKhancoban = new River(5, 100, 0 , 50, 100, khancoban);
+		murray.connectTo(murrayToKhancoban);
+		River khancobanRiver = new River(5, 100, 0 , 50, 100, scheme.getOcean());
+		khancoban.connectTo(khancobanRiver);
 
 		System.out.print("The model is ");
 		
-		if(snowWhite.validateModel())
+		if(scheme.validateModel())
 			System.out.println("valid");
 		else{
 			System.out.println("invalid");
