@@ -73,7 +73,9 @@ public class Gui extends JFrame {
 	private List<TreeSet<Connectable>> getLayers(SnowyScheme snowy){
 		List<TreeSet<Connectable>> layers = new ArrayList<TreeSet<Connectable>>();
 		TreeSet<Connectable> visited = new TreeSet<Connectable>();
-		List<Connectable> all = snowy.getRiversAndDams();
+		List<Connectable> all = new ArrayList<Connectable>();
+		all.addAll(snowy.getDams());
+		all.addAll(snowy.getRivers());
 		int layer = 0;
 		layers.add(new TreeSet<Connectable>());
 		layers.get(layer).add(snowy.getOcean()); // Bottom layer is always ocean
