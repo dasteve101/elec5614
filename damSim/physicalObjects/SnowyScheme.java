@@ -291,4 +291,11 @@ public class SnowyScheme {
 		tmpList.add(damOrRiver);
 		return recursiveDFS(damOrRiver.getDownstream(), completedIndexs, tmpList);
 	}
+
+	public List<Connectable> getRiversAndDams() {
+		List<Connectable> damsNRivers = new ArrayList<Connectable>();
+		damsNRivers.addAll(dams);
+		damsNRivers.addAll(rivers);
+		return damsNRivers;
+	}
 }
