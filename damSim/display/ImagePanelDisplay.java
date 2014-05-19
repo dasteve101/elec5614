@@ -45,25 +45,6 @@ public class ImagePanelDisplay {
 		
 		/* TODO - finish this function */
 		/* TODO - determine how the diagram is going to be constructed */
-		/*private BufferedImage image;
-
-		public ImagePanel(String fileName) throws IOException {
-			image = ImageIO.read(new File(fileName));
-			setOpaque(true);
-		}
-		
-		@Override
-	    public Dimension getPreferredSize()
-	    {
-	        return (new Dimension(image.getWidth(), image.getHeight()));
-	    }
-
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			g.drawImage(image, 0, 0, null); // see javadoc for more info on the
-											// parameters
-		}*/
 	}
 	
 	/**
@@ -74,6 +55,11 @@ public class ImagePanelDisplay {
 	 *
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8693432720183042365L;
 
 		/**
 		 * Constructor method.
@@ -91,17 +77,6 @@ public class ImagePanelDisplay {
 		}
 	}
 	
-	// FIXME - this function is probably not needed here.
-	private static class ButtonHandler implements ActionListener {
-		/* TODO - finish this function */
-		// TODO - see if this class is really necessary. Might be removed for optimisation purposes.
-		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-	}
-
 	/**
 	 * Getter method for the observedScheme field.
 	 * 
