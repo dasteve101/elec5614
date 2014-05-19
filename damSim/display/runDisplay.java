@@ -8,7 +8,13 @@ import physicalObjects.*;
  * This class opens a GUI to display the objects
  */
 public class runDisplay {
-
+	
+	/**
+	 * Class method to create the Snowy Hydro scheme object. This is a direct copy
+	 * from the snowySystem.java class, from package tests.
+	 * 
+	 * @return
+	 */
 	private static SnowyScheme constructSnowyScheme() {
 		/* Setup a basic dam scheme */
 		
