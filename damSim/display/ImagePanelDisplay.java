@@ -35,7 +35,13 @@ public class ImagePanelDisplay {
 		 */
 		private static final long serialVersionUID = -3613761596634571654L;
 
-		
+		/**
+		 * Method to display the image of the Snowy Hydro scheme,
+		 */
+		public void displayImage() {
+
+			
+		}
 		
 		/* TODO - finish this function */
 		/* TODO - determine how the diagram is going to be constructed */
@@ -69,16 +75,25 @@ public class ImagePanelDisplay {
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
 
+		/**
+		 * Constructor method.
+		 * This is used to create all the buttons and controls for the Snowy Scheme
+		 * type observedScheme.
+		 */
+		public SimulationController() {
+			
+		}
+		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
 			
 		}
-		
 	}
 	
+	// FIXME - this function is probably not needed here.
 	private static class ButtonHandler implements ActionListener {
-/* TODO - finish this function */
+		/* TODO - finish this function */
 		// TODO - see if this class is really necessary. Might be removed for optimisation purposes.
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
