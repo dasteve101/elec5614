@@ -60,8 +60,15 @@ public class ImagePanelDisplay {
 		}*/
 	}
 	
-	private static class ButtonHandler implements ActionListener {
-/* TODO - finish this function */
+	/**
+	 * Class used to manually alter attributes in the Snowy Hydro scheme.
+	 * This class is used for testing purposes only.
+	 * 
+	 * @author christoper
+	 *
+	 */
+	public static class SimulationController extends JPanel implements ActionListener {
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
@@ -69,8 +76,22 @@ public class ImagePanelDisplay {
 		}
 		
 	}
-
 	
+	private static class ButtonHandler implements ActionListener {
+/* TODO - finish this function */
+		// TODO - see if this class is really necessary. Might be removed for optimisation purposes.
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// TODO Auto-generated method stub
+			
+		}
+	}
+
+	/**
+	 * Getter method for the observedScheme field.
+	 * 
+	 * @return observedScheme - The hydro scheme that the GUI is modelling.
+	 */
 	public SnowyScheme getSnowyScheme() {
 		return observedScheme;
 	}
@@ -79,9 +100,19 @@ public class ImagePanelDisplay {
 	 * Constructor method for the class.
 	 */
 	public ImagePanelDisplay(SnowyScheme scheme) {
-		// Create an instance of the snowy hydro scheme.
-		
-	
+		observedScheme = scheme;
+		// Create two JFrames (windows) for the image and the simulation controls.
+		JFrame image = new JFrame("Image Window");
+		JFrame simulation = new JFrame("Simulation Window");
+		// Create an extended JPanel instance of the image panel.
+		ImagePanel imageContent = new ImagePanel();
+		// Create a JPanel instance of the simulation controller panel.
+		SimulationController simulationContent = new SimulationController();
+		// Attach the different JPanels to their respective JFrames (windows).
+		image.setContentPane(imageContent);
+		simulation.setContentPane(simulationContent);
+		// Make the two JFrames visible.
+
 	}
 
 }
