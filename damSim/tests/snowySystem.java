@@ -10,6 +10,8 @@ public class snowySystem {
 		
 		/*Dam setup 
 		 * Used ML for water and MW for power, didn't add outlfow as it depends on the dam, coeff wasn't changed
+		 * River setup
+		 * Length added in metres for rivers EXCEPT for the ones to ocean
 		 */		
 		/**dam
 		 * @param count - Variable used as an identifier.
@@ -49,38 +51,38 @@ public class snowySystem {
 		SnowyScheme scheme = new SnowyScheme(murray);
 		
 		// Rivers
-		River hightoBlowering = new River(6, 1000, 100 , 500, 10, scheme.getOcean()); // From blowering to ocean
+		River hightoBlowering = new River(0, 1000, 100 , 500, 10, scheme.getOcean()); // From blowering to ocean
 		blowering.connectTo(hightoBlowering);
-		River junamaToblowering = new River(0, 100, 0 , 500, 100, blowering);
+		River junamaToblowering = new River(1, 100, 0 , 500, 17857, blowering);
 		jounama.connectTo(junamaToblowering);
-		River talbingoTojunama = new River(1, 100, 0 , 500, 100, jounama);
+		River talbingoTojunama = new River(2, 100, 0 , 500, 8923, jounama);
 		talbingo.connectTo(talbingoTojunama);
-		River tumutToTalbingo = new River(2, 100, 0 , 500, 100, talbingo);
+		River tumutToTalbingo = new River(3, 100, 0 , 500, 29762, talbingo);
 		tumut2.connectTo(tumutToTalbingo);
-		River tumutToTamut = new River(2, 100, 0 , 500, 100, tumut2);
+		River tumutToTamut = new River(4, 100, 0 , 500, 8929, tumut2);
 		tumut1.connectTo(tumutToTamut);
-		River toomaToTumut = new River(3, 100, 0, 50, 100, tumut1);
+		River toomaToTumut = new River(5, 100, 0, 50, 14881, tumut1);
 		tooma.connectTo(toomaToTumut);
-		River happyJToTumut = new River(3, 100, 0, 50, 100, tumut1);
+		River happyJToTumut = new River(6, 100, 0, 50, 14881, tumut1);
 		happyJacks.connectTo(happyJToTumut);
 		Pipe eucumbeneToHappyJ = new Pipe(0 ,0 , eucumbene, happyJacks);
-		River tangaraToEucumbene = new River(4, 100, 0 , 50, 100, eucumbene);
+		River tangaraToEucumbene = new River(7, 100, 0 , 50, 35714, eucumbene);
 		tangara.connectTo(tangaraToEucumbene);
-		River eucumbeneToJindabyne = new River(4, 100, 0 , 50, 100, jindabyne);
+		River eucumbeneToJindabyne = new River(8, 100, 0 , 50, 327382, jindabyne);
 		eucumbene.connectTo(eucumbeneToJindabyne);
-		River snowyRiver = new River(4, 100, 0 , 50, 100, scheme.getOcean());
+		River snowyRiver = new River(9, 100, 0 , 50, 100, scheme.getOcean());
 		jindabyne.connectTo(snowyRiver);
-		Pipe jindabyneToIsland = new Pipe(0, 0, islandBendDam, jindabyne);
-		Pipe eucumbeneToIsland = new Pipe(0, 0, islandBendDam, eucumbene);
-		River guthegaToIsland = new River(4, 100, 0 , 50, 100, islandBendDam);
+		Pipe jindabyneToIsland = new Pipe(1, 0, islandBendDam, jindabyne);
+		Pipe eucumbeneToIsland = new Pipe(2, 0, islandBendDam, eucumbene);
+		River guthegaToIsland = new River(10, 100, 0 , 50, 17857, islandBendDam);
 		guthega.connectTo(guthegaToIsland);
-		River islandToGeehi = new River(5, 100, 0 , 50, 100, geehi);
+		River islandToGeehi = new River(11, 100, 0 , 50, 16071, geehi);
 		islandBendDam.connectTo(islandToGeehi);
-		River geehiToMurray = new River(5, 100, 0 , 50, 100, murray);
+		River geehiToMurray = new River(12, 100, 0 , 50, 14881, murray);
 		geehi.connectTo(geehiToMurray);
-		River murrayToKhancoban = new River(5, 100, 0 , 50, 100, khancoban);
+		River murrayToKhancoban = new River(13, 100, 0 , 50, 10119, khancoban);
 		murray.connectTo(murrayToKhancoban);
-		River khancobanRiver = new River(5, 100, 0 , 50, 100, scheme.getOcean());
+		River khancobanRiver = new River(14, 100, 0 , 50, 100, scheme.getOcean());
 		khancoban.connectTo(khancobanRiver);
 
 		System.out.print("The model is ");
