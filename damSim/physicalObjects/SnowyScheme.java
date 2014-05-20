@@ -51,7 +51,8 @@ public class SnowyScheme {
 	 * @param dam - dam to add to object
 	 */
 	public void addDam(Dam dam) {
-		dams.add(dam);
+		if(!dams.contains(dam))
+			dams.add(dam);
 	}
 
 	/**
@@ -65,7 +66,8 @@ public class SnowyScheme {
 	 * @param river - river to add to object
 	 */
 	public void addRiver(River river) {
-		rivers.add(river);
+		if(!rivers.contains(river))
+			rivers.add(river);
 	}
 
 	/**
@@ -79,7 +81,8 @@ public class SnowyScheme {
 	 * @param pipe - pipe to add to object
 	 */
 	public void addPipe(Pipe pipe) {
-		pipes.add(pipe);
+		if(!pipes.contains(pipe))
+			pipes.add(pipe);
 	}
 
 	/**
