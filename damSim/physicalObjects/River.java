@@ -12,7 +12,6 @@ package physicalObjects;
  *
  */
 public class River extends Connectable {
-	private int count;
     private float max;         // Max L/s
     private float min;         // Min L/s
     private float flow;        // Litres/sec
@@ -21,14 +20,14 @@ public class River extends Connectable {
     private float tmpSum = 0;  // Sum all the water for this timestep
     
     /**
-     * @param count - An id
+     * @param name - a name to call it
      * @param max - A max value before flooding
      * @param min - A min value before drought
      * @param initialFlow - What the river starts at
      * @param length - Length of the river
      */
-    public River(int count, float max, float min, float initialFlow, float length){
-    	this.count =  count;
+    public River(String name, float max, float min, float initialFlow, float length){
+    	super(name);
     	this.max = max;
     	this.min = min;
     	this.flow = initialFlow;
@@ -37,15 +36,15 @@ public class River extends Connectable {
     }
 
     /**
-     * @param count - An id
+     * @param name - A name to call it
      * @param max - A max value before flooding
      * @param min - A min value before drought
      * @param initialFlow - What the river starts at
      * @param length - Length of the river
      * @param out - Where the water flow goes.
      */
-    public River(int count, float max, float min, float initialFlow, float length, Connectable out){
-    	this.count = count;
+    public River(String name, float max, float min, float initialFlow, float length, Connectable out){
+    	super(name);
     	this.max = max;
     	this.min = min;
     	this.flow = initialFlow;
@@ -122,7 +121,7 @@ public class River extends Connectable {
 	}
 	
 	public String toString(){
-		String val ="River " + count;
+		String val ="River " + this.getName();
 		val += "\nMax:" + max;
 		val += "\nMin:" + min;
 		val += "\nLength:" + length;

@@ -8,11 +8,11 @@ public class runAll {
 
 	public static void main(String[] args) throws Exception {
 		/* Setup a basic dam scheme */
-		River riverOut = new River(0, 1000, 0 , 100, 10); 						// River from dam to ocean
-		Dam lastDam = new Dam(0, 10000, 2000, riverOut, (float) 0.3, 1000);		// lastDam connected to riverOut.
+		River riverOut = new River("0", 1000, 0 , 100, 10); 						// River from dam to ocean
+		Dam lastDam = new Dam("0", 10000, 2000, riverOut, (float) 0.3, 1000);		// lastDam connected to riverOut.
 
-		River upHill = new River(1, 1000, 100 , 500, 10, lastDam);				// River with lastDam connected to the bottom of it.
-		Dam higherDam = new Dam(1, 10000, 2000, upHill, (float) 0.3, 1000);		// higherDam is connected to the top of upHill.
+		River upHill = new River("1", 1000, 100 , 500, 10, lastDam);				// River with lastDam connected to the bottom of it.
+		Dam higherDam = new Dam("1", 10000, 2000, upHill, (float) 0.3, 1000);		// higherDam is connected to the top of upHill.
 		Pipe pipeBetween = new Pipe(300, (float) 0.5, higherDam, lastDam);		// Connect a pipe between higherDam and lastDam.
 		SnowyScheme snowWhite = new SnowyScheme(lastDam);						// Create a pseudo Snowy Mountain Scheme.
 		riverOut.connectTo(snowWhite.getOcean());								// Connect riverOut to the ocean.
