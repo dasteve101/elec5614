@@ -15,7 +15,7 @@ public class SnowyScheme {
 	private List<Dam> dams;
 	private List<River> rivers;
 	private List<Pipe> pipes;
-	// private float powerDemand;
+    private float powerDemand;
 	private float waterDemand;
 	private float lewayInDemand;
 
@@ -181,6 +181,7 @@ public class SnowyScheme {
 	public void increment(List<Float> rain, List<Float> waterForPower,
 			List<Float> waterOut, List<Float> pumpPower, float powerDemand)
 			throws IncorrectLengthException {
+		this.powerDemand = powerDemand; 
 		powerOut = 0;
 		rainfall(rain);
 		generatePower(waterForPower);
@@ -194,6 +195,9 @@ public class SnowyScheme {
 			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterOut);
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
+	}
+	public float getPowerDemand(){
+		return powerDemand;
 	}
 
 	/**

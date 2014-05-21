@@ -1,6 +1,11 @@
 package tests;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import controller.ControlRTS;
+import controller.DamSensor;
+import controller.PowerDemandSensor;
 import physicalObjects.*;
 
 public class snowySystem {
@@ -126,5 +131,17 @@ public class snowySystem {
 			System.out.println("invalid");
 			return;
 		}
+		
+		PowerDemandSensor powerDemandSensor = new PowerDemandSensor(scheme);
+		List<Dam> allTheDams = scheme.getDams();
+		List<DamSensor> damSensors = new ArrayList<DamSensor>();
+		for (Dam dam : allTheDams) {
+			damSensors.add(new DamSensor(dam));
+		}
+		ControlRTS controller = new ControlRTS(powerDemandSensor, damSensors);
+		// TODO Make a thread instead of hijacking this one.
+	//while (true) {
+	//		controller.decision();
+		//}
 	}
 }
