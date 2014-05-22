@@ -1,14 +1,16 @@
 package controller;
 
-import physicalObjects.SnowyScheme;
 
 public class PowerDemandSensor {
-	SnowyScheme snow;
-	public PowerDemandSensor(SnowyScheme scheme) {
-	snow = scheme;
+	float demand;
+	public PowerDemandSensor() {
+	
 	}
 	public float  getPowerDemand(){
-		return snow.getPowerDemand();	
+		return demand; 	
 		}
+	public void setPowerDemand(float powerDemand){
+		this. demand = powerDemand;
+	}
 	
 }

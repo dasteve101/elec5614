@@ -3,12 +3,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
+
 import controller.ControlRTS;
 import controller.DamSensor;
+import controller.MailBox;
 import controller.PowerDemandSensor;
 import physicalObjects.*;
 
 public class snowySystem {
+	
+	static List<Float> makeZeroes(int count) {
+		List<Float> zeroes = new ArrayList<Float>();
+		for (int i = 0; i < count; i++) {
+			zeroes.add(0.0f);
+		}
+		return zeroes;
+	}
 
 	public static void main(String[] args) throws Exception {
 		/* Setup a basic dam scheme */
@@ -132,16 +143,22 @@ public class snowySystem {
 			return;
 		}
 		
-		PowerDemandSensor powerDemandSensor = new PowerDemandSensor(scheme);
+		PowerDemandSensor powerDemandSensor = new PowerDemandSensor();
 		List<Dam> allTheDams = scheme.getDams();
+		MailBox box = new MailBox();
 		List<DamSensor> damSensors = new ArrayList<DamSensor>();
 		for (Dam dam : allTheDams) {
 			damSensors.add(new DamSensor(dam));
 		}
-		ControlRTS controller = new ControlRTS(powerDemandSensor, damSensors);
+		ControlRTS controller = new ControlRTS(powerDemandSensor, damSensors,box);
 		// TODO Make a thread instead of hijacking this one.
-	//while (true) {
-	//		controller.decision();
-		//}
+	    while (true) {
+	    	scheme.increment(makeZeroes(15), box.getWaterforPower(), makeZeroes(15), makeZeroes(15), 500);
+	    	powerDemandSensor.setPowerDemand(scheme.getPowerDemand());
+	    	System.out.println("Simulating");
+	        
+	    	Thread.sleep(100);
+			
+		}
 	}
 }

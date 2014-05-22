@@ -11,4 +11,7 @@ public float getMaxWaterForPower(){
 	return dam.getMaxWaterForPower();
 	
 }
+public float getWattsPerLitre(){
+	return dam.getWattsPerLitre();
+}
 }
