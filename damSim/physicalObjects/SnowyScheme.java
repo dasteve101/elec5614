@@ -213,7 +213,7 @@ public class SnowyScheme {
 		 */
 		if (waterSupplyPoint == null || !dams.contains(waterSupplyPoint))
 			return false;
-		for (int i = 0; i < dams.size() - 1; i++) {
+		for (int i = 0; i < dams.size(); i++) {
 			if (dams.get(i).getDownstream() == null)
 				return false;
 			if (dams.get(i).getLevel() < 0
@@ -224,7 +224,7 @@ public class SnowyScheme {
 			if (dams.get(i).getWattsPerLitre() < 0)
 				return false;
 		}
-		for (int i = 0; i < rivers.size() - 1; i++) {
+		for (int i = 0; i < rivers.size(); i++) {
 			if (rivers.get(i).getDownstream() == null)
 				return false;
 			if (rivers.get(i).getMax() < rivers.get(i).getMin())
@@ -234,7 +234,7 @@ public class SnowyScheme {
 			if (rivers.get(i).getFlow() < 0)
 				return false;
 		}
-		for (int i = 0; i < pipes.size() - 1; i++) {
+		for (int i = 0; i < pipes.size(); i++) {
 			if (pipes.get(i).getDownhill() == null
 					|| pipes.get(i).getUphill() == null)
 				return false;
@@ -242,12 +242,12 @@ public class SnowyScheme {
 				return false;
 		}
 		TreeSet<Connectable> completedIndexs = new TreeSet<Connectable>();
-		for(int i = 0; i < dams.size() - 1; i++){
+		for(int i = 0; i < dams.size(); i++){
 			completedIndexs = recursiveDFS(dams.get(i), completedIndexs, null);
 			if(!completedIndexs.contains(dams.get(i)))
 				return false;
 		}
-		for(int i = 0; i < rivers.size() - 1; i++){
+		for(int i = 0; i < rivers.size(); i++){
 			completedIndexs = recursiveDFS(rivers.get(i), completedIndexs, null);
 			if(!completedIndexs.contains(rivers.get(i)))
 				return false;
