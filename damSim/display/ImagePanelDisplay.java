@@ -8,13 +8,16 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import java.util.*;
+import java.util.List;
+
 import physicalObjects.*;
 
 /**
  * Class used to create an image display of the Snowy Hydro Scheme.
  * Use this to graphically display the scheme.
  * 
- * @author christoper
+ * @author Christopher
  *
  */
 public class ImagePanelDisplay {
@@ -25,7 +28,7 @@ public class ImagePanelDisplay {
 	 * Graphically display the Snowy Scheme using the .jpeg images contained in the package.
 	 * This panel holds the Snowy Hydro Scheme diagram.
 	 * 
-	 * @author christoper
+	 * @author Christopher
 	 *
 	 */
 	public static class ImagePanel extends JPanel {
@@ -51,7 +54,7 @@ public class ImagePanelDisplay {
 	 * Class used to manually alter attributes in the Snowy Hydro scheme.
 	 * This class is used for testing purposes only.
 	 * 
-	 * @author christoper
+	 * @author Christopher
 	 *
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
@@ -67,9 +70,45 @@ public class ImagePanelDisplay {
 		 * type observedScheme.
 		 */
 		public SimulationController() {
-			
+			// TODO - determine what order buttons and sub-panels will be created locate appropriate methods.
+			// Create the dam panel segment of the simulator window.
+			createDamWindowSegment();
 		}
 		
+		/**
+		 * Create a JPanel that contains all the dams in the Snowy Hydro scheme.
+		 * A JPanel with a collection of buttons controlling each dam.
+		 * 
+		 * @return
+		 */
+		private JPanel createDamWindowSegment() {
+			JPanel damContentPane;
+			// Create a JPanel of buttons for each dam in the Snowy Hydro Scheme.
+			List<Dam> snowyDams = observedScheme.getDams();
+			// Iterate though the dam List and create a button panel for each one.
+			for (Dam dam: snowyDams) {
+				damContentPane = createDamButtonPanel(dam);
+				// Add the panel to the instance JPanel.
+				add(damContentPane);
+			}
+			return null;
+			// TODO Auto-generated method stub
+		}
+
+		/**
+		 * Create a JPanel that monitors a single dam in the Snowy Hydro Scheme.
+		 * 
+		 * @return
+		 */
+		private JPanel createDamButtonPanel(Dam dam) {
+			// Add two buttons (increment and decrement) to a dam JPanel.
+			JButton damIncrement = new JButton("+ 10");
+			JButton damDecrement = new JButton("- 10");
+			
+			
+			return null;
+		}
+
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
