@@ -89,22 +89,35 @@ public class ImagePanelDisplay {
 			// Add two buttons (increment and decrement) to a dam JPanel.
 			JButton damIncrement = new JButton("+ 10");
 			JButton damDecrement = new JButton("- 10");
-			JPanel buttonContainer = new JPanel();
+			JPanel buttonContainer = new JPanel(new BorderLayout());
 			JLabel damName = new JLabel(dam.getName());
 			// Add ActionListeners to the buttons.
 			damIncrement.addActionListener(this);
 			damDecrement.addActionListener(this);
+			// Add client properties to the buttons to identifiy them.
+			damIncrement.putClientProperty("dam_object", dam);
+			damIncrement.putClientProperty("operation", "Increment by 10");
 			// Add all the components to the JPanel container.
-			buttonContainer.add(damName);
-			buttonContainer.add(damIncrement);
-			buttonContainer.add(damDecrement);
+			buttonContainer.add(damName, BorderLayout.NORTH);
+			buttonContainer.add(damIncrement, BorderLayout.EAST);
+			buttonContainer.add(damDecrement, BorderLayout.WEST);
 
 			return buttonContainer;
 		}
 
+		/**
+		 * Event-handler for all the JButtons.
+		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			// FIXME - assume, for the mean time, that all action events are going to be JButtons.
+			JButton buttonEvent = (JButton)e.getSource();
+			// TODO - Create MACRO strings for these operation key-value pairs.
+			if (buttonEvent.getClientProperty("operation") == "Increment by 10") {
+				System.out.println("Sweet n' Sour sauce!");
+			} else {
+				System.out.println("Awkwards.");
+			}
 			
 		}
 	}
@@ -135,8 +148,9 @@ public class ImagePanelDisplay {
 		// Attach the different JPanels to their respective JFrames (windows).
 		image.setContentPane(imageContent);
 		simulation.getContentPane().add(simulationContent);
+		// Adjust the size of the frame.
+		simulation.pack();
 		// Make the two JFrames visible.
 		simulation.setVisible(true);
 	}
-
 }
