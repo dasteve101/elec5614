@@ -70,11 +70,8 @@ public class ImagePanelDisplay {
 		 * type observedScheme.
 		 */
 		public SimulationController() {
-			// TODO - determine what order buttons and sub-panels will be created locate appropriate methods.
-			super();
 			// Create the dam panel segment of the simulator window.
-			JPanel damContentPane = new JPanel();
-			// Create a JPanel of buttons for each dam in the Snowy Hydro Scheme.
+			// Get the Dam List from the observed scheme.
 			List<Dam> snowyDams = observedScheme.getDams();
 			// Iterate though the dam List and create a button panel for each one.
 			for (Dam dam: snowyDams) {
@@ -93,7 +90,7 @@ public class ImagePanelDisplay {
 			JButton damIncrement = new JButton("+ 10");
 			JButton damDecrement = new JButton("- 10");
 			JPanel buttonContainer = new JPanel();
-			JLabel damName = new JLabel(Integer.toString(dam.getID()));
+			JLabel damName = new JLabel(dam.getName());
 			// Add ActionListeners to the buttons.
 			damIncrement.addActionListener(this);
 			damDecrement.addActionListener(this);
