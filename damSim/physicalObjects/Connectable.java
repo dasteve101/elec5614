@@ -5,10 +5,19 @@ package physicalObjects;
  */
 /**
  * @author stephen
- *
  */
 public abstract class Connectable implements Comparable<Connectable>{
-    
+
+	private String name;
+	
+	public Connectable(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
     /**
      * Where the water flows from this object
      * @param downstream

@@ -15,7 +15,7 @@ public class SnowyScheme {
 	private List<Dam> dams;
 	private List<River> rivers;
 	private List<Pipe> pipes;
-	// private float powerDemand;
+    private float powerDemand;
 	private float waterDemand;
 	private float lewayInDemand;
 
@@ -24,7 +24,7 @@ public class SnowyScheme {
 	 *            whether or not water demand is met.
 	 */
 	public SnowyScheme(Dam waterSupplyPoint) {
-		ocean = new River(-1, 0, 0, 0, 1);
+		ocean = new River("Ocean", 0, 0, 0, 1);
 		dams = new ArrayList<Dam>();
 		rivers = new ArrayList<River>();
 		pipes = new ArrayList<Pipe>();
@@ -41,7 +41,7 @@ public class SnowyScheme {
 	}
 
 	/**
-	 * @param waterSupplyPoint
+	 * @param waterSupplyPoint - the dam that the town water supply is from
 	 */
 	public void setWaterSupply(Dam waterSupplyPoint) {
 		this.waterSupplyPoint = waterSupplyPoint;
@@ -51,7 +51,8 @@ public class SnowyScheme {
 	 * @param dam - dam to add to object
 	 */
 	public void addDam(Dam dam) {
-		dams.add(dam);
+		if(!dams.contains(dam))
+			dams.add(dam);
 	}
 
 	/**
@@ -65,7 +66,8 @@ public class SnowyScheme {
 	 * @param river - river to add to object
 	 */
 	public void addRiver(River river) {
-		rivers.add(river);
+		if(!rivers.contains(river))
+			rivers.add(river);
 	}
 
 	/**
@@ -79,7 +81,8 @@ public class SnowyScheme {
 	 * @param pipe - pipe to add to object
 	 */
 	public void addPipe(Pipe pipe) {
-		pipes.add(pipe);
+		if(!pipes.contains(pipe))
+			pipes.add(pipe);
 	}
 
 	/**
@@ -93,27 +96,25 @@ public class SnowyScheme {
 	/**
 	 * This method puts the rain in the dams, rivers too?
 	 * 
-	 * @param rainInDams
-	 * @throws Exception
+	 * @param rainInDams - rainfall in each dam
+	 * @throws IncorrectLengthException
 	 */
-	protected void rainfall(List<Float> rainInDams) throws Exception {
+	protected void rainfall(List<Float> rainInDams) throws IncorrectLengthException {
 		if (dams.size() != rainInDams.size())
-			throw new Exception("Incorrect size of array");
+			throw new IncorrectLengthException(dams.size(), rainInDams.size());
 		for (int i = 0; i <= dams.size() - 1; i++) {
 			dams.get(i).waterIn(rainInDams.get(i));
-
 		}
-
 	}
 
 	/**
-	 * @param waterOut
-	 * @return
-	 * @throws Exception
+	 * @param waterOut - water that was released to generate power
+	 * @return - total power generated
+	 * @throws IncorrectLengthException
 	 */
-	protected float generatePower(List<Float> waterOut) throws Exception {
+	protected float generatePower(List<Float> waterOut) throws IncorrectLengthException {
 		if (dams.size() != waterOut.size())
-			throw new Exception("Incorrect size of array");
+			throw new IncorrectLengthException(dams.size(), waterOut.size());
 		float power = 0;
 
 		for (int i = 0; i <= dams.size() - 1; i++) {
@@ -124,13 +125,13 @@ public class SnowyScheme {
 	}
 
 	/**
-	 * @param waterOut
-	 * @return
-	 * @throws Exception
+	 * @param waterOut - water to release from each of the dams
+	 * @return - the amount of water that was released
+	 * @throws IncorrectLengthException
 	 */
-	protected float waterOut(List<Float> waterOut) throws Exception {
+	protected float waterOut(List<Float> waterOut) throws IncorrectLengthException {
 		if (dams.size() != waterOut.size())
-			throw new Exception("Incorrect size of array");
+			throw new IncorrectLengthException(dams.size(), waterOut.size());
 		float water = 0;
 
 		for (int i = 0; i <= dams.size() - 1; i++) {
@@ -149,40 +150,38 @@ public class SnowyScheme {
 	}
 
 	/**
-	 * @param powerIn
-	 * @throws Exception
+	 * @param powerIn - power for each of the pipes
+	 * @throws IncorrectLengthException
 	 */
-	protected void pumpPowers(List<Float> powerIn) throws Exception {
+	protected void pumpPowers(List<Float> powerIn) throws IncorrectLengthException {
 		if (pipes.size() != powerIn.size())
-			throw new Exception("Incorrect size of array");
-
-		
+			throw new IncorrectLengthException(pipes.size(), powerIn.size());
 
 		for(int i =0;i <=pipes.size()-1; i++){
-				float powerToPump = powerIn.get(i);
-				if(powerOut - powerToPump >= 0){
-					//up???
-					pipes.get(i).pump(powerToPump, true);
-					powerOut -= powerToPump;
-				}
-				else{
-					pipes.get(i).pump(powerToPump, true);
-					powerOut = 0;
-				}
-
+			float powerToPump = powerIn.get(i);
+			if(powerOut - powerToPump >= 0){
+				//up???
+				pipes.get(i).pump(powerToPump, true);
+				powerOut -= powerToPump;
+			}
+			else{
+				pipes.get(i).pump(powerToPump, true);
+				powerOut = 0;
+			}
 		}
 	}
 
 	/**
-	 * @param rain
-	 * @param waterForPower
-	 * @param waterOut
-	 * @param pumpPower
-	 * @throws Exception
+	 * @param rain - list of the size of dams, rainfall in each
+	 * @param waterForPower - list of the size of dams, water to let out for power in each
+	 * @param waterOut - list of the size of dams, water to let out in each
+	 * @param pumpPower - power for all the pumps
+	 * @throws IncorrectLengthException
 	 */
 	public void increment(List<Float> rain, List<Float> waterForPower,
 			List<Float> waterOut, List<Float> pumpPower, float powerDemand)
-			throws Exception {
+			throws IncorrectLengthException {
+		this.powerDemand = powerDemand; 
 		powerOut = 0;
 		rainfall(rain);
 		generatePower(waterForPower);
@@ -196,6 +195,9 @@ public class SnowyScheme {
 			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterOut);
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
+	}
+	public float getPowerDemand(){
+		return powerDemand;
 	}
 
 	/**
@@ -211,7 +213,7 @@ public class SnowyScheme {
 		 */
 		if (waterSupplyPoint == null || !dams.contains(waterSupplyPoint))
 			return false;
-		for (int i = 0; i < dams.size() - 1; i++) {
+		for (int i = 0; i < dams.size(); i++) {
 			if (dams.get(i).getDownstream() == null)
 				return false;
 			if (dams.get(i).getLevel() < 0
@@ -222,7 +224,7 @@ public class SnowyScheme {
 			if (dams.get(i).getWattsPerLitre() < 0)
 				return false;
 		}
-		for (int i = 0; i < rivers.size() - 1; i++) {
+		for (int i = 0; i < rivers.size(); i++) {
 			if (rivers.get(i).getDownstream() == null)
 				return false;
 			if (rivers.get(i).getMax() < rivers.get(i).getMin())
@@ -232,7 +234,7 @@ public class SnowyScheme {
 			if (rivers.get(i).getFlow() < 0)
 				return false;
 		}
-		for (int i = 0; i < pipes.size() - 1; i++) {
+		for (int i = 0; i < pipes.size(); i++) {
 			if (pipes.get(i).getDownhill() == null
 					|| pipes.get(i).getUphill() == null)
 				return false;
@@ -240,12 +242,12 @@ public class SnowyScheme {
 				return false;
 		}
 		TreeSet<Connectable> completedIndexs = new TreeSet<Connectable>();
-		for(int i = 0; i < dams.size() - 1; i++){
+		for(int i = 0; i < dams.size(); i++){
 			completedIndexs = recursiveDFS(dams.get(i), completedIndexs, null);
 			if(!completedIndexs.contains(dams.get(i)))
 				return false;
 		}
-		for(int i = 0; i < rivers.size() - 1; i++){
+		for(int i = 0; i < rivers.size(); i++){
 			completedIndexs = recursiveDFS(rivers.get(i), completedIndexs, null);
 			if(!completedIndexs.contains(rivers.get(i)))
 				return false;

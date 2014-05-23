@@ -8,7 +8,6 @@ package physicalObjects;
  * Should be generalised to more than one river out?
  */
 public class Dam extends Connectable {
-	private int count = 0;
 	private float capacity = 0;
 	private float level = 0;
 	private Connectable downstream;
@@ -24,22 +23,15 @@ public class Dam extends Connectable {
 	 * @param coeff - Coefficient of the power-water equation (used to determine power generated per litre of water).
 	 * @param maxPwr - max power the generator in the dam can produce 
 	 */
-	public Dam(int count, float capacity, float initialLevel,
+	public Dam(String name, float capacity, float initialLevel,
 			Connectable downstream, float coeff, float maxPwr) {
-		this.count = count;
+		super(name);
 		this.capacity = capacity;
 		this.level = initialLevel;
 		this.downstream = downstream;
 		this.overflowed = false;
 		this.wattsperlitre = coeff;
 		this.maxWaterForPwr = maxPwr;
-	}
-
-	/**
-	 * @return
-	 */
-	public int getID() {
-		return count;
 	}
 
 	/**
@@ -184,7 +176,7 @@ public class Dam extends Connectable {
 
 	@Override
 	public String toString() {
-		String val = "Dam " + count;
+		String val = "Dam " + this.getName();
 		val += "\nCapacity:" + capacity;
 		val += "\nLevel:" + level;
 		val += "\nOverflowed:" + overflowed;
