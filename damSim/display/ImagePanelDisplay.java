@@ -58,7 +58,7 @@ public class ImagePanelDisplay {
 	 *
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
-
+// TODO - Create Panel for changing the power and water demand for the entire scheme.
 		/**
 		 * 
 		 */
@@ -71,28 +71,16 @@ public class ImagePanelDisplay {
 		 */
 		public SimulationController() {
 			// TODO - determine what order buttons and sub-panels will be created locate appropriate methods.
+			super();
 			// Create the dam panel segment of the simulator window.
-			createDamWindowSegment();
-		}
-		
-		/**
-		 * Create a JPanel that contains all the dams in the Snowy Hydro scheme.
-		 * A JPanel with a collection of buttons controlling each dam.
-		 * 
-		 * @return
-		 */
-		private JPanel createDamWindowSegment() {
-			JPanel damContentPane;
+			JPanel damContentPane = new JPanel();
 			// Create a JPanel of buttons for each dam in the Snowy Hydro Scheme.
 			List<Dam> snowyDams = observedScheme.getDams();
 			// Iterate though the dam List and create a button panel for each one.
 			for (Dam dam: snowyDams) {
-				damContentPane = createDamButtonPanel(dam);
 				// Add the panel to the instance JPanel.
-				add(damContentPane);
+				add(createDamButtonPanel(dam));
 			}
-			return null;
-			// TODO Auto-generated method stub
 		}
 
 		/**
@@ -104,13 +92,21 @@ public class ImagePanelDisplay {
 			// Add two buttons (increment and decrement) to a dam JPanel.
 			JButton damIncrement = new JButton("+ 10");
 			JButton damDecrement = new JButton("- 10");
-			
-			
-			return null;
+			JPanel buttonContainer = new JPanel();
+			JLabel damName = new JLabel(Integer.toString(dam.getID()));
+			// Add ActionListeners to the buttons.
+			damIncrement.addActionListener(this);
+			damDecrement.addActionListener(this);
+			// Add all the components to the JPanel container.
+			buttonContainer.add(damName);
+			buttonContainer.add(damIncrement);
+			buttonContainer.add(damDecrement);
+
+			return buttonContainer;
 		}
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
+		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			
 		}
@@ -133,15 +129,17 @@ public class ImagePanelDisplay {
 		// Create two JFrames (windows) for the image and the simulation controls.
 		JFrame image = new JFrame("Image Window");
 		JFrame simulation = new JFrame("Simulation Window");
+		// End the thread with the close button is pressed.
+		simulation.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Create an extended JPanel instance of the image panel.
 		ImagePanel imageContent = new ImagePanel();
 		// Create a JPanel instance of the simulation controller panel.
 		SimulationController simulationContent = new SimulationController();
 		// Attach the different JPanels to their respective JFrames (windows).
 		image.setContentPane(imageContent);
-		simulation.setContentPane(simulationContent);
+		simulation.getContentPane().add(simulationContent);
 		// Make the two JFrames visible.
-
+		simulation.setVisible(true);
 	}
 
 }
