@@ -9,16 +9,23 @@ public class DamThread implements Runnable {
 	private Dam d;
 	private Thread t;
 	private SynchronousQueue<MessageToPass> messages;
+	private volatile boolean isRunning;
 	
 	public DamThread(Dam d){
 		this.d = d;
 		messages = new SynchronousQueue<MessageToPass>();
+		isRunning = false;
+	}
+	
+	public Dam getDam(){
+		return d;
 	}
 
 	@Override
 	public void run() {
 		MessageToPass recieved;
-		while(true){
+		isRunning = true;
+		while(isRunning){
 			try {
 				// Wait for message [expected inflow]
 				recieved = messages.take();
@@ -64,6 +71,11 @@ public class DamThread implements Runnable {
 			t.start();
 		}
 		return t;
+	}
+	
+	public void stop(){
+		isRunning = false;
+		t.interrupt();
 	}
 	
 	public static void main(String[] args){

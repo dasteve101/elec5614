@@ -95,7 +95,7 @@ public class runDisplay {
 		River happyJToTumut = new River("Happy Jacks to Tumut 1", 100, 0, 50, 14881, tumut1);
 		happyJacks.connectTo(happyJToTumut);
 		scheme.addRiver(happyJToTumut);
-		Pipe eucumbeneToHappyJ = new Pipe(0 ,0 , eucumbene, happyJacks);
+		Pipe eucumbeneToHappyJ = new Pipe("Eucumbene to Happy Jacks", 0 , 0, 0, eucumbene, happyJacks);
 		scheme.addPipe(eucumbeneToHappyJ);
 		River tangaraToEucumbene = new River("Tangara to Eucumbene", 100, 0 , 50, 35714, eucumbene);
 		tangara.connectTo(tangaraToEucumbene);
@@ -106,9 +106,9 @@ public class runDisplay {
 		River snowyRiver = new River("Snowy River", 100, 0 , 50, 100, scheme.getOcean());
 		jindabyne.connectTo(snowyRiver);
 		scheme.addRiver(snowyRiver);
-		Pipe jindabyneToIsland = new Pipe(1, 0, islandBendDam, jindabyne);
+		Pipe jindabyneToIsland = new Pipe("JindaByne to Island Bend", 1, 0, 0, islandBendDam, jindabyne);
 		scheme.addPipe(jindabyneToIsland);
-		Pipe eucumbeneToIsland = new Pipe(2, 0, islandBendDam, eucumbene);
+		Pipe eucumbeneToIsland = new Pipe("Eucumbene to Island", 2, 0, 0, islandBendDam, eucumbene);
 		scheme.addPipe(eucumbeneToIsland);
 		River guthegaToIsland = new River("Guthega to Island Bend", 100, 0 , 50, 17857, islandBendDam);
 		guthega.connectTo(guthegaToIsland);

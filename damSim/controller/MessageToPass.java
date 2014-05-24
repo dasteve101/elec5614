@@ -14,6 +14,10 @@ public class MessageToPass {
 		return inflow;
 	}
 
+	public void setInflow(float in){
+		inflow = in;
+	}
+	
 	public float getCapacity() {
 		return capacity;
 	}
