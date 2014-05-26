@@ -18,6 +18,9 @@ public class SnowyScheme {
     private float powerDemand;
 	private float waterDemand;
 	private float lewayInDemand;
+	private List<Float> waterForPowerList;
+	private List<Float> waterOutList; 
+	private List<Float> pumpPowerList;
 
 	/**
 	 * @param waterSupplyPoint - The dam object that is used to determine
@@ -31,6 +34,9 @@ public class SnowyScheme {
 		powerOut = 0;
 		this.waterSupplyPoint = waterSupplyPoint;
 		lewayInDemand = (float) 0.05; // +/- 5%
+		waterForPowerList = new ArrayList<Float>();
+		waterOutList = new ArrayList<Float>(); 
+		pumpPowerList = new ArrayList<Float>();
 	}
 
 	/**
@@ -47,6 +53,13 @@ public class SnowyScheme {
 		this.waterSupplyPoint = waterSupplyPoint;
 	}
 
+	/**
+	 * @return waterSupplyPoint
+	 */
+	public Dam getWaterSupply() {
+		return waterSupplyPoint;
+	}
+	
 	/**
 	 * @param dam - dam to add to object
 	 */
@@ -92,10 +105,38 @@ public class SnowyScheme {
 		return pipes;
 	}
 
-	// TODO - Extend to rivers too??
 	/**
-	 * This method puts the rain in the dams, rivers too?
-	 * 
+	 * @param wtrPwr
+	 * @throws IncorrectLengthException
+	 */
+	public void setWaterForPower(List<Float> wtrPwr) throws IncorrectLengthException {
+		if (dams.size() != wtrPwr.size())
+			throw new IncorrectLengthException(dams.size(), wtrPwr.size());
+		waterForPowerList = wtrPwr;
+	}
+	
+	/**
+	 * @param wtrOut
+	 * @throws IncorrectLengthException
+	 */
+	public void setWaterOut(List<Float> wtrOut) throws IncorrectLengthException {
+		if (dams.size() != wtrOut.size())
+			throw new IncorrectLengthException(dams.size(), wtrOut.size());
+		waterOutList = wtrOut;
+	}
+	
+	/**
+	 * @param pPower
+	 * @throws IncorrectLengthException
+	 */
+	public void setPumpPowers(List<Float> pPower) throws IncorrectLengthException {
+		if (dams.size() != pPower.size())
+			throw new IncorrectLengthException(dams.size(), pPower.size());
+		pumpPowerList = pPower;
+	}
+	
+	/**
+	 * This method puts the rain in the dams
 	 * @param rainInDams - rainfall in each dam
 	 * @throws IncorrectLengthException
 	 */
@@ -159,14 +200,24 @@ public class SnowyScheme {
 
 		for(int i =0;i <=pipes.size()-1; i++){
 			float powerToPump = powerIn.get(i);
-			if(powerOut - powerToPump >= 0){
-				//up???
-				pipes.get(i).pump(powerToPump, true);
-				powerOut -= powerToPump;
+			boolean direction = true;
+			if (powerToPump < 0) {
+				direction = false;
+				powerToPump = -powerToPump;
+			}
+			if (direction) {
+				// pump uphill
+				if (powerOut - powerToPump >= 0) {
+					pipes.get(i).pump(powerToPump, true);
+					powerOut -= powerToPump;
+				} else {
+					pipes.get(i).pump(powerOut, true);
+					powerOut = 0;
+				}
 			}
 			else{
-				pipes.get(i).pump(powerToPump, true);
-				powerOut = 0;
+				// releasing water downhill doesn't take any power
+				pipes.get(i).pump(powerToPump, direction);
 			}
 		}
 	}
@@ -178,24 +229,24 @@ public class SnowyScheme {
 	 * @param pumpPower - power for all the pumps
 	 * @throws IncorrectLengthException
 	 */
-	public void increment(List<Float> rain, List<Float> waterForPower,
-			List<Float> waterOut, List<Float> pumpPower, float powerDemand)
-			throws IncorrectLengthException {
+	public void increment(List<Float> rain, float powerDemand) throws IncorrectLengthException {
 		this.powerDemand = powerDemand; 
 		powerOut = 0;
 		rainfall(rain);
-		generatePower(waterForPower);
-		waterOut(waterOut);
+		generatePower(waterForPowerList);
+		waterOut(waterOutList);
+		pumpPowers(pumpPowerList);
 		timeStepRivers();
 		// pumpPowers(pumpPower);
 		// Check demand of power and water are met
 		if(powerOut < powerDemand*(1-lewayInDemand) || powerOut > powerDemand*(1+lewayInDemand) )
 			System.out.println("Power demand not met: Needed " + powerDemand + "+/-" + (lewayInDemand*100) + "% and got " + powerOut);
 		if(waterSupplyPoint.getLevel() < waterDemand*(1-lewayInDemand))
-			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterOut);
+			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterSupplyPoint.getLevel());
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
 	}
+	
 	public float getPowerDemand(){
 		return powerDemand;
 	}
@@ -238,7 +289,7 @@ public class SnowyScheme {
 			if (pipes.get(i).getDownhill() == null
 					|| pipes.get(i).getUphill() == null)
 				return false;
-			if (pipes.get(i).getCoeff() < 0 || pipes.get(i).getMax() < 0)
+			if (pipes.get(i).getCoeff() < 0 || pipes.get(i).getMaxPower() < 0)
 				return false;
 		}
 		TreeSet<Connectable> completedIndexs = new TreeSet<Connectable>();
