@@ -146,6 +146,7 @@ public class runDisplay {
 		// and the RealTimeDisplay constructor.
 		SnowyScheme hydroScheme = constructSnowyScheme();
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);
+		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme);
 	}
 
 }
