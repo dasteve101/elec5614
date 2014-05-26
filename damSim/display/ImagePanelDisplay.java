@@ -94,7 +94,7 @@ public class ImagePanelDisplay {
 			// Add ActionListeners to the buttons.
 			damIncrement.addActionListener(this);
 			damDecrement.addActionListener(this);
-			// Add client properties to the buttons to identifiy them.
+			// Add client properties to the buttons to identify them.
 			damIncrement.putClientProperty("dam_object", dam);
 			damIncrement.putClientProperty("operation", "Increment by 10");
 			// Add all the components to the JPanel container.
