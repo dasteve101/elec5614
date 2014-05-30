@@ -2,7 +2,10 @@ package display;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Observable;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import javax.swing.*; 
@@ -37,6 +40,11 @@ public class RealTimeDisplay {
 	 */
 	private class damMonitor extends JPanel {
 		
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8893953223112938031L;
+
 		private damMonitor () {
 			// Get the dam List from the scheme and create an information panel for each one.
 			List<Dam> schemeDams = system.getDams();
@@ -77,7 +85,16 @@ public class RealTimeDisplay {
 	 *
 	 */
 	private class riverMonitor extends JPanel {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7277111165113017112L;
 		
+	}
+	
+	private class abortScheme extends JPanel {
+
 	}
 
 	/**

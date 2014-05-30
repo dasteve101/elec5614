@@ -2,6 +2,8 @@ package display;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.io.IOException;
 
@@ -91,6 +93,7 @@ public class ImagePanelDisplay {
 			JButton damDecrement = new JButton("- 10");
 			JPanel buttonContainer = new JPanel(new BorderLayout());
 			JLabel damName = new JLabel(dam.getName());
+
 			// Add ActionListeners to the buttons.
 			damIncrement.addActionListener(this);
 			damDecrement.addActionListener(this);
@@ -110,16 +113,34 @@ public class ImagePanelDisplay {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			Dam dam;
 			// FIXME - assume, for the mean time, that all action events are going to be JButtons.
 			JButton buttonEvent = (JButton)e.getSource();
 			// TODO - Create MACRO strings for these operation key-value pairs.
 			if (buttonEvent.getClientProperty("operation") == "Increment by 10") {
-				System.out.println("Sweet n' Sour sauce!");
+				// Increment a dam by 10 via the SnowtScheme class.
+				List<Float> rain = makeZeroes(14);
+				rain.add(10.0f);
+				try {
+					observedScheme.increment(rain, makeZeroes(15), makeZeroes(15), makeZeroes(15), 500);
+					
+				} catch (IncorrectLengthException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			} else {
 				System.out.println("Awkwards.");
 			}
 			
 		}
+		
+		static List<Float> makeZeroes(int count) {
+			List<Float> zeroes = new ArrayList<Float>();
+			for (int i = 0; i < count; i++) {
+				zeroes.add(0.0f);
+			}
+			return zeroes;
+		}	
 	}
 	
 	/**
@@ -152,5 +173,6 @@ public class ImagePanelDisplay {
 		simulation.pack();
 		// Make the two JFrames visible.
 		simulation.setVisible(true);
+
 	}
 }
