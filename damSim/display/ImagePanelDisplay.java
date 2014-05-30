@@ -12,31 +12,32 @@ import javax.swing.*;
 
 import java.util.*;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import physicalObjects.*;
 
 /**
- * Class used to create an image display of the Snowy Hydro Scheme.
- * Use this to graphically display the scheme.
+ * Class used to create an image display of the Snowy Hydro Scheme. Use this to
+ * graphically display the scheme.
  * 
  * @author Christopher
- *
+ * 
  */
 public class ImagePanelDisplay {
-	
+
 	private static SnowyScheme observedScheme;
 
 	/**
-	 * Graphically display the Snowy Scheme using the .jpeg images contained in the package.
-	 * This panel holds the Snowy Hydro Scheme diagram.
+	 * Graphically display the Snowy Scheme using the .jpeg images contained in
+	 * the package. This panel holds the Snowy Hydro Scheme diagram.
 	 * 
 	 * @author Christopher
-	 *
+	 * 
 	 */
 	public static class ImagePanel extends JPanel {
 
 		/**
-		 *	The class member fields.
+		 * The class member fields.
 		 */
 		private static final long serialVersionUID = -3613761596634571654L;
 
@@ -45,41 +46,75 @@ public class ImagePanelDisplay {
 		 */
 		public void displayImage() {
 
-			
 		}
-		
+
 		/* TODO - finish this function */
 		/* TODO - determine how the diagram is going to be constructed */
 	}
-	
+
 	/**
-	 * Class used to manually alter attributes in the Snowy Hydro scheme.
-	 * This class is used for testing purposes only.
+	 * Class used to manually alter attributes in the Snowy Hydro scheme. This
+	 * class is used for testing purposes only.
 	 * 
 	 * @author Christopher
-	 *
+	 * 
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
-// TODO - Create Panel for changing the power and water demand for the entire scheme.
+		// TODO - Create Panel for changing the power and water demand for the
+		// entire scheme.
+
 		/**
 		 * 
 		 */
 		private static final long serialVersionUID = 8693432720183042365L;
+		private JButton waterDemandButton;
+		private JButton powerDemandButton;
+		private JTextField demandChange;
 
 		/**
-		 * Constructor method.
-		 * This is used to create all the buttons and controls for the Snowy Scheme
-		 * type observedScheme.
+		 * Constructor method. This is used to create all the buttons and
+		 * controls for the Snowy Scheme type observedScheme.
 		 */
 		public SimulationController() {
 			// Create the dam panel segment of the simulator window.
 			// Get the Dam List from the observed scheme.
 			List<Dam> snowyDams = observedScheme.getDams();
-			// Iterate though the dam List and create a button panel for each one.
-			for (Dam dam: snowyDams) {
+			// Iterate though the dam List and create a button panel for each
+			// one.
+			for (Dam dam : snowyDams) {
 				// Add the panel to the instance JPanel.
 				add(createDamButtonPanel(dam));
 			}
+
+			// Create JPanel to change the water and power demand of the entire
+			// scheme.
+			add(createDemandController());
+		}
+
+		/**
+		 * Method to create a JPanel that allows the user to change the water
+		 * and power demand of the entire scheme.
+		 * 
+		 * @return
+		 */
+		private JPanel createDemandController() {
+			// TODO Auto-generated method stub
+			// Create the necessary components.
+			JPanel demandPanel = new JPanel();
+			JLabel label = new JLabel("Demand Control");
+			waterDemandButton = new JButton("Change Water Demand");
+			powerDemandButton = new JButton("Change Power Demand");
+			demandChange = new JTextField("Enter float value here");
+			// Add action listeners to the components.
+			waterDemandButton.addActionListener(this);
+			powerDemandButton.addActionListener(this);
+			// Add components to the JPanel.
+			demandPanel.add(powerDemandButton, BorderLayout.WEST);
+			demandPanel.add(waterDemandButton, BorderLayout.EAST);
+			demandPanel.add(demandChange, BorderLayout.NORTH);
+			demandPanel.add(label, BorderLayout.PAGE_START);
+
+			return demandPanel;
 		}
 
 		/**
@@ -89,23 +124,71 @@ public class ImagePanelDisplay {
 		 */
 		private JPanel createDamButtonPanel(Dam dam) {
 			// Add two buttons (increment and decrement) to a dam JPanel.
-			JButton damIncrement = new JButton("+ 10");
-			JButton damDecrement = new JButton("- 10");
+			JButton damRainLevel = new JButton("Set rain level");
 			JPanel buttonContainer = new JPanel(new BorderLayout());
 			JLabel damName = new JLabel(dam.getName());
 
 			// Add ActionListeners to the buttons.
-			damIncrement.addActionListener(this);
-			damDecrement.addActionListener(this);
-			// Add client properties to the buttons to identify them.
-			damIncrement.putClientProperty("dam_object", dam);
-			damIncrement.putClientProperty("operation", "Increment by 10");
+			damRainLevel.addActionListener(this);
 			// Add all the components to the JPanel container.
 			buttonContainer.add(damName, BorderLayout.NORTH);
-			buttonContainer.add(damIncrement, BorderLayout.EAST);
-			buttonContainer.add(damDecrement, BorderLayout.WEST);
+			buttonContainer.add(damRainLevel, BorderLayout.EAST);
 
 			return buttonContainer;
+		}
+
+		/**
+		 * Function to test if the user input is a valid float value.
+		 * 
+		 * @param value
+		 * @return
+		 */
+		private boolean validUserInput(String value) {
+			// TODO Auto-generated method stub
+			final String Digits = "(\\p{Digit}+)";
+			final String HexDigits = "(\\p{XDigit}+)";
+			// an exponent is 'e' or 'E' followed by an optionally
+			// signed decimal integer.
+			final String Exp = "[eE][+-]?" + Digits;
+			final String fpRegex = ("[\\x00-\\x20]*" + // Optional leading
+														// "whitespace"
+					"[+-]?(" + // Optional sign character
+					"NaN|" + // "NaN" string
+					"Infinity|" + // "Infinity" string
+
+					// A decimal floating-point string representing a finite
+					// positive
+					// number without a leading sign has at most five basic
+					// pieces:
+					// Digits . Digits ExponentPart FloatTypeSuffix
+					//
+					// Since this method allows integer-only strings as input
+					// in addition to strings of floating-point literals, the
+					// two sub-patterns below are simplifications of the grammar
+					// productions from the Java Language Specification, 2nd
+					// edition, section 3.10.2.
+
+					// Digits ._opt Digits_opt ExponentPart_opt
+					// FloatTypeSuffix_opt
+					"(((" + Digits + "(\\.)?(" + Digits + "?)(" + Exp + ")?)|" +
+
+			// . Digits ExponentPart_opt FloatTypeSuffix_opt
+					"(\\.(" + Digits + ")(" + Exp + ")?)|" +
+
+					// Hexadecimal strings
+					"((" +
+					// 0[xX] HexDigits ._opt BinaryExponent FloatTypeSuffix_opt
+					"(0[xX]" + HexDigits + "(\\.)?)|" +
+
+					// 0[xX] HexDigits_opt . HexDigits BinaryExponent
+					// FloatTypeSuffix_opt
+					"(0[xX]" + HexDigits + "?(\\.)" + HexDigits + ")" +
+
+					")[pP][+-]?" + Digits + "))" + "[fFdD]?))" + "[\\x00-\\x20]*");// Optional
+																					// trailing
+																					// "whitespace"
+
+			return Pattern.matches(fpRegex, value);
 		}
 
 		/**
@@ -113,36 +196,35 @@ public class ImagePanelDisplay {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Dam dam;
-			// FIXME - assume, for the mean time, that all action events are going to be JButtons.
-			JButton buttonEvent = (JButton)e.getSource();
-			// TODO - Create MACRO strings for these operation key-value pairs.
-			if (buttonEvent.getClientProperty("operation") == "Increment by 10") {
-				// Increment a dam by 10 via the SnowtScheme class.
-				List<Float> rain = makeZeroes(14);
-				rain.add(10.0f);
-				try {
-					observedScheme.increment(rain, makeZeroes(15), makeZeroes(15), makeZeroes(15), 500);
-					
-				} catch (IncorrectLengthException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+			// FIXME - assume, for the mean time, that all action events are
+			// going to be JButtons.
+			JButton buttonEvent = (JButton) e.getSource();
+			// Check which action event was triggered.`
+			if (buttonEvent == powerDemandButton) {
+				String value = demandChange.getText();
+				// Validate the input.
+				if (validUserInput(value)) {
+					// Get the float value from the string.
+					float floatValue = Float.parseFloat(value);
+					// Use the float value to change power demand.
+					int numOfDams = observedScheme.getDams().size();
+					System.out.println(value);
+
+				} else {
+					System.out.println("Fail buddy!");
+					// Non-valid input.
 				}
+			} else if (buttonEvent == waterDemandButton) {
+				String value = demandChange.getText();
+
 			} else {
 				System.out.println("Awkwards.");
 			}
-			
+
 		}
-		
-		static List<Float> makeZeroes(int count) {
-			List<Float> zeroes = new ArrayList<Float>();
-			for (int i = 0; i < count; i++) {
-				zeroes.add(0.0f);
-			}
-			return zeroes;
-		}	
+
 	}
-	
+
 	/**
 	 * Getter method for the observedScheme field.
 	 * 
@@ -157,7 +239,8 @@ public class ImagePanelDisplay {
 	 */
 	public ImagePanelDisplay(SnowyScheme scheme) {
 		observedScheme = scheme;
-		// Create two JFrames (windows) for the image and the simulation controls.
+		// Create two JFrames (windows) for the image and the simulation
+		// controls.
 		JFrame image = new JFrame("Image Window");
 		JFrame simulation = new JFrame("Simulation Window");
 		// End the thread with the close button is pressed.

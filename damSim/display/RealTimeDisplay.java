@@ -29,6 +29,7 @@ public class RealTimeDisplay {
 	/**
 	 * 
 	 */
+	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 31428L;
 
 	/**
@@ -93,8 +94,33 @@ public class RealTimeDisplay {
 		
 	}
 	
-	private class abortScheme extends JPanel {
+	private class abortScheme extends JPanel implements ActionListener {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -6454401343894962013L;
+		private JButton abortButton;
+	
+		private abortScheme() {
+			abortButton = new JButton("ABORT!");
+			
+			abortButton.addActionListener(this);
+			add(abortButton);
 
+		}
+	// TODO - implement run continuously and by one increment buttons.	
+		// TODO - Create JPanel to manually input rain levels into each dam.
+		// TODO - Create JButton to create random distribution for rain levels.
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO - complete this function.
+			if (e.getSource() == abortButton) {
+				System.out.println("That seemed to work.");
+			} else
+				System.out.println("That fucked up.");
+		}
+		
 	}
 
 	/**
@@ -109,10 +135,16 @@ public class RealTimeDisplay {
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Create the JPanels needed.
 		damMonitor damPanel = new damMonitor();
+		abortScheme abortPanel = new abortScheme();
 // TODO - add equivalent methods for Rivers. connections etc.
 		// Add the JPanels to the JFrame.
-		realTimeMonitor.add(damPanel);
+		realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
+		realTimeMonitor.add(abortPanel, BorderLayout.PAGE_END);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);
 	}
+
+	
+
+	
 }
