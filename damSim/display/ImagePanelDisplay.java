@@ -60,16 +60,23 @@ public class ImagePanelDisplay {
 	 * 
 	 */
 	public static class SimulationController extends JPanel implements ActionListener {
-		// TODO - Create Panel for changing the power and water demand for the
-		// entire scheme.
-
-		/**
-		 * 
-		 */
+		
+		private static final String TEXT_FIELD_OBJECT = "text field object";
+		private static final String DAM_OBJECT = "dam object";
+		private static final String ACTION = "action";
 		private static final long serialVersionUID = 8693432720183042365L;
+
 		private JButton waterDemandButton;
 		private JButton powerDemandButton;
+		private JButton damRainLevelButton;
 		private JTextField demandChange;
+		private JButton randomButton;
+		private JButton defaultButton;
+		private ArrayList<JTextField> rainLevels = new ArrayList<JTextField>();
+		private float powerDemand;
+
+			// TODO - include randomisation option.
+			// TODO - include 'default' setting.
 
 		/**
 		 * Constructor method. This is used to create all the buttons and
@@ -85,12 +92,14 @@ public class ImagePanelDisplay {
 				// Add the panel to the instance JPanel.
 				add(createDamButtonPanel(dam));
 			}
-
+			
 			// Create JPanel to change the water and power demand of the entire
 			// scheme.
 			add(createDemandController());
 		}
 
+		// TODO - Create Panel for changing the power and water demand for the
+		// entire scheme.
 		/**
 		 * Method to create a JPanel that allows the user to change the water
 		 * and power demand of the entire scheme.
@@ -98,19 +107,21 @@ public class ImagePanelDisplay {
 		 * @return
 		 */
 		private JPanel createDemandController() {
-			// TODO Auto-generated method stub
 			// Create the necessary components.
 			JPanel demandPanel = new JPanel();
 			JLabel label = new JLabel("Demand Control");
 			waterDemandButton = new JButton("Change Water Demand");
 			powerDemandButton = new JButton("Change Power Demand");
+			damRainLevelButton = new JButton("Set rain level");
 			demandChange = new JTextField("Enter float value here");
 			// Add action listeners to the components.
 			waterDemandButton.addActionListener(this);
 			powerDemandButton.addActionListener(this);
+			damRainLevelButton.addActionListener(this);
 			// Add components to the JPanel.
 			demandPanel.add(powerDemandButton, BorderLayout.WEST);
 			demandPanel.add(waterDemandButton, BorderLayout.EAST);
+			demandPanel.add(damRainLevelButton, BorderLayout.SOUTH);
 			demandPanel.add(demandChange, BorderLayout.NORTH);
 			demandPanel.add(label, BorderLayout.PAGE_START);
 
@@ -123,16 +134,15 @@ public class ImagePanelDisplay {
 		 * @return
 		 */
 		private JPanel createDamButtonPanel(Dam dam) {
-			// Add two buttons (increment and decrement) to a dam JPanel.
-			JButton damRainLevel = new JButton("Set rain level");
+			// Add components to the JPanel.
 			JPanel buttonContainer = new JPanel(new BorderLayout());
 			JLabel damName = new JLabel(dam.getName());
-
-			// Add ActionListeners to the buttons.
-			damRainLevel.addActionListener(this);
+			JTextField rainLevel = new JTextField("Enter rain level here");
 			// Add all the components to the JPanel container.
 			buttonContainer.add(damName, BorderLayout.NORTH);
-			buttonContainer.add(damRainLevel, BorderLayout.EAST);
+			buttonContainer.add(rainLevel, BorderLayout.SOUTH);
+			// Add JTextField to an ArrayList.
+			rainLevels.add(rainLevel);
 
 			return buttonContainer;
 		}
@@ -144,7 +154,6 @@ public class ImagePanelDisplay {
 		 * @return
 		 */
 		private boolean validUserInput(String value) {
-			// TODO Auto-generated method stub
 			final String Digits = "(\\p{Digit}+)";
 			final String HexDigits = "(\\p{XDigit}+)";
 			// an exponent is 'e' or 'E' followed by an optionally
@@ -196,27 +205,63 @@ public class ImagePanelDisplay {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// FIXME - assume, for the mean time, that all action events are
-			// going to be JButtons.
+			// FIXME - assume, for the mean time, that all action events are going to be JButtons.
 			JButton buttonEvent = (JButton) e.getSource();
 			// Check which action event was triggered.`
 			if (buttonEvent == powerDemandButton) {
 				String value = demandChange.getText();
 				// Validate the input.
 				if (validUserInput(value)) {
+					// TODO - check for negative values.
 					// Get the float value from the string.
 					float floatValue = Float.parseFloat(value);
+					powerDemand = floatValue;
 					// Use the float value to change power demand.
 					int numOfDams = observedScheme.getDams().size();
 					System.out.println(value);
+					// TODO - use the increment function here.
 
 				} else {
 					System.out.println("Fail buddy!");
 					// Non-valid input.
 				}
+			} else if (buttonEvent == damRainLevelButton) {
+				// FIXME - Test variable.
+				powerDemand = 1234;
+				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
+				ArrayList<Float> rainForDams = new ArrayList<Float>();
+				for (JTextField rainLevel : rainLevels) {
+					// Get the float value from the JTextField.
+					float floatValue = 0;
+					if (validUserInput(rainLevel.getText())) {
+						// TODO - check for negative values.
+						floatValue = Float.parseFloat(rainLevel.getText());
+					} else {
+						// ERROR
+						System.out.println("ERROR!");
+					}
+					// Add the float value to the Float List.
+					if (rainForDams.add(new Float(floatValue)))
+						System.out.println("Good");
+					else
+						System.out.println("Get outta here!");
+				}
+				System.out.println("rainForDams List size:" + rainForDams.size());
+				System.out.println("Dams List size:" + observedScheme.getDams().size());
+				// TODO - determine how to use previous values. Take into account variables being used for the first time.
+				// Increment the Hydro Scheme.
+				try {
+					observedScheme.increment(rainForDams, powerDemand);
+					//this.repaint();
+				} catch (IncorrectLengthException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					System.out.println("Good work dumbass!");
+				}
 			} else if (buttonEvent == waterDemandButton) {
+				// TODO - determine whether this is ever going to be implemented or not.
 				String value = demandChange.getText();
-
+				System.out.println("Waterboarding!");
 			} else {
 				System.out.println("Awkwards.");
 			}

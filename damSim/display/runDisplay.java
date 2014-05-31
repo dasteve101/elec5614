@@ -1,5 +1,7 @@
 package display;
 
+import java.util.ArrayList;
+
 import javax.swing.SwingUtilities;
 
 import physicalObjects.*;
@@ -125,6 +127,14 @@ public class runDisplay {
 		River khancobanRiver = new River("Khancoban to Ocean", 100, 0 , 50, 100, scheme.getOcean());
 		khancoban.connectTo(khancobanRiver);
 		scheme.addRiver(khancobanRiver);
+
+		System.out.print("The model is ");
+		
+		if(scheme.validateModel())
+			System.out.println("valid");
+		else{
+			System.out.println("invalid");
+		}
 		
 		return scheme;
 	}
@@ -145,6 +155,19 @@ public class runDisplay {
 		// Create an instance of the Snowy Scheme as pass it to the ImagePanelDisplay constructor
 		// and the RealTimeDisplay constructor.
 		SnowyScheme hydroScheme = constructSnowyScheme();
+		ArrayList<Float> watersOut = new ArrayList<Float>();
+		for (int i = 0; i < 15; i++) {
+			watersOut.add(new Float(0f));
+		}
+		try {
+			hydroScheme.setWaterOut(watersOut);
+			hydroScheme.setWaterForPower(watersOut);
+		} catch (IncorrectLengthException e) {
+			// TODO Auto-generated catch block
+			System.out.println("---------\nrunDisplay bummer!\n----------------");
+			e.printStackTrace();
+		}
+
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);
 		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme);
 	}
