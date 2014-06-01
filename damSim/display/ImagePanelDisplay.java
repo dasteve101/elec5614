@@ -124,7 +124,7 @@ public class ImagePanelDisplay {
 			demandPanel.add(damRainLevelButton, BorderLayout.SOUTH);
 			demandPanel.add(demandChange, BorderLayout.NORTH);
 			demandPanel.add(label, BorderLayout.PAGE_START);
-
+// TODO - fix border layout.
 			return demandPanel;
 		}
 
@@ -143,7 +143,7 @@ public class ImagePanelDisplay {
 			buttonContainer.add(rainLevel, BorderLayout.SOUTH);
 			// Add JTextField to an ArrayList.
 			rainLevels.add(rainLevel);
-
+// TODO - fix borderlayouts.
 			return buttonContainer;
 		}
 
