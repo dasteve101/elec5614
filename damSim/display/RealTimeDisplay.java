@@ -49,6 +49,8 @@ public class RealTimeDisplay {
 		private damMonitor () {
 			// Get the dam List from the scheme and create an information panel for each one.
 			List<Dam> schemeDams = system.getDams();
+			// Create a new GridLayout for the JPanel.
+			setLayout(new GridLayout(0, 3, 20, 20));
 			// Iterate through the Dam List and create an information panel for each dam.
 			for (Dam dam: schemeDams) {
 				// Add each information panel to the main JPanel.
@@ -68,8 +70,15 @@ public class RealTimeDisplay {
 			JLabel damCapacity = new JLabel("Capacity: " + Float.toString(dam.getCapacity()));
 			JLabel damLevel = new JLabel("Level: " + Float.toString(dam.getLevel()));
 			JLabel damOverflowed = new JLabel("Overflowed: " + Boolean.toString(dam.getOverflowed()));
+			// Set the alignment attributes for the JLabels.
+			damName.setAlignmentX(CENTER_ALIGNMENT);
+			damCapacity.setAlignmentX(CENTER_ALIGNMENT);
+			damLevel.setAlignmentX(CENTER_ALIGNMENT);
+			damOverflowed.setAlignmentX(CENTER_ALIGNMENT);
 			// Create the JPanel to hold all the information.
 			JPanel damInfo = new JPanel();
+			// Set loyout attributes for the JPanel.
+			damInfo.setLayout(new BoxLayout(damInfo, BoxLayout.Y_AXIS));
 			// Attach the JLabels to the JPanel.
 			damInfo.add(damName);
 			damInfo.add(damCapacity);
