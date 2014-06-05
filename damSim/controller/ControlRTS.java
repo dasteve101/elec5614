@@ -5,6 +5,7 @@ import java.util.List;
 
 import physicalObjects.Dam;
 import physicalObjects.IncorrectLengthException;
+import physicalObjects.Pipe;
 import physicalObjects.SnowyScheme;
 
 public class ControlRTS implements Runnable {
@@ -73,19 +74,28 @@ public class ControlRTS implements Runnable {
 		if(!s.validateModel())
 			throw new Exception("This model is invalid! Cannot control invalid model");
 		this.s = s;
-		damThreads = new ArrayList<DamThread>();
-		for(Dam d : s.getDams()){
-			damThreads.add(new DamThread(d));
-			if(d.equals(s.getWaterSupply()))
-				waterSupply = damThreads.get(damThreads.size() - 1);
-		}
-		for(DamThread d : damThreads)
-			d.init();
+		startDamThreads();
 		if(t == null){
 			t = new Thread(this);
 			isRunning = false;
 			t.start();
 		}
+	}
+	
+	private void startDamThreads(){
+		damThreads = new ArrayList<DamThread>();
+		for(Dam d : s.getDams()){
+			List<Pipe> pipes = new ArrayList<Pipe>();
+			for(Pipe p : s.getPipes()){
+				if(p.getDownhill().equals(d) || p.getUphill().equals(d))
+					pipes.add(p);
+			}
+			damThreads.add(new DamThread(d, pipes));
+			if(d.equals(s.getWaterSupply()))
+				waterSupply = damThreads.get(damThreads.size() - 1);
+		}
+		for(DamThread d : damThreads)
+			d.init();
 	}
 	
 	@Override
@@ -115,7 +125,10 @@ public class ControlRTS implements Runnable {
 			
 			// Logic and decision here
 			
-			// NB: a negitive power to pump is interpreted as downhill and in litres
+			// Maybe should do belief propagation???
+			// Let the dams send messages to each other and converge to solution
+			
+			// NB: a negative power to pump is interpreted as downhill and in litres
 			
 			try{
 				// send the values
@@ -127,15 +140,7 @@ public class ControlRTS implements Runnable {
 				System.out.println("Invalid list lengths: must restart damThreads");
 				for(DamThread d : damThreads)
 					d.stop();
-				// Read in dams again and try to correct
-				damThreads = new ArrayList<DamThread>();
-				for(Dam d : s.getDams()){
-					damThreads.add(new DamThread(d));
-					if(d.equals(s.getWaterSupply()))
-						waterSupply = damThreads.get(damThreads.size() - 1);
-				}
-				for(DamThread d : damThreads)
-					d.init();
+				startDamThreads();
 			}
 		}
 	}

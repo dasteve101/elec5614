@@ -1,18 +1,22 @@
 package controller;
 
 import physicalObjects.*;
+
+import java.util.List;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 public class DamThread implements Runnable {
 
 	private Dam d;
+	private List<Pipe> pipes;
 	private Thread t;
 	private SynchronousQueue<MessageToPass> messages;
 	private volatile boolean isRunning;
 	
-	public DamThread(Dam d){
+	public DamThread(Dam d, List<Pipe> pipes){
 		this.d = d;
+		this.pipes = pipes;
 		messages = new SynchronousQueue<MessageToPass>();
 		isRunning = false;
 	}
@@ -20,11 +24,29 @@ public class DamThread implements Runnable {
 	public Dam getDam(){
 		return d;
 	}
+	
+	private float calculateOut(float min, float max, float delta, float k, float l){
+		/*
+		 * linear for points below, then inverse tan, then linear above
+		 */
+		if(l <= (0.5 - delta)){
+			return (min/((float)0.5-delta))*l;
+		}
+		if(l >= (0.5 + delta)){
+			return (min/((float)0.5-delta))*l + max - ((float)0.5+delta)*(min/((float)0.5-delta));
+		}
+		// Else within valid range so use inv tan
+		float A = (float) ((max - min)/(2*Math.atan(delta/k)));
+		float C = (max + min)/2;
+		return (float) (A*Math.atan((l-0.5)/k) + C);
+	}
 
 	@Override
 	public void run() {
 		MessageToPass recieved;
 		isRunning = true;
+		float delta = (float) 0.45; // 0 < delta < 0.5
+		float k = (float) 0.1; // Control the sharpness/flatness
 		while(isRunning){
 			try {
 				// Wait for message [expected inflow]
@@ -32,16 +54,16 @@ public class DamThread implements Runnable {
 				// Calculate recommended params and set in message
 				recieved.setCapacity(d.getCapacity());
 				float recommendedOut = 0;
+				float level = d.getLevel() + recieved.getInflow();
 				if (d.getDownstream() instanceof River){
 					// River downstream
 					River downstream = ((River)d.getDownstream());
-					float averageFlow = (downstream.getMax() + downstream.getMin())/2;
-					recommendedOut = averageFlow + recieved.getInflow() +
-							((d.getPercentage() - 50)/50)*(downstream.getMax() - downstream.getMin());
+					recommendedOut = calculateOut(downstream.getMin(), downstream.getMax(), delta, k, level);
 				}
 				else{
+					// This shouldn't happen but just in case ...
 					Dam downstream = ((Dam)d.getDownstream());
-					recommendedOut = d.getCapacity()*(d.getPercentage() - 50)/(5*(downstream.getPercentage() + 1));
+					recommendedOut = calculateOut(0, (d.getCapacity() - d.getLevel())/100, delta, k, level);
 				}
 				if (recommendedOut < 0)
 					recommendedOut = 0;
@@ -80,7 +102,7 @@ public class DamThread implements Runnable {
 	
 	public static void main(String[] args){
 		Dam d = new Dam("Test", 0, 0, null, 0, 0);
-		DamThread dt = new DamThread(d);
+		DamThread dt = new DamThread(d, null);
 		Thread t = dt.init();
 	}
 
