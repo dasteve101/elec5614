@@ -2,6 +2,7 @@ package controller;
 
 import physicalObjects.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
@@ -13,16 +14,38 @@ public class DamThread implements Runnable {
 	private Thread t;
 	private SynchronousQueue<MessageToPass> messages;
 	private volatile boolean isRunning;
+	private List<DamThread> upstream;
+	private List<DamThread> downstream;
 	
 	public DamThread(Dam d, List<Pipe> pipes){
 		this.d = d;
 		this.pipes = pipes;
 		messages = new SynchronousQueue<MessageToPass>();
 		isRunning = false;
+		upstream = new ArrayList<DamThread>();
+		downstream = new ArrayList<DamThread>();
 	}
 	
 	public Dam getDam(){
 		return d;
+	}
+	
+	public void addUpstream(DamThread d){
+		if(!upstream.contains(d))
+			upstream.add(d);
+	}
+	
+	public void addDownstream(DamThread d){
+		if(!upstream.contains(d))
+			upstream.add(d);
+	}
+	
+	public List<DamThread> getUpstream(){
+		return upstream;
+	}
+	
+	public List<DamThread> getDownstream(){
+		return downstream;
 	}
 	
 	private float calculateOut(float min, float max, float delta, float k, float l){

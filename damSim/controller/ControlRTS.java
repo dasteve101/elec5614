@@ -3,10 +3,7 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import physicalObjects.Dam;
-import physicalObjects.IncorrectLengthException;
-import physicalObjects.Pipe;
-import physicalObjects.SnowyScheme;
+import physicalObjects.*;
 
 public class ControlRTS implements Runnable {
 /*
@@ -69,6 +66,7 @@ public class ControlRTS implements Runnable {
 	private DamThread waterSupply;
 	private Thread t;
 	private volatile boolean isRunning;
+	private List<DamThread> rootDams;
 	
 	public ControlRTS(SnowyScheme s) throws Exception{
 		if(!s.validateModel())
@@ -84,18 +82,41 @@ public class ControlRTS implements Runnable {
 	
 	private void startDamThreads(){
 		damThreads = new ArrayList<DamThread>();
+		rootDams = new ArrayList<DamThread>();
 		for(Dam d : s.getDams()){
 			List<Pipe> pipes = new ArrayList<Pipe>();
 			for(Pipe p : s.getPipes()){
 				if(p.getDownhill().equals(d) || p.getUphill().equals(d))
 					pipes.add(p);
 			}
-			damThreads.add(new DamThread(d, pipes));
+			DamThread t = new DamThread(d, pipes);
+			damThreads.add(t);
+			boolean root = true;
+			for(Dam d2 : s.getDams()){
+				if(d2.getDownstream().getDownstream().equals(d)){
+					root = false;
+					break;
+				}
+			}
+			if(root)
+				rootDams.add(t);
 			if(d.equals(s.getWaterSupply()))
 				waterSupply = damThreads.get(damThreads.size() - 1);
 		}
+		for(DamThread d : damThreads){
+			// set downstream and upstream for belief prop
+		}
 		for(DamThread d : damThreads)
 			d.init();
+	}
+	
+	private MessageToPass beliefProp(DamThread t, MessageToPass m){
+		
+		
+		
+		t.getDam();
+		
+		return m;
 	}
 	
 	@Override
@@ -112,10 +133,12 @@ public class ControlRTS implements Runnable {
 			pumpPowerList = new ArrayList<Float>();
 			
 			// Look at all the threads and fill in the values in the list
-			for(DamThread d : damThreads){
+			for(DamThread d : rootDams){
 				m.setInflow(0);
+				
 				try {
-					d.sendWithTimeout(m);
+					m = d.sendWithTimeout(m);
+					beliefProp(d,m);
 					// read response
 				} catch (InterruptedException e) {
 					e.printStackTrace();
