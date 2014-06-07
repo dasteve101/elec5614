@@ -86,6 +86,8 @@ public class ImagePanelDisplay {
 			// Create the dam panel segment of the simulator window.
 			// Get the Dam List from the observed scheme.
 			List<Dam> snowyDams = observedScheme.getDams();
+			// Create a new GridLayout for the JPanel.
+			setLayout(new GridLayout(0,3, 20, 20));
 			// Iterate though the dam List and create a button panel for each
 			// one.
 			for (Dam dam : snowyDams) {
