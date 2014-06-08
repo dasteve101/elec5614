@@ -10,6 +10,8 @@ import java.util.*;
 
 import javax.swing.*; 
 
+import controller.ControlRTS;
+
 import physicalObjects.*;
 
 /**
@@ -25,7 +27,8 @@ public class RealTimeDisplay {
 	 * Member fields.
 	 */
 	private static SnowyScheme system;
-
+	private ControlRTS control;
+	
 	/**
 	 * 
 	 */
@@ -137,8 +140,9 @@ public class RealTimeDisplay {
 	 * 
 	 * @param system - the Snowy Hydro Scheme that this GUI is supposed to monitor.
 	 */
-	public RealTimeDisplay(SnowyScheme scheme) {
+	public RealTimeDisplay(SnowyScheme scheme, ControlRTS control) {
 		system = scheme;
+		this.control = control;
 		// Create the JFrame needed.
 		JFrame realTimeMonitor = new JFrame("RTC Snowy Hydro");
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

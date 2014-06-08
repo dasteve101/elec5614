@@ -16,6 +16,7 @@ public class ControlRTS implements Runnable {
 	private volatile float waterDemand;
 	private List<DamThread> rootDams;
 	private volatile boolean initialized;
+	private volatile String messageToBeDisplayed;
 	
 	public ControlRTS(SnowyScheme s) throws Exception{
 		if(!s.validateModel())
@@ -37,6 +38,12 @@ public class ControlRTS implements Runnable {
 	
 	public void setWaterDemand(float w){
 		waterDemand = w;
+	}
+	
+	public String getMessage(){
+		String tmp = messageToBeDisplayed;
+		messageToBeDisplayed = null;
+		return tmp;
 	}
 	
 	private void startDamThreads(){
@@ -139,6 +146,13 @@ public class ControlRTS implements Runnable {
 					System.out.println("Could not read from sensor in dam " + d.getDam());
 				}
 			}
+			
+			
+			// need to look at upstream/downstream needs more or less water
+			// Need to use pipes
+			
+			
+			
 			//	need to look at power/water demand
 			if(waterSupply.getDam().getCapacity() < waterDemand){
 				for(DamThread up: waterSupply.getUpstream()){
@@ -179,6 +193,8 @@ public class ControlRTS implements Runnable {
 					predictedPower -= pumpP; 
 			}
 			if(predictedPower < powerDemand){
+				messageToBeDisplayed = "Power Low: warning";
+				System.out.println(messageToBeDisplayed);
 				for(int i = 0; i < s.getDams().size(); i++){
 					Dam currDam = s.getDams().get(i);
 					if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
@@ -189,8 +205,6 @@ public class ControlRTS implements Runnable {
 					}
 				}
 			}
-			
-			// need to look at upstream/downstream needs more or less water
 			
 			try{
 				// send the values
