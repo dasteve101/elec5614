@@ -120,6 +120,8 @@ public class ControlRTS implements Runnable {
 					System.out.println("Could not read from sensor in dam " + d.getDam());
 				}
 			}
+			// need to look at power/water demand
+			// need to look at upstream/downstream needs more or less water
 			
 			// Logic and decision here
 			
