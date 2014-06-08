@@ -78,19 +78,19 @@ public class runDisplay {
 		River hightoBlowering = new River("Blowering to Ocean", 1000, 100 , 500, 10, scheme.getOcean()); // From blowering to ocean
 		blowering.connectTo(hightoBlowering);
 		scheme.addRiver(hightoBlowering);
-		River junamaToblowering = new River("Junama To Blowering", 100, 0 , 500, (float) 17.857, blowering);
+		River junamaToblowering = new River("Junama To Blowering", 1000, 100 , 500, (float) 17.857, blowering);
 		jounama.connectTo(junamaToblowering);
 		scheme.addRiver(junamaToblowering);
-		River talbingoTojunama = new River("Talbingo to Junama", 100, 0 , 500, (float) 8.923, jounama);
+		River talbingoTojunama = new River("Talbingo to Junama", 1000, 100 , 500, (float) 8.923, jounama);
 		talbingo.connectTo(talbingoTojunama);
 		scheme.addRiver(talbingoTojunama);
-		River tumutToTalbingo = new River("Tumut to Talbingo", 100, 0 , 500, (float) 29.762, talbingo);
+		River tumutToTalbingo = new River("Tumut to Talbingo", 1000, 100 , 500, (float) 29.762, talbingo);
 		tumut2.connectTo(tumutToTalbingo);
 		scheme.addRiver(tumutToTalbingo);
-		River tumutToTamut = new River("Tumut 1 to Tumut 2", 100, 0 , 500, (float) 8.929, tumut2);
+		River tumutToTamut = new River("Tumut 1 to Tumut 2", 1000, 100 , 500, (float) 8.929, tumut2);
 		tumut1.connectTo(tumutToTamut);
 		scheme.addRiver(tumutToTamut);
-		River toomaToTumut = new River("Tooma to Tumut 1", 100, 0, 50, (float) 14.881, tumut1);
+		River toomaToTumut = new River("Tooma to Tumut 1", 1000, 100 , 500, (float) 14.881, tumut1);
 		tooma.connectTo(toomaToTumut);
 		scheme.addRiver(toomaToTumut);
 		River happyJToTumut = new River("Happy Jacks to Tumut 1", 100, 0, 50, (float) 14.881, tumut1);
@@ -120,7 +120,7 @@ public class runDisplay {
 		River geehiToMurray = new River("Geehi to Murray", 100, 0 , 50, (float) 14.881, murray);
 		geehi.connectTo(geehiToMurray);
 		scheme.addRiver(geehiToMurray);
-		River murrayToKhancoban = new River("Murray to Khancoban", 100, 0 , 50, (float) 10.119, khancoban);
+		River murrayToKhancoban = new River("Murray to Khancoban", 1000, 100 , 500, (float) 10.119, khancoban);
 		murray.connectTo(murrayToKhancoban);
 		scheme.addRiver(murrayToKhancoban);
 		River khancobanRiver = new River("Khancoban to Ocean", 100, 0 , 50, 100, scheme.getOcean());
