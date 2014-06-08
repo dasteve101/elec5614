@@ -1,10 +1,9 @@
 package display;
 
 import java.util.ArrayList;
-
 import javax.swing.SwingUtilities;
-
 import physicalObjects.*;
+import controller.*;
 
 /**
  * This class opens a GUI to display the objects
@@ -155,17 +154,24 @@ public class runDisplay {
 		// Create an instance of the Snowy Scheme as pass it to the ImagePanelDisplay constructor
 		// and the RealTimeDisplay constructor.
 		SnowyScheme hydroScheme = constructSnowyScheme();
-		ArrayList<Float> watersOut = new ArrayList<Float>();
-		for (int i = 0; i < 15; i++) {
-			watersOut.add(new Float(0f));
-		}
+//		ArrayList<Float> watersOut = new ArrayList<Float>();
+//		for (int i = 0; i < 15; i++) {
+//			watersOut.add(new Float(0f));
+//		}
+//		try {
+//			hydroScheme.setWaterOut(watersOut);
+//			hydroScheme.setWaterForPower(watersOut);
+//		} catch (IncorrectLengthException e) {
+//			// TODO Auto-generated catch block
+//			System.out.println("---------\nrunDisplay bummer!\n----------------");
+//			e.printStackTrace();
+//		}
+		
 		try {
-			hydroScheme.setWaterOut(watersOut);
-			hydroScheme.setWaterForPower(watersOut);
-		} catch (IncorrectLengthException e) {
-			// TODO Auto-generated catch block
-			System.out.println("---------\nrunDisplay bummer!\n----------------");
+			ControlRTS control = new ControlRTS(hydroScheme);
+		} catch (Exception e) {
 			e.printStackTrace();
+			return;
 		}
 
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);

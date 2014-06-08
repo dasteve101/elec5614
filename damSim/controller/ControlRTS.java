@@ -100,7 +100,7 @@ public class ControlRTS implements Runnable {
 			for(DamThread d : damThreads){
 				m.setInflow(0);
 				try {
-					m = d.sendWithTimeout(m);
+					d.sendWithTimeout(m);
 					for(int i = 0; i < s.getDams().size(); i++){
 						if(d.getDam().equals(s.getDams().get(i))){
 							if(d.getDam().getMaxWaterForPower() < m.getWaterOut()){

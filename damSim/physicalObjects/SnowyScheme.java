@@ -130,8 +130,8 @@ public class SnowyScheme {
 	 * @throws IncorrectLengthException
 	 */
 	public void setPumpPowers(List<Float> pPower) throws IncorrectLengthException {
-		if (dams.size() != pPower.size())
-			throw new IncorrectLengthException(dams.size(), pPower.size());
+		if (pipes.size() != pPower.size())
+			throw new IncorrectLengthException(pipes.size(), pPower.size());
 		pumpPowerList = pPower;
 	}
 	
