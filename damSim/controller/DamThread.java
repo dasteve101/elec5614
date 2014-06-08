@@ -30,6 +30,10 @@ public class DamThread implements Runnable {
 		return d;
 	}
 	
+	public List<Pipe> getPipes(){
+		return pipes;
+	}
+	
 	public void addUpstream(DamThread d){
 		if(!upstream.contains(d))
 			upstream.add(d);

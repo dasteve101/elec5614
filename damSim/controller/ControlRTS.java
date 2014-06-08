@@ -12,6 +12,8 @@ public class ControlRTS implements Runnable {
 	private DamThread waterSupply;
 	private Thread t;
 	private volatile boolean isRunning;
+	private volatile float powerDemand;
+	private volatile float waterDemand;
 	private List<DamThread> rootDams;
 	private volatile boolean initialized;
 	
@@ -27,6 +29,14 @@ public class ControlRTS implements Runnable {
 		}
 		initialized = false;
 		while(!initialized);
+	}
+	
+	public void setPowerDemand(float p){
+		powerDemand = p;
+	}
+	
+	public void setWaterDemand(float w){
+		waterDemand = w;
 	}
 	
 	private void startDamThreads(){
@@ -98,10 +108,19 @@ public class ControlRTS implements Runnable {
 			for(int i = 0; i < s.getPipes().size(); i++){
 				pumpPowerList.add((float) 0);
 			}
-			
+			float predictedPower = 0;
 			// Look at all the threads and fill in the values in the list
 			for(DamThread d : damThreads){
-				m.setInflow(0);
+				float inflow = 0; 
+				for(DamThread up : d.getUpstream()){
+					if(up.getDam().getDownstream().getDownstream().equals(d.getDam())){
+						Connectable down = up.getDam().getDownstream();
+						if(down instanceof River){
+							inflow += ((River) down).getFlow();
+						}
+					}
+				}
+				m.setInflow(inflow);
 				try {
 					d.sendWithTimeout(m);
 					for(int i = 0; i < s.getDams().size(); i++){
@@ -112,20 +131,66 @@ public class ControlRTS implements Runnable {
 							}
 							else
 								waterForPowerList.set(i, m.getWaterOut());
+							predictedPower += waterForPowerList.get(i)*d.getDam().getWattsPerLitre();
 						}
 					}
-					// read response
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					System.out.println("Could not read from sensor in dam " + d.getDam());
 				}
 			}
-			// need to look at power/water demand
+			//	need to look at power/water demand
+			if(waterSupply.getDam().getCapacity() < waterDemand){
+				for(DamThread up: waterSupply.getUpstream()){
+					// increase upstream supply by 25%
+					if(up.getDam().getDownstream().getDownstream().equals(waterSupply.getDam())){
+						for(int i = 0; i < s.getDams().size(); i++){
+							if(up.getDam().equals(s.getDams().get(i))){
+								waterOutList.set(i, (float) (waterOutList.get(i)*1.25));
+								break;
+							}
+						}
+					}
+				}
+				for(Pipe p : waterSupply.getPipes()){
+					int index = 0;
+					for(int i = 0; i < s.getPipes().size(); i++){
+						if(s.getPipes().get(i).equals(p)){
+							index = i;
+							break;
+						}
+					}
+					if(p.getUphill().equals(waterSupply.getDam())){
+						if(pumpPowerList.get(index) <= 0)
+							pumpPowerList.set(index, pumpPowerList.get(index) + p.getMaxPower());
+						else
+							pumpPowerList.set(index, p.getMaxPower());
+					}
+					else{
+						if(pumpPowerList.get(index) >= 0)
+							pumpPowerList.set(index, pumpPowerList.get(index) - p.getMaxWater());
+						else
+							pumpPowerList.set(index, -p.getMaxWater());
+					}
+				}
+			}
+			for(Float pumpP : pumpPowerList){
+				if(pumpP > 0)
+					predictedPower -= pumpP; 
+			}
+			if(predictedPower < powerDemand){
+				for(int i = 0; i < s.getDams().size(); i++){
+					Dam currDam = s.getDams().get(i);
+					if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
+						if(waterForPowerList.get(i)*1.25 < currDam.getMaxWaterForPower())
+							waterForPowerList.set(i,(float) (waterForPowerList.get(i)*1.25));
+						else
+							waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+					}
+				}
+			}
+			
 			// need to look at upstream/downstream needs more or less water
-			
-			// Logic and decision here
-			
-			// NB: a negative power to pump is interpreted as downhill and in litres
 			
 			try{
 				// send the values
