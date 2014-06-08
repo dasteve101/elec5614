@@ -97,7 +97,7 @@ public class ControlRTS implements Runnable {
 			}
 			
 			// Look at all the threads and fill in the values in the list
-			for(DamThread d : rootDams){
+			for(DamThread d : damThreads){
 				m.setInflow(0);
 				try {
 					m = d.sendWithTimeout(m);
