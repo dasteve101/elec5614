@@ -41,21 +41,21 @@ public class runDisplay {
 	     */
 		
 		// Dams
-		Dam blowering = new Dam("Blowering", 1628000, 0, null , (float)0.3, 80); 
-		Dam talbingo = new Dam("Talbingo", 921400, 0, null, (float)0.3, 1500); 		
-		Dam tumut2 = new Dam("Tumut 2", 2677, 0, null, (float)0.3, 286); 		
-		Dam tumut1 = new Dam("Tumut 1", 52793, 0, null, (float)0.3, 330); 		
-		Dam guthega = new Dam("Guthega", 1604, 0, null, (float)0.3, 60);
-		Dam murray = new Dam("Murray", 2344, 0, null, (float)0.3, 1500);
-		Dam jounama = new Dam("Jounama", 43542, 0, null, (float)0.3, 0);
-		Dam tooma = new Dam("Tooma", 28124, 0, null, (float)0.3, 0);
-		Dam happyJacks = new Dam("Happy Jacks", 271, 0, null, (float)0.3, 0);
-		Dam tangara = new Dam("Tangara", 254099, 0, null, (float)0.3, 0);
-		Dam eucumbene = new Dam("Eucumbene", 4798400, 0, null, (float)0.3, 0);
-		Dam jindabyne = new Dam("Jindabyne", 688287, 0, null, (float)0.3, 0);
-		Dam islandBendDam = new Dam("Island Bend", 3084, 0, null, (float)0.3, 0);
-		Dam geehi = new Dam("Geehi", 21093, 0, null, (float)0.3, 0);
-		Dam khancoban = new Dam("Khancoban", 26643, 0, null, (float)0.3, 0);
+		Dam blowering = new Dam("Blowering", 1628000, 1628000/2, null , (float)0.3, 80); 
+		Dam talbingo = new Dam("Talbingo", 921400, 921400/2, null, (float)0.3, 1500); 		
+		Dam tumut2 = new Dam("Tumut 2", 2677, 2677/2, null, (float)0.3, 286); 		
+		Dam tumut1 = new Dam("Tumut 1", 52793, 52793/2, null, (float)0.3, 330); 		
+		Dam guthega = new Dam("Guthega", 1604, 1604/2, null, (float)0.3, 60);
+		Dam murray = new Dam("Murray", 2344, 2344/2, null, (float)0.3, 1500);
+		Dam jounama = new Dam("Jounama", 43542, 43542/2, null, (float)0.3, 0);
+		Dam tooma = new Dam("Tooma", 28124, 28124/2, null, (float)0.3, 0);
+		Dam happyJacks = new Dam("Happy Jacks", 271, 271/2, null, (float)0.3, 0);
+		Dam tangara = new Dam("Tangara", 254099, 254099/2, null, (float)0.3, 0);
+		Dam eucumbene = new Dam("Eucumbene", 4798400, 4798400/2, null, (float)0.3, 0);
+		Dam jindabyne = new Dam("Jindabyne", 688287, 688287/2, null, (float)0.3, 0);
+		Dam islandBendDam = new Dam("Island Bend", 3084, 3084/2, null, (float)0.3, 0);
+		Dam geehi = new Dam("Geehi", 21093, 21093/2, null, (float)0.3, 0);
+		Dam khancoban = new Dam("Khancoban", 26643, 26643/2, null, (float)0.3, 0);
 
 		SnowyScheme scheme = new SnowyScheme(murray);
 		scheme.addDam(blowering);
@@ -78,30 +78,30 @@ public class runDisplay {
 		River hightoBlowering = new River("Blowering to Ocean", 1000, 100 , 500, 10, scheme.getOcean()); // From blowering to ocean
 		blowering.connectTo(hightoBlowering);
 		scheme.addRiver(hightoBlowering);
-		River junamaToblowering = new River("Junama To Blowering", 100, 0 , 500, 17857, blowering);
+		River junamaToblowering = new River("Junama To Blowering", 100, 0 , 500, (float) 17.857, blowering);
 		jounama.connectTo(junamaToblowering);
 		scheme.addRiver(junamaToblowering);
-		River talbingoTojunama = new River("Talbingo to Junama", 100, 0 , 500, 8923, jounama);
+		River talbingoTojunama = new River("Talbingo to Junama", 100, 0 , 500, (float) 8.923, jounama);
 		talbingo.connectTo(talbingoTojunama);
 		scheme.addRiver(talbingoTojunama);
-		River tumutToTalbingo = new River("Tumut to Talbingo", 100, 0 , 500, 29762, talbingo);
+		River tumutToTalbingo = new River("Tumut to Talbingo", 100, 0 , 500, (float) 29.762, talbingo);
 		tumut2.connectTo(tumutToTalbingo);
 		scheme.addRiver(tumutToTalbingo);
-		River tumutToTamut = new River("Tumut 1 to Tumut 2", 100, 0 , 500, 8929, tumut2);
+		River tumutToTamut = new River("Tumut 1 to Tumut 2", 100, 0 , 500, (float) 8.929, tumut2);
 		tumut1.connectTo(tumutToTamut);
 		scheme.addRiver(tumutToTamut);
-		River toomaToTumut = new River("Tooma to Tumut 1", 100, 0, 50, 14881, tumut1);
+		River toomaToTumut = new River("Tooma to Tumut 1", 100, 0, 50, (float) 14.881, tumut1);
 		tooma.connectTo(toomaToTumut);
 		scheme.addRiver(toomaToTumut);
-		River happyJToTumut = new River("Happy Jacks to Tumut 1", 100, 0, 50, 14881, tumut1);
+		River happyJToTumut = new River("Happy Jacks to Tumut 1", 100, 0, 50, (float) 14.881, tumut1);
 		happyJacks.connectTo(happyJToTumut);
 		scheme.addRiver(happyJToTumut);
 		Pipe eucumbeneToHappyJ = new Pipe("Eucumbene to Happy Jacks", 0 , 0, 0, eucumbene, happyJacks);
 		scheme.addPipe(eucumbeneToHappyJ);
-		River tangaraToEucumbene = new River("Tangara to Eucumbene", 100, 0 , 50, 35714, eucumbene);
+		River tangaraToEucumbene = new River("Tangara to Eucumbene", 100, 0 , 50, (float) 35.714, eucumbene);
 		tangara.connectTo(tangaraToEucumbene);
 		scheme.addRiver(tangaraToEucumbene);
-		River eucumbeneToJindabyne = new River("Eucumbene To Jinabyne", 100, 0 , 50, 327382, jindabyne);
+		River eucumbeneToJindabyne = new River("Eucumbene To Jinabyne", 100, 0 , 50, (float) 327.382, jindabyne);
 		eucumbene.connectTo(eucumbeneToJindabyne);
 		scheme.addRiver(eucumbeneToJindabyne);
 		River snowyRiver = new River("Snowy River", 100, 0 , 50, 100, scheme.getOcean());
@@ -111,16 +111,16 @@ public class runDisplay {
 		scheme.addPipe(jindabyneToIsland);
 		Pipe eucumbeneToIsland = new Pipe("Eucumbene to Island", 2, 0, 0, islandBendDam, eucumbene);
 		scheme.addPipe(eucumbeneToIsland);
-		River guthegaToIsland = new River("Guthega to Island Bend", 100, 0 , 50, 17857, islandBendDam);
+		River guthegaToIsland = new River("Guthega to Island Bend", 100, 0 , 50, (float) 17.857, islandBendDam);
 		guthega.connectTo(guthegaToIsland);
 		scheme.addRiver(guthegaToIsland);
-		River islandToGeehi = new River("Island Bend to Geehi", 100, 0 , 50, 16071, geehi);
+		River islandToGeehi = new River("Island Bend to Geehi", 100, 0 , 50, (float) 16.071, geehi);
 		islandBendDam.connectTo(islandToGeehi);
 		scheme.addRiver(islandToGeehi);
-		River geehiToMurray = new River("Geehi to Murray", 100, 0 , 50, 14881, murray);
+		River geehiToMurray = new River("Geehi to Murray", 100, 0 , 50, (float) 14.881, murray);
 		geehi.connectTo(geehiToMurray);
 		scheme.addRiver(geehiToMurray);
-		River murrayToKhancoban = new River("Murray to Khancoban", 100, 0 , 50, 10119, khancoban);
+		River murrayToKhancoban = new River("Murray to Khancoban", 100, 0 , 50, (float) 10.119, khancoban);
 		murray.connectTo(murrayToKhancoban);
 		scheme.addRiver(murrayToKhancoban);
 		River khancobanRiver = new River("Khancoban to Ocean", 100, 0 , 50, 100, scheme.getOcean());
@@ -142,39 +142,21 @@ public class runDisplay {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		/*
-		SwingUtilities.invokeLater(new Runnable() {
-			@Override
-			public void run() {
-				new Gui(); // Let the constructor do the job
-			}
-		});
-		*/
-		
-		// Create an instance of the Snowy Scheme as pass it to the ImagePanelDisplay constructor
-		// and the RealTimeDisplay constructor.
+
 		SnowyScheme hydroScheme = constructSnowyScheme();
-//		ArrayList<Float> watersOut = new ArrayList<Float>();
-//		for (int i = 0; i < 15; i++) {
-//			watersOut.add(new Float(0f));
-//		}
-//		try {
-//			hydroScheme.setWaterOut(watersOut);
-//			hydroScheme.setWaterForPower(watersOut);
-//		} catch (IncorrectLengthException e) {
-//			// TODO Auto-generated catch block
-//			System.out.println("---------\nrunDisplay bummer!\n----------------");
-//			e.printStackTrace();
-//		}
 		
 		try {
+			// Start a new thread with the controller
 			ControlRTS control = new ControlRTS(hydroScheme);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return;
 		}
+		System.out.println("Controller initailized");
 
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);
+		// put control in here???
+		// NB: control.stop() to kill all the threads
 		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme);
 	}
 

@@ -122,11 +122,4 @@ public class DamThread implements Runnable {
 		isRunning = false;
 		t.interrupt();
 	}
-	
-	public static void main(String[] args){
-		Dam d = new Dam("Test", 0, 0, null, 0, 0);
-		DamThread dt = new DamThread(d, null);
-		Thread t = dt.init();
-	}
-
 }

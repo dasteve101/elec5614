@@ -13,6 +13,7 @@ public class ControlRTS implements Runnable {
 	private Thread t;
 	private volatile boolean isRunning;
 	private List<DamThread> rootDams;
+	private volatile boolean initialized;
 	
 	public ControlRTS(SnowyScheme s) throws Exception{
 		if(!s.validateModel())
@@ -24,6 +25,8 @@ public class ControlRTS implements Runnable {
 			isRunning = false;
 			t.start();
 		}
+		initialized = false;
+		while(!initialized);
 	}
 	
 	private void startDamThreads(){
@@ -127,6 +130,7 @@ public class ControlRTS implements Runnable {
 				s.setWaterOut(waterOutList);
 				s.setWaterForPower(waterForPowerList);
 				s.setPumpPowers(pumpPowerList);
+				initialized = true;
 			} catch( IncorrectLengthException e){
 				e.printStackTrace();
 				System.out.println("Invalid list lengths: must restart damThreads");
