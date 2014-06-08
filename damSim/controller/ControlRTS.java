@@ -6,61 +6,7 @@ import java.util.List;
 import physicalObjects.*;
 
 public class ControlRTS implements Runnable {
-/*
-	PowerDemandSensor pSensor;
-	List<DamSensor> damSensors;
-	MailBox send;
-
-	public ControlRTS(PowerDemandSensor Psensor, List<DamSensor> dSensors,
-			MailBox box) {
-		pSensor = Psensor;
-		damSensors = dSensors;
-		send = box;
-		List<Float> waterForPower = new ArrayList();
-		for (int i = 0; i <= damSensors.size() - 1; i++) {
-			waterForPower.add((float) 0);
-		}
-		send.setWaterforPower(waterForPower);
-		Thread myThread = new Thread(this);
-		myThread.start();
-	}
-
-	private void decision() {
-		List<Float> waterForPower = new ArrayList();
-		float pdemand = pSensor.getPowerDemand();
-		for (int i = 0; i <= damSensors.size() - 1; i++) {
-			if (pdemand > 0) {
-				float waterToUse = Math.min(pdemand
-						/ damSensors.get(i).getWattsPerLitre(),
-						damSensors.get(i).getMaxWaterForPower());
-				pdemand -= waterToUse * damSensors.get(i).getWattsPerLitre();
-				waterForPower.add(waterToUse);
-			} else {
-				waterForPower.add((float) 0);
-			}
-		}
-		send.setWaterforPower(waterForPower);
-		System.out.println("sending:" + waterForPower);
-	}
-
-	@Override
-	public void run() {
-		// TODO Auto-generated method stub
-		try {
-
-			while (true) {
-				decision();
-				System.out.println("Making decision");
-
-				Thread.sleep(200);
-			}
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
- */
-
+	
 	private List<DamThread> damThreads;
 	private SnowyScheme s;
 	private DamThread waterSupply;
@@ -104,19 +50,29 @@ public class ControlRTS implements Runnable {
 				waterSupply = damThreads.get(damThreads.size() - 1);
 		}
 		for(DamThread d : damThreads){
-			// set downstream and upstream for belief prop
+			for(DamThread d2: damThreads){
+				if(d.getDam().getDownstream().getDownstream().equals(d2.getDam())){
+					d.addDownstream(d2);
+					d2.addUpstream(d);
+				}
+			}
+		}
+		for(Pipe p : s.getPipes()){
+			DamThread uphill = null;
+			DamThread downhill = null;
+			for(DamThread d : damThreads){
+				if(d.getDam().equals(p.getUphill()))
+					uphill = d;
+				if(d.getDam().equals(p.getDownhill()))
+					downhill = d;
+				if(uphill != null && downhill != null)
+					break;
+			}
+			uphill.addDownstream(downhill);
+			downhill.addUpstream(uphill);
 		}
 		for(DamThread d : damThreads)
 			d.init();
-	}
-	
-	private MessageToPass beliefProp(DamThread t, MessageToPass m){
-		
-		
-		
-		t.getDam();
-		
-		return m;
 	}
 	
 	@Override
@@ -132,13 +88,29 @@ public class ControlRTS implements Runnable {
 			waterOutList = new ArrayList<Float>();
 			pumpPowerList = new ArrayList<Float>();
 			
+			for(int i = 0; i < s.getDams().size(); i++){
+				waterForPowerList.add((float) 0);
+				waterOutList.add((float) 0);
+			}
+			for(int i = 0; i < s.getPipes().size(); i++){
+				pumpPowerList.add((float) 0);
+			}
+			
 			// Look at all the threads and fill in the values in the list
 			for(DamThread d : rootDams){
 				m.setInflow(0);
-				
 				try {
 					m = d.sendWithTimeout(m);
-					beliefProp(d,m);
+					for(int i = 0; i < s.getDams().size(); i++){
+						if(d.getDam().equals(s.getDams().get(i))){
+							if(d.getDam().getMaxWaterForPower() < m.getWaterOut()){
+								waterForPowerList.set(i, d.getDam().getMaxWaterForPower());
+								waterOutList.set(i, m.getWaterOut() - d.getDam().getMaxWaterForPower());
+							}
+							else
+								waterForPowerList.set(i, m.getWaterOut());
+						}
+					}
 					// read response
 				} catch (InterruptedException e) {
 					e.printStackTrace();
@@ -147,9 +119,6 @@ public class ControlRTS implements Runnable {
 			}
 			
 			// Logic and decision here
-			
-			// Maybe should do belief propagation???
-			// Let the dams send messages to each other and converge to solution
 			
 			// NB: a negative power to pump is interpreted as downhill and in litres
 			
