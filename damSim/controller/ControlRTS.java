@@ -194,16 +194,39 @@ public class ControlRTS implements Runnable {
 			}
 			if(predictedPower < powerDemand){
 				messageToBeDisplayed = "Power Low: warning";
-				System.out.println(messageToBeDisplayed);
+				// calculate power that can gain
+				float extraPower = 0;
+				ArrayList<Integer> powerGen = new ArrayList<Integer>();
 				for(int i = 0; i < s.getDams().size(); i++){
 					Dam currDam = s.getDams().get(i);
-					if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
-						if(waterForPowerList.get(i)*1.25 < currDam.getMaxWaterForPower())
-							waterForPowerList.set(i,(float) (waterForPowerList.get(i)*1.25));
-						else
-							waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+					float tmp =  currDam.getWattsPerLitre()*(currDam.getMaxWaterForPower()-waterForPowerList.get(i));
+					if(tmp > 0){
+						extraPower += tmp;
+						powerGen.add(i);
 					}
 				}
+				float diff = extraPower + predictedPower - powerDemand;
+				if(diff < 0){
+					messageToBeDisplayed += "\nCannot meet demand";
+					diff = 0;
+				}
+				extraPower -= diff;
+				// amount to increase power in each				
+				while(extraPower > 0){
+					// Keep increasing evenly until the extra power is met
+					for(int i : powerGen){
+						Dam currDam = s.getDams().get(i);
+						float amountToIncrease = extraPower/powerGen.size();
+						float percentageIncrease = (float) (amountToIncrease/waterForPowerList.get(i) + 0.001);
+						if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
+							if(waterForPowerList.get(i)*percentageIncrease < currDam.getMaxWaterForPower())
+								waterForPowerList.set(i,(float) (waterForPowerList.get(i)*percentageIncrease));
+							else
+								waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+						}
+					}
+				}
+				System.out.println(messageToBeDisplayed);
 			}
 			
 			try{
