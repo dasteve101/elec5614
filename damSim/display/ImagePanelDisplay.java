@@ -82,7 +82,6 @@ public class ImagePanelDisplay {
 
 			// TODO - include randomisation option.
 			// TODO - include 'default' setting.
-		// TODO - include 'increment' button.
 		// TODO - include 'auto increment' button.
 
 		/**
