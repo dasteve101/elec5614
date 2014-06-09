@@ -101,10 +101,10 @@ public class runDisplay {
 		River tangaraToEucumbene = new River("Tangara to Eucumbene", 107, 10 , 50, (float) 35.714, eucumbene);
 		tangara.connectTo(tangaraToEucumbene);
 		scheme.addRiver(tangaraToEucumbene);
-		River eucumbeneToJindabyne = new River("Eucumbene To Jinabyne", 928, 93 , 400, (float) 327.382, jindabyne);
+		River eucumbeneToJindabyne = new River("Eucumbene To Jinabyne", 928, 93 , 400, (float) 32.738, jindabyne);
 		eucumbene.connectTo(eucumbeneToJindabyne);
 		scheme.addRiver(eucumbeneToJindabyne);
-		River snowyRiver = new River("Snowy River", 100, 0 , 50, 100, scheme.getOcean());
+		River snowyRiver = new River("Snowy River", 1000, 10 , 500, 100, scheme.getOcean());
 		jindabyne.connectTo(snowyRiver);
 		scheme.addRiver(snowyRiver);
 		Pipe jindabyneToIsland = new Pipe("JindaByne to Island Bend", 1, 0, 0, islandBendDam, jindabyne);
