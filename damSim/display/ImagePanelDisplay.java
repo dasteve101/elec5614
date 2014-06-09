@@ -91,20 +91,38 @@ public class ImagePanelDisplay {
 		 */
 		public SimulationController() {
 			// Create the dam panel segment of the simulator window.
+			setLayout(new GridBagLayout());
+			// Create the constraints.
+			GridBagConstraints c = new GridBagConstraints();
+			// Define some variables for GUI construction.
+			int row = 0;
+			int col = 0;
 			// Get the Dam List from the observed scheme.
 			List<Dam> snowyDams = observedScheme.getDams();
-			// Create a new GridLayout for the JPanel.
-			setLayout(new GridLayout(0,3, 20, 20));
 			// Iterate though the dam List and create a button panel for each
 			// one.
 			for (Dam dam : snowyDams) {
+				// Set up the constraints for the upcoming button.
+				if (col > 2) {
+					row++;
+					col = 0;
+				}
+				c.gridx = row;
+				c.gridy = col++;
+				c.weightx = 0.5;
 				// Add the panel to the instance JPanel.
-				add(createDamButtonPanel(dam));
+				add(createDamButtonPanel(dam), c);
 			}
 			
+			// Specify constraints for the last few buttons.
+			c.gridx = ++row;
+			c.gridy = 1;
+			c.gridwidth = 3;
 			// Create JPanel to change the water and power demand of the entire
 			// scheme.
-			add(createDemandController());
+			add(createDemandController(), c);
+			
+			
 		}
 
 		/**
@@ -148,15 +166,16 @@ public class ImagePanelDisplay {
 		 */
 		private JPanel createDamButtonPanel(Dam dam) {
 			// Add components to the JPanel.
-			JPanel buttonContainer = new JPanel(new BorderLayout());
+			JPanel buttonContainer = new JPanel();
+			buttonContainer.setLayout(new BoxLayout(buttonContainer, BoxLayout.Y_AXIS));
 			JLabel damName = new JLabel(dam.getName());
 			JTextField rainLevel = new JTextField("0");
 			// Add all the components to the JPanel container.
-			buttonContainer.add(damName, BorderLayout.NORTH);
-			buttonContainer.add(rainLevel, BorderLayout.SOUTH);
+			buttonContainer.add(damName);
+			buttonContainer.add(rainLevel);
 			// Add JTextField to an ArrayList.
 			rainLevels.add(rainLevel);
-// TODO - fix borderlayouts.
+
 			return buttonContainer;
 		}
 
@@ -358,6 +377,8 @@ public class ImagePanelDisplay {
 		simulation.pack();
 		// Make the two JFrames visible.
 		simulation.setVisible(true);
+		
+		// TODO - message dialog from controller.
 		
 		control = null;
 		try {
