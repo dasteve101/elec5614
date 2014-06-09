@@ -116,7 +116,7 @@ public class ImagePanelDisplay {
 			JLabel label = new JLabel("Demand Control");
 			waterDemandButton = new JButton("Change Water Demand");
 			powerDemandButton = new JButton("Change Power Demand");
-			damRainLevelButton = new JButton("Set rain level");
+			damRainLevelButton = new JButton("Set rain level (increment)");
 			incrementButton = new JButton("Increment");
 			startButton = new JButton("Start");
 			demandChange = new JTextField("Enter float value here");

@@ -204,14 +204,12 @@ public class RealTimeDisplay {
 		// Create the JFrame needed.
 		realTimeMonitor = new JFrame("RTC Snowy Hydro");
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		final JLabel tester = new JLabel("Ok this is ");
 		// Create the JPanels needed.
 		damPanel = new damMonitor();
 		abortScheme abortPanel = new abortScheme();
 		// TODO - add equivalent methods for Rivers. connections etc.
 		// Add the JPanels to the JFrame.
 		realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
-		realTimeMonitor.add(tester);
 		realTimeMonitor.add(abortPanel, BorderLayout.PAGE_END);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);

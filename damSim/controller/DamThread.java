@@ -82,7 +82,7 @@ public class DamThread implements Runnable {
 				// Calculate recommended params and set in message
 				response.setCapacity(d.getCapacity());
 				float recommendedOut = 0;
-				float level = d.getLevel() + response.getInflow();
+				float level = (d.getLevel() + response.getInflow())/d.getCapacity();
 				if (d.getDownstream() instanceof River){
 					// River downstream
 					River downstream = ((River)d.getDownstream());
