@@ -17,7 +17,9 @@ public class Pipe{
     
     /**
      * Create a Pipe between two dams
-     * @param max - Max amount of power inputed
+     * @param name - Name of pipe
+     * @param maxPwr - Max amount of power inputed uphill
+     * @param maxWtr - Max amount of water downhill
      * @param coeff - water = coeff*power
      * @param uphill - the Dam to pump to (if up = true)
      * @param downhill - the Dam to pump from (if up = true)
