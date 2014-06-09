@@ -258,6 +258,12 @@ public class ImagePanelDisplay {
 			// Debugging print functions.
 			System.out.println("rainForDams List size:" + rainForDams.size());
 			System.out.println("Dams List size:" + observedScheme.getDams().size());
+			try {
+				observedScheme.setRainForDams(rainForDams);
+			} catch (IncorrectLengthException e) {
+				e.printStackTrace();
+				return;
+			}
 			// TODO - determine how to use previous values. Take into account variables being used for the first time.
 			// Increment the Hydro Scheme.
 			try {
