@@ -325,13 +325,7 @@ public class ImagePanelDisplay {
 					float floatValue = Float.parseFloat(value);
 					powerDemand = floatValue;
 					control.setPowerDemand(powerDemand);
-					// Use the float value to change power demand.
-					int numOfDams = observedScheme.getDams().size();
-					System.out.println(value);
-					// TODO - use the increment function here.
-
 				} else {
-					System.out.println("Fail buddy!");
 					// Non-valid input.
 				}
 			} else if (buttonEvent == damRainLevelButton) {
@@ -343,10 +337,7 @@ public class ImagePanelDisplay {
 				float floatValue = Float.parseFloat(value);
 				waterDemand = floatValue;
 				control.setWaterDemand(waterDemand);
-				System.out.println("Waterboarding!");
 			} else if (buttonEvent == incrementButton) {
-				// FIXME - make these common instructions more modular.
-				// FIXME - Test variable.
 				incrementTheHydroScheme();
 			} else if (e.getSource() == startButton) {
 				Thread simulation = new Thread(new Runnable() {
