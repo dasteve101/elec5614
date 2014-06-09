@@ -329,7 +329,6 @@ public class ImagePanelDisplay {
 					public void run() {
 						try {
 							while (true) {
-								powerDemand = 100;
 								incrementTheHydroScheme();
 								Thread.sleep(1000);
 							}
