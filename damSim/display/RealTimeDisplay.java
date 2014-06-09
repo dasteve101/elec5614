@@ -25,6 +25,8 @@ public class RealTimeDisplay {
 	 */
 	private static SnowyScheme system;
 	private ControlRTS control;
+	private JFrame realTimeMonitor;
+	private damMonitor damPanel;
 	
 	/**
 	 * 
@@ -108,13 +110,17 @@ public class RealTimeDisplay {
 		 * 
 		 */
 		private static final long serialVersionUID = -6454401343894962013L;
+		private JButton startButton;
 		private JButton abortButton;
 	
 		private abortScheme() {
+			startButton = new JButton("Start");
 			abortButton = new JButton("ABORT!");
 			
+			startButton.addActionListener(this);
 			abortButton.addActionListener(this);
 			add(abortButton);
+			add(startButton);
 
 		}
 	// TODO - implement run continuously and by one increment buttons.	
@@ -124,10 +130,33 @@ public class RealTimeDisplay {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO - complete this function.
-			if (e.getSource() == abortButton) {
+			if (e.getSource() == startButton) {
+				Thread simulation = new Thread(new Runnable() {
+
+					@Override
+					public void run() {
+						try {
+							while (true) {
+								system.increment(100);
+								realTimeMonitor.remove(damPanel);
+								
+								damPanel = new damMonitor();
+								realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
+								realTimeMonitor.revalidate();
+								Thread.sleep(1000);
+							}
+						} catch (IncorrectLengthException | InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				simulation.start();
+			} else if (e.getSource() == abortButton) {
 				System.out.println("That seemed to work.");
-			} else
+			} else {
 				System.out.println("That fucked up.");
+			}
 		}
 		
 	}
@@ -141,10 +170,10 @@ public class RealTimeDisplay {
 		system = scheme;
 		this.control = control;
 		// Create the JFrame needed.
-		JFrame realTimeMonitor = new JFrame("RTC Snowy Hydro");
+		realTimeMonitor = new JFrame("RTC Snowy Hydro");
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Create the JPanels needed.
-		damMonitor damPanel = new damMonitor();
+		damPanel = new damMonitor();
 		abortScheme abortPanel = new abortScheme();
 // TODO - add equivalent methods for Rivers. connections etc.
 		// Add the JPanels to the JFrame.

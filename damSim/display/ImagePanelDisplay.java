@@ -240,7 +240,8 @@ public class ImagePanelDisplay {
 				// TODO - determine how to use previous values. Take into account variables being used for the first time.
 				// Increment the Hydro Scheme.
 				try {
-					observedScheme.increment(rainForDams, powerDemand);
+					observedScheme.setRainForDams(rainForDams);
+					observedScheme.increment(powerDemand);
 					//this.repaint();
 				} catch (IncorrectLengthException e1) {
 					// TODO Auto-generated catch block
@@ -259,10 +260,12 @@ public class ImagePanelDisplay {
 				ArrayList<Float> rainForDams = getTextFieldRainValues();
 				System.out.println("rainForDams List size:" + rainForDams.size());
 				System.out.println("Dams List size:" + observedScheme.getDams().size());
+				
 				// TODO - determine how to use previous values. Take into account variables being used for the first time.
 				// Increment the Hydro Scheme.
 				try {
-					observedScheme.increment(rainForDams, powerDemand);
+					observedScheme.setRainForDams(rainForDams);
+					observedScheme.increment(powerDemand);
 					//this.repaint();
 				} catch (IncorrectLengthException e1) {
 					// TODO Auto-generated catch block
