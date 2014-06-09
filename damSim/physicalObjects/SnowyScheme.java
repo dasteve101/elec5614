@@ -21,6 +21,7 @@ public class SnowyScheme {
 	private List<Float> waterForPowerList;
 	private List<Float> waterOutList; 
 	private List<Float> pumpPowerList;
+	private ArrayList<Float> rainForDams;
 
 	/**
 	 * @param waterSupplyPoint - The dam object that is used to determine
@@ -135,6 +136,12 @@ public class SnowyScheme {
 		pumpPowerList = pPower;
 	}
 	
+	public void setRainForDams(ArrayList<Float> rainForDams) throws IncorrectLengthException {
+		if (dams.size() != rainForDams.size())
+			throw new IncorrectLengthException(dams.size(), rainForDams.size());
+		this.rainForDams = rainForDams;
+	}
+	
 	/**
 	 * This method puts the rain in the dams
 	 * @param rainInDams - rainfall in each dam
@@ -175,7 +182,7 @@ public class SnowyScheme {
 			throw new IncorrectLengthException(dams.size(), waterOut.size());
 		float water = 0;
 
-		for (int i = 0; i <= dams.size() - 1; i++) {
+		for (int i = 0; i < dams.size(); i++) {
 			water += dams.get(i).waterOut(waterOut.get(i));
 		}
 		return water;
@@ -185,8 +192,9 @@ public class SnowyScheme {
 	 * 
 	 */
 	private void timeStepRivers() {
-		for (int i = 0; i <= rivers.size() - 1; i++) {
+		for (int i = 0; i < rivers.size(); i++) {
 			rivers.get(i).timeStep();
+			System.out.println(rivers.get(i));
 		}
 	}
 
@@ -223,16 +231,15 @@ public class SnowyScheme {
 	}
 
 	/**
-	 * @param rain - list of the size of dams, rainfall in each
 	 * @param waterForPower - list of the size of dams, water to let out for power in each
 	 * @param waterOut - list of the size of dams, water to let out in each
 	 * @param pumpPower - power for all the pumps
 	 * @throws IncorrectLengthException
 	 */
-	public void increment(List<Float> rain, float powerDemand) throws IncorrectLengthException {
+	public void increment(float powerDemand) throws IncorrectLengthException {
 		this.powerDemand = powerDemand; 
 		powerOut = 0;
-		rainfall(rain);
+		rainfall(rainForDams);
 		generatePower(waterForPowerList);
 		waterOut(waterOutList);
 		pumpPowers(pumpPowerList);
@@ -351,4 +358,5 @@ public class SnowyScheme {
 		damsNRivers.addAll(rivers);
 		return damsNRivers;
 	}
+
 }

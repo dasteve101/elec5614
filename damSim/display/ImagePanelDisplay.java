@@ -242,7 +242,7 @@ public class ImagePanelDisplay {
 			} else if (buttonEvent == incrementButton) {
 				// FIXME - make these common instructions more modular.
 				// FIXME - Test variable.
-				powerDemand = 1234;
+				powerDemand = 100;
 				incrementTheHydroScheme();
 			} else {
 				System.out.println("Awkwards.");
@@ -261,7 +261,7 @@ public class ImagePanelDisplay {
 			// TODO - determine how to use previous values. Take into account variables being used for the first time.
 			// Increment the Hydro Scheme.
 			try {
-				observedScheme.increment(rainForDams, powerDemand);
+				observedScheme.increment(powerDemand);
 			} catch (IncorrectLengthException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
