@@ -207,6 +207,58 @@ public class ImagePanelDisplay {
 		}
 
 		/**
+		 * Function that increments the observed hydro scheme.
+		 */
+		private void incrementTheHydroScheme() {
+			ArrayList<Float> rainForDams = getTextFieldRainValues();
+			// Debugging print functions.
+			System.out.println("rainForDams List size:" + rainForDams.size());
+			System.out.println("Dams List size:" + observedScheme.getDams().size());
+			// Set the rain fall values in the scheme.
+			try {
+				observedScheme.setRainForDams(rainForDams);
+			} catch (IncorrectLengthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// TODO - determine how to use previous values. Take into account variables being used for the first time.
+			// Increment the Hydro Scheme.
+			try {
+				observedScheme.increment(powerDemand);
+			} catch (IncorrectLengthException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				System.out.println("Good work dumbass!");
+			}
+		}
+
+		/**
+		 * Function that gets all the values from the JTextFields for rain levels.
+		 * 
+		 * @return
+		 */
+		private ArrayList<Float> getTextFieldRainValues() {
+			ArrayList<Float> rainForDams = new ArrayList<Float>();
+			for (JTextField rainLevel : rainLevels) {
+				// Get the float value from the JTextField.
+				float floatValue = 0;
+				if (validUserInput(rainLevel.getText())) {
+					// TODO - check for negative values.
+					floatValue = Float.parseFloat(rainLevel.getText());
+				} else {
+					// ERROR
+					System.out.println("\nInvalid Float Input value: assume value to be 0");
+				}
+				// Add the float value to the Float List.
+				if (rainForDams.add(new Float(floatValue)))
+					System.out.println("Good");
+				else
+					System.out.println("Get outta here!");
+			}
+			return rainForDams;
+		}
+		
+		/**
 		 * Event-handler for all the JButtons.
 		 */
 		@Override
@@ -248,53 +300,10 @@ public class ImagePanelDisplay {
 				System.out.println("Awkwards.");
 			}
 
-		}
-
-		/**
-		 * Function that increments the observed hydro scheme.
-		 */
-		private void incrementTheHydroScheme() {
-			ArrayList<Float> rainForDams = getTextFieldRainValues();
-			// Debugging print functions.
-			System.out.println("rainForDams List size:" + rainForDams.size());
-			System.out.println("Dams List size:" + observedScheme.getDams().size());
-			// TODO - determine how to use previous values. Take into account variables being used for the first time.
-			// Increment the Hydro Scheme.
-			try {
-				observedScheme.increment(powerDemand);
-			} catch (IncorrectLengthException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				System.out.println("Good work dumbass!");
-			}
-		}
-
-		/**
-		 * Function that gets all the values from the JTextFields for rain levels.
-		 * 
-		 * @return
-		 */
-		private ArrayList<Float> getTextFieldRainValues() {
-			ArrayList<Float> rainForDams = new ArrayList<Float>();
-			for (JTextField rainLevel : rainLevels) {
-				// Get the float value from the JTextField.
-				float floatValue = 0;
-				if (validUserInput(rainLevel.getText())) {
-					// TODO - check for negative values.
-					floatValue = Float.parseFloat(rainLevel.getText());
-				} else {
-					// ERROR
-					System.out.println("\nInvalid Float Input value: assume value to be 0");
-				}
-				// Add the float value to the Float List.
-				if (rainForDams.add(new Float(floatValue)))
-					System.out.println("Good");
-				else
-					System.out.println("Get outta here!");
-			}
-			return rainForDams;
-		}
-
+		}	
+		
+		
+		
 	}
 
 	/**

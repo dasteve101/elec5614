@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Observable;
 import java.awt.event.*;
@@ -54,7 +55,7 @@ public class RealTimeDisplay {
 		 */
 		private static final long serialVersionUID = 8893953223112938031L;
 		
-		private LinkedHashMap<Dam, List<JLabel>> damLabels;
+		private Map<Dam, List<JLabel>> damLabels;
 
 		private damMonitor() {
 			// Get the dam List from the scheme and create an information panel
@@ -69,6 +70,8 @@ public class RealTimeDisplay {
 			for (Dam dam : schemeDams) {
 				// Create arrayList of JLabels based on the dam information.
 				List<JLabel> labels = createJLabels(dam);
+				// Add labels and dam to the LinkedHashMap.
+				damLabels.put(dam, labels);
 				// Add each information panel to the main JPanel.
 				add(createDamInformation(dam, labels));
 			}
@@ -110,11 +113,6 @@ public class RealTimeDisplay {
 		 * @return
 		 */
 		private JPanel createDamInformation(Dam dam, List<JLabel> labels) {
-
-			JLabel counters = new JLabel("Test Counter: " + Integer.toString(counter));
-			counter++;
-			
-			counters.setAlignmentX(CENTER_ALIGNMENT);
 			// Create the JPanel to hold all the information.
 			JPanel damInfo = new JPanel();
 			// Set layout attributes for the JPanel.
@@ -123,12 +121,32 @@ public class RealTimeDisplay {
 			for (JLabel label : labels) {
 				damInfo.add(label);
 			}
-			damInfo.add(counters);
 
 			return damInfo;
 		}
+		
+		/**
+		 * Function that updates the JLabels in the dam monitor panel.
+		 */
+		 public void updateTextLabels() {
+			 // Create place holders for the dam and JLabels list.
+			 Dam dam;
+			 List<JLabel> labels;
+			 // Cycle though all the dams and update their respective JLabels.
+			 for (Map.Entry<Dam, List<JLabel>> entry : damLabels.entrySet()) {
+				 dam = entry.getKey();
+				 labels = entry.getValue();
+				 labels.get(0).setText(dam.getName());
+				 labels.get(1).setText("Capacity: "
+							+ Float.toString(dam.getCapacity()));
+				labels.get(2).setText("Level: "
+							+ Float.toString(dam.getLevel()));
+				labels.get(3).setText("Overflowed: "
+							+ Boolean.toString(dam.getOverflowed()));
+			 }
+		 }
 	}
-
+	
 	/**
 	 * 
 	 * @author christoper
@@ -228,8 +246,9 @@ public class RealTimeDisplay {
 		// FIXME - need a method that is more efficient.
 		doWorkRunnable = new Runnable() {
 		    public void run() {
-		    	System.out.println("runnable thread");
-		    	tester.setText("Well ok then: " + Integer.toString(counter++));
+		    	damPanel.updateTextLabels();
+		    	damPanel.revalidate();
+		    	damPanel.repaint();
 		    }
 		};
 		SwingUtilities.invokeLater(doWorkRunnable);
