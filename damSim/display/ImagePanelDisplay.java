@@ -299,11 +299,7 @@ public class ImagePanelDisplay {
 			} else {
 				System.out.println("Awkwards.");
 			}
-
 		}	
-		
-		
-		
 	}
 
 	/**
