@@ -151,7 +151,7 @@ public class runDisplay {
 
 		try {
 			UIManager.put("control", new Color(255, 255, 255));
-			UIManager.put("Label.font", new Font("Tahoma", Font.TRUETYPE_FONT, 16));
+			UIManager.put("Label.font", new Font("Tahoma", Font.TRUETYPE_FONT, 14));
 		    for (LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
 		        if ("Nimbus".equals(info.getName())) {
 		            UIManager.setLookAndFeel(info.getClassName());

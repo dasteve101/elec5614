@@ -64,7 +64,7 @@ public class RealTimeDisplay {
 			// for each one.
 			List<Dam> schemeDams = system.getDams();
 			// Create a new GridLayout for the JPanel.
-			setLayout(new GridLayout(0, 3, 20, 20));
+			setLayout(new GridLayout(0, 4, 20, 20));
 			// Create new linked hash map.
 			damLabels = new LinkedHashMap<Dam, List<JLabel>>(schemeDams.size());
 			// Iterate through the Dam List and create an information panel for
@@ -171,7 +171,7 @@ public class RealTimeDisplay {
 			// for each one.
 			List<River> schemeRivers = system.getRivers();
 			// Create a new GridLayout for the JPanel.
-			setLayout(new GridLayout(0, 3, 20, 20));
+			setLayout(new GridLayout(0, 5, 20, 20));
 			// Create new linked hash map.
 			riverLabels = new LinkedHashMap<River, List<JLabel>>(schemeRivers.size());
 			// Iterate through the Dam List and create an information panel for
@@ -428,7 +428,10 @@ public class RealTimeDisplay {
 		system = scheme;
 		// Create the JFrame needed.
 		realTimeMonitor = new JFrame("RTC Snowy Hydro");
-		realTimeMonitor.setLayout(new FlowLayout());
+		// Setup the border layout.
+		realTimeMonitor.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		// Define close behaviour.
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Create the JPanels needed.
 		damPanel = new damMonitor();
@@ -438,12 +441,24 @@ public class RealTimeDisplay {
 		// Add borders to the different panels.
 		damPanel.setBorder(BorderFactory.createTitledBorder("Dams"));
 		riverPanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
-		pipePanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
+		pipePanel.setBorder(BorderFactory.createTitledBorder("Pipes"));
 		// Add the JPanels to the JFrame.
-		realTimeMonitor.add(damPanel);
-		realTimeMonitor.add(riverPanel);
-		realTimeMonitor.add(pipePanel);
-		realTimeMonitor.add(abortPanel);
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		realTimeMonitor.add(damPanel, c);
+		c.gridx = 1;
+		c.gridy = 0;
+		c.weightx = 0.5;
+		realTimeMonitor.add(riverPanel, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		c.gridwidth = 2;
+		realTimeMonitor.add(pipePanel, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		realTimeMonitor.add(abortPanel, c);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);
 
