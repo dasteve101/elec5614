@@ -222,6 +222,10 @@ public class ControlRTS implements Runnable {
 				}
 			}
 			
+			System.out.println("Tooma Info:::");
+			System.out.println("Water out: " + waterOutList.get(7));
+			System.out.println("Water for power: " + waterForPowerList.get(7));
+			
 			try{
 				// send the values
 				s.setWaterOut(waterOutList);
