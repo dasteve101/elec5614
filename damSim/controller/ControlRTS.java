@@ -128,6 +128,47 @@ public class ControlRTS implements Runnable {
 							inflow += ((River) down).getFlow();
 						}
 					}
+					else{
+						// Only other upstream can be a pipe
+						Pipe betweenPipe = null;
+						int index = -1;
+						for(Pipe p : d.getPipes()){
+							if(p.getUphill().equals(up.getDam())){
+								betweenPipe = p;
+								break;
+							}
+						}
+						for(int i = 0; i < s.getPipes().size(); i++){
+							if(betweenPipe.equals(s.getPipes().get(i))){
+								index = i;
+								break;
+							}
+						}
+						System.out.println(up.getDam());
+						System.out.println(up.getDam().getPercentage());
+						System.out.println(d.getDam());
+						System.out.println(d.getDam().getPercentage());						
+						if(up.getDam().getPercentage() > (d.getDam().getPercentage() + 20)){
+							// release water downhill so -ve
+							if(up.getDam().getPercentage() > (d.getDam().getPercentage() + 50))
+								pumpPowerList.set(index, -betweenPipe.getMaxWater());
+							else{
+								float diff = up.getDam().getPercentage() - d.getDam().getPercentage() - (float) 20;
+								float waterToRel =  - (float) ((betweenPipe.getMaxWater()/30)*diff);
+								pumpPowerList.set(index, waterToRel);
+							}
+						}
+						if(up.getDam().getPercentage() < (d.getDam().getPercentage() - 20)){
+							if(up.getDam().getPercentage() < (d.getDam().getPercentage() - 70))
+								pumpPowerList.set(index, betweenPipe.getMaxPower());
+							else{
+								float diff =  - up.getDam().getPercentage() + d.getDam().getPercentage() - (float) 20;
+								float powerToPump = (float) ((betweenPipe.getMaxWater()/50)*diff);
+								pumpPowerList.set(index, powerToPump);
+							}
+						}
+						
+					}
 				}
 				MessageToPass m = new MessageToPass(0);
 				m.setInflow(inflow);

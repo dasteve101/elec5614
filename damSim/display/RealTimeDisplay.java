@@ -194,6 +194,7 @@ public class RealTimeDisplay {
 			ArrayList<JLabel> labels = new ArrayList<JLabel>();
 			// Create labels that will be used for each Dam field.
 			JLabel riverName = new JLabel(river.getName());
+			riverName.setForeground(Color.BLUE);
 			JLabel riverFlow = new JLabel("Flow: "
 					+ Float.toString(river.getFlow()));
 			JLabel riverMax = new JLabel("Max: "
@@ -299,6 +300,7 @@ public class RealTimeDisplay {
 			ArrayList<JLabel> labels = new ArrayList<JLabel>();
 			// Create labels that will be used for each Dam field.
 			JLabel pipeName = new JLabel(pipe.getName());
+			pipeName.setForeground(Color.GREEN);
 			JLabel pipePower = new JLabel("Max Power: "
 					+ Float.toString(pipe.getMaxPower()));
 			JLabel pipeMaxWater = new JLabel("Max Water: "
