@@ -234,24 +234,7 @@ public class ImagePanelDisplay {
 			} else if (buttonEvent == damRainLevelButton) {
 				// FIXME - Test variable.
 				powerDemand = 1234;
-				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
-				ArrayList<Float> rainForDams = new ArrayList<Float>();
-				for (JTextField rainLevel : rainLevels) {
-					// Get the float value from the JTextField.
-					float floatValue = 0;
-					if (validUserInput(rainLevel.getText())) {
-						// TODO - check for negative values.
-						floatValue = Float.parseFloat(rainLevel.getText());
-					} else {
-						// ERROR
-						System.out.println("\nInvalid Float Input value: assume value to be 0");
-					}
-					// Add the float value to the Float List.
-					if (rainForDams.add(new Float(floatValue)))
-						System.out.println("Good");
-					else
-						System.out.println("Get outta here!");
-				}
+				ArrayList<Float> rainForDams = getTextFieldRainValues();
 				System.out.println("rainForDams List size:" + rainForDams.size());
 				System.out.println("Dams List size:" + observedScheme.getDams().size());
 				// TODO - determine how to use previous values. Take into account variables being used for the first time.
@@ -273,23 +256,7 @@ public class ImagePanelDisplay {
 				// FIXME - Test variable.
 				powerDemand = 1234;
 				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
-				ArrayList<Float> rainForDams = new ArrayList<Float>();
-				for (JTextField rainLevel : rainLevels) {
-					// Get the float value from the JTextField.
-					float floatValue = 0;
-					if (validUserInput(rainLevel.getText())) {
-						// TODO - check for negative values.
-						floatValue = Float.parseFloat(rainLevel.getText());
-					} else {
-						// ERROR
-						System.out.println("\nInvalid Float Input value: assume value to be 0");
-					}
-					// Add the float value to the Float List.
-					if (rainForDams.add(new Float(floatValue)))
-						System.out.println("Good");
-					else
-						System.out.println("Get outta here!");
-				}
+				ArrayList<Float> rainForDams = getTextFieldRainValues();
 				System.out.println("rainForDams List size:" + rainForDams.size());
 				System.out.println("Dams List size:" + observedScheme.getDams().size());
 				// TODO - determine how to use previous values. Take into account variables being used for the first time.
@@ -306,6 +273,32 @@ public class ImagePanelDisplay {
 				System.out.println("Awkwards.");
 			}
 
+		}
+
+		/**
+		 * Function that gets all the values from the JTextFields for rain levels.
+		 * 
+		 * @return
+		 */
+		private ArrayList<Float> getTextFieldRainValues() {
+			ArrayList<Float> rainForDams = new ArrayList<Float>();
+			for (JTextField rainLevel : rainLevels) {
+				// Get the float value from the JTextField.
+				float floatValue = 0;
+				if (validUserInput(rainLevel.getText())) {
+					// TODO - check for negative values.
+					floatValue = Float.parseFloat(rainLevel.getText());
+				} else {
+					// ERROR
+					System.out.println("\nInvalid Float Input value: assume value to be 0");
+				}
+				// Add the float value to the Float List.
+				if (rainForDams.add(new Float(floatValue)))
+					System.out.println("Good");
+				else
+					System.out.println("Get outta here!");
+			}
+			return rainForDams;
 		}
 
 	}
