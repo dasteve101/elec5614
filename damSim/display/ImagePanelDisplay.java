@@ -72,11 +72,14 @@ public class ImagePanelDisplay {
 		private JTextField demandChange;
 		private JButton randomButton;
 		private JButton defaultButton;
+		private JButton incrementButton;
 		private ArrayList<JTextField> rainLevels = new ArrayList<JTextField>();
 		private float powerDemand;
 
 			// TODO - include randomisation option.
 			// TODO - include 'default' setting.
+		// TODO - include 'increment' button.
+		// TODO - include 'auto increment' button.
 
 		/**
 		 * Constructor method. This is used to create all the buttons and
@@ -100,8 +103,6 @@ public class ImagePanelDisplay {
 			add(createDemandController());
 		}
 
-		// TODO - Create Panel for changing the power and water demand for the
-		// entire scheme.
 		/**
 		 * Method to create a JPanel that allows the user to change the water
 		 * and power demand of the entire scheme.
@@ -110,22 +111,25 @@ public class ImagePanelDisplay {
 		 */
 		private JPanel createDemandController() {
 			// Create the necessary components.
-			JPanel demandPanel = new JPanel();
+			JPanel demandPanel = new JPanel();		// Use the GridBagLayout manager for this.
 			JLabel label = new JLabel("Demand Control");
 			waterDemandButton = new JButton("Change Water Demand");
 			powerDemandButton = new JButton("Change Power Demand");
 			damRainLevelButton = new JButton("Set rain level");
+			incrementButton = new JButton("Increment");
 			demandChange = new JTextField("Enter float value here");
 			// Add action listeners to the components.
 			waterDemandButton.addActionListener(this);
 			powerDemandButton.addActionListener(this);
 			damRainLevelButton.addActionListener(this);
+			incrementButton.addActionListener(this);
 			// Add components to the JPanel.
 			demandPanel.add(powerDemandButton, BorderLayout.WEST);
 			demandPanel.add(waterDemandButton, BorderLayout.EAST);
 			demandPanel.add(damRainLevelButton, BorderLayout.SOUTH);
 			demandPanel.add(demandChange, BorderLayout.NORTH);
 			demandPanel.add(label, BorderLayout.PAGE_START);
+			demandPanel.add(incrementButton, BorderLayout.PAGE_END);
 // TODO - fix border layout.
 			return demandPanel;
 		}
@@ -240,7 +244,7 @@ public class ImagePanelDisplay {
 						floatValue = Float.parseFloat(rainLevel.getText());
 					} else {
 						// ERROR
-						System.out.println("ERROR!");
+						System.out.println("\nInvalid Float Input value: assume value to be 0");
 					}
 					// Add the float value to the Float List.
 					if (rainForDams.add(new Float(floatValue)))
@@ -264,6 +268,40 @@ public class ImagePanelDisplay {
 				// TODO - determine whether this is ever going to be implemented or not.
 				String value = demandChange.getText();
 				System.out.println("Waterboarding!");
+			} else if (buttonEvent == incrementButton) {
+				// FIXME - make these common instructions more modular.
+				// FIXME - Test variable.
+				powerDemand = 1234;
+				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
+				ArrayList<Float> rainForDams = new ArrayList<Float>();
+				for (JTextField rainLevel : rainLevels) {
+					// Get the float value from the JTextField.
+					float floatValue = 0;
+					if (validUserInput(rainLevel.getText())) {
+						// TODO - check for negative values.
+						floatValue = Float.parseFloat(rainLevel.getText());
+					} else {
+						// ERROR
+						System.out.println("\nInvalid Float Input value: assume value to be 0");
+					}
+					// Add the float value to the Float List.
+					if (rainForDams.add(new Float(floatValue)))
+						System.out.println("Good");
+					else
+						System.out.println("Get outta here!");
+				}
+				System.out.println("rainForDams List size:" + rainForDams.size());
+				System.out.println("Dams List size:" + observedScheme.getDams().size());
+				// TODO - determine how to use previous values. Take into account variables being used for the first time.
+				// Increment the Hydro Scheme.
+				try {
+					observedScheme.increment(rainForDams, powerDemand);
+					//this.repaint();
+				} catch (IncorrectLengthException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					System.out.println("Good work dumbass!");
+				}
 			} else {
 				System.out.println("Awkwards.");
 			}

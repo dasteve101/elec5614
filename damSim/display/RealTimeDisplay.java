@@ -80,7 +80,7 @@ public class RealTimeDisplay {
 			damOverflowed.setAlignmentX(CENTER_ALIGNMENT);
 			// Create the JPanel to hold all the information.
 			JPanel damInfo = new JPanel();
-			// Set loyout attributes for the JPanel.
+			// Set layout attributes for the JPanel.
 			damInfo.setLayout(new BoxLayout(damInfo, BoxLayout.Y_AXIS));
 			// Attach the JLabels to the JPanel.
 			damInfo.add(damName);
