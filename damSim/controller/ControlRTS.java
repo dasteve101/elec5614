@@ -211,19 +211,32 @@ public class ControlRTS implements Runnable {
 					diff = 0;
 				}
 				extraPower -= diff;
-				// amount to increase power in each				
+				// amount to increase power in each
+				
 				while(extraPower > 0){
 					// Keep increasing evenly until the extra power is met
+					int stationsRemaining = powerGen.size();
+					int removeIndex = -1;
 					for(int i : powerGen){
 						Dam currDam = s.getDams().get(i);
-						float amountToIncrease = extraPower/powerGen.size();
-						float percentageIncrease = (float) (amountToIncrease/waterForPowerList.get(i) + 0.001);
+						float amountToIncrease = extraPower/stationsRemaining;
+						float percentageIncrease = 1 + (float) (amountToIncrease/waterForPowerList.get(i));
 						if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
-							if(waterForPowerList.get(i)*percentageIncrease < currDam.getMaxWaterForPower())
+							if(waterForPowerList.get(i)*percentageIncrease < currDam.getMaxWaterForPower()){
+								extraPower -= (float) (waterForPowerList.get(i)*
+										percentageIncrease)*currDam.getWattsPerLitre();
 								waterForPowerList.set(i,(float) (waterForPowerList.get(i)*percentageIncrease));
-							else
+							}
+							else{
+								extraPower -= (float) (currDam.getMaxWaterForPower()-waterForPowerList.get(i))*
+										percentageIncrease*currDam.getWattsPerLitre();
 								waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+								removeIndex = i;
+							}
 						}
+					}
+					if(removeIndex != -1){
+						powerGen.remove(removeIndex);
 					}
 				}
 				System.out.println(messageToBeDisplayed);
