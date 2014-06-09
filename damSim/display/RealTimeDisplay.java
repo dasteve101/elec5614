@@ -166,17 +166,13 @@ public class RealTimeDisplay {
 		 * 
 		 */
 		private static final long serialVersionUID = -6454401343894962013L;
-		private JButton startButton;
 		private JButton abortButton;
 
 		private abortScheme() {
-			startButton = new JButton("Start");
 			abortButton = new JButton("ABORT!");
 
-			startButton.addActionListener(this);
 			abortButton.addActionListener(this);
 			add(abortButton);
-			add(startButton);
 
 		}
 
@@ -187,29 +183,7 @@ public class RealTimeDisplay {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO - complete this function.
-			if (e.getSource() == startButton) {
-				Thread simulation = new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						try {
-							while (true) {
-								system.increment(100);
-								realTimeMonitor.remove(damPanel);
-								
-								damPanel = new damMonitor();
-								realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
-								realTimeMonitor.revalidate();
-								Thread.sleep(1000);
-							}
-						} catch (IncorrectLengthException | InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-				simulation.start();
-			} else if (e.getSource() == abortButton) {
+			if (e.getSource() == abortButton) {
 				System.out.println("That seemed to work.");
 			} else {
 				System.out.println("That fucked up.");
