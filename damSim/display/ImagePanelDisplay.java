@@ -155,6 +155,7 @@ public class ImagePanelDisplay {
 			// Add all the components to the JPanel container.
 			buttonContainer.add(damName, BorderLayout.NORTH);
 			buttonContainer.add(rainLevel, BorderLayout.SOUTH);
+			buttonContainer.setSize(150, 100);
 			// Add JTextField to an ArrayList.
 			rainLevels.add(rainLevel);
 // TODO - fix borderlayouts.
@@ -311,7 +312,6 @@ public class ImagePanelDisplay {
 					public void run() {
 						try {
 							while (true) {
-								powerDemand = 100;
 								incrementTheHydroScheme();
 								Thread.sleep(1000);
 							}
