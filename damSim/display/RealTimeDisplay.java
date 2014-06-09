@@ -86,6 +86,8 @@ public class RealTimeDisplay {
 			ArrayList<JLabel> labels = new ArrayList<JLabel>();
 			// Create labels that will be used for each Dam field.
 			JLabel damName = new JLabel(dam.getName());
+			if(dam.getMaxWaterForPower() > 0)
+				damName.setForeground(Color.RED);
 			JLabel damCapacity = new JLabel("Capacity: "
 					+ Float.toString(dam.getCapacity()));
 			JLabel damLevel = new JLabel("Level: "
