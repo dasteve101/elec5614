@@ -7,6 +7,11 @@ import java.util.Map;
 
 import physicalObjects.*;
 
+/**
+ * This controls the snowy scheme
+ * It communicates with the damThreads (servers running at each dam)
+ * And balances requirements to control the dams
+ */
 public class ControlRTS implements Runnable {
 	
 	private List<DamThread> damThreads;
