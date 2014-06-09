@@ -28,7 +28,7 @@ import physicalObjects.*;
 public class ImagePanelDisplay {
 
 	private static SnowyScheme observedScheme;
-	private ControlRTS control;
+	private static ControlRTS control;
 
 	/**
 	 * Graphically display the Snowy Scheme using the .jpeg images contained in
@@ -79,6 +79,7 @@ public class ImagePanelDisplay {
 		private JButton startButton;
 		private ArrayList<JTextField> rainLevels = new ArrayList<JTextField>();
 		private float powerDemand;
+		private float waterDemand;
 
 			// TODO - include randomisation option.
 			// TODO - include 'default' setting.
@@ -231,7 +232,7 @@ public class ImagePanelDisplay {
 			// TODO - determine how to use previous values. Take into account variables being used for the first time.
 			// Increment the Hydro Scheme.
 			try {
-				observedScheme.increment(powerDemand);
+				observedScheme.increment(powerDemand, waterDemand);
 			} catch (IncorrectLengthException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -281,6 +282,7 @@ public class ImagePanelDisplay {
 					// Get the float value from the string.
 					float floatValue = Float.parseFloat(value);
 					powerDemand = floatValue;
+					control.setPowerDemand(powerDemand);
 					// Use the float value to change power demand.
 					int numOfDams = observedScheme.getDams().size();
 					System.out.println(value);
@@ -291,17 +293,17 @@ public class ImagePanelDisplay {
 					// Non-valid input.
 				}
 			} else if (buttonEvent == damRainLevelButton) {
-				// FIXME - Test variable.
-				powerDemand = 1234;
 				incrementTheHydroScheme();
 			} else if (buttonEvent == waterDemandButton) {
 				// TODO - determine whether this is ever going to be implemented or not.
 				String value = demandChange.getText();
+				float floatValue = Float.parseFloat(value);
+				waterDemand = floatValue;
+				control.setWaterDemand(waterDemand);
 				System.out.println("Waterboarding!");
 			} else if (buttonEvent == incrementButton) {
 				// FIXME - make these common instructions more modular.
 				// FIXME - Test variable.
-				powerDemand = 100;
 				incrementTheHydroScheme();
 			} else if (e.getSource() == startButton) {
 				Thread simulation = new Thread(new Runnable() {
