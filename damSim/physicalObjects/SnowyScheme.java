@@ -246,10 +246,10 @@ public class SnowyScheme {
 		timeStepRivers();
 		// pumpPowers(pumpPower);
 		// Check demand of power and water are met
-		if(powerOut < powerDemand*(1-lewayInDemand) || powerOut > powerDemand*(1+lewayInDemand) )
-			System.out.println("Power demand not met: Needed " + powerDemand + "+/-" + (lewayInDemand*100) + "% and got " + powerOut);
+		if(powerOut < powerDemand*(1-lewayInDemand) )
+			System.out.println("Power demand not met: Needed " + powerDemand + " with " + (lewayInDemand*100) + "% tolerance and got " + powerOut);
 		if(waterSupplyPoint.getLevel() < waterDemand*(1-lewayInDemand))
-			System.out.println("Water demand not met: Needed " + waterDemand + "+/-" + (lewayInDemand*100) + "% and got " + waterSupplyPoint.getLevel());
+			System.out.println("Water demand not met: Needed " + waterDemand + " with " + (lewayInDemand*100) + "% tolerance and got " + waterSupplyPoint.getLevel());
 		powerOut -= powerDemand;
 		waterSupplyPoint.pumpOut(waterDemand);
 	}

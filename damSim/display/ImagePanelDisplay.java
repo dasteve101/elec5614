@@ -290,7 +290,8 @@ public class ImagePanelDisplay {
 					floatValue = Float.parseFloat(rainLevel.getText());
 				} else {
 					// ERROR
-					System.out.println("\nInvalid Float Input value: assume value to be 0");
+					floatValue = (float) (2 + 100*Math.random());
+					System.out.println("Invalid Float Input value: assume value to be 0");
 				}
 				// Add the float value to the Float List.
 				if (rainForDams.add(new Float(floatValue)))
