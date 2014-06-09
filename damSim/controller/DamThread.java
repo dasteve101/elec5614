@@ -40,8 +40,8 @@ public class DamThread implements Runnable {
 	}
 	
 	public void addDownstream(DamThread d){
-		if(!upstream.contains(d))
-			upstream.add(d);
+		if(!downstream.contains(d))
+			downstream.add(d);
 	}
 	
 	public List<DamThread> getUpstream(){
