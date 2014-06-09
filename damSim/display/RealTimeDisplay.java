@@ -254,6 +254,10 @@ public class RealTimeDisplay {
 				 labels.get(0).setText(river.getName());
 				 labels.get(1).setText("Flow: "
 							+ Float.toString(river.getFlow()));
+				 if(river.getFlow() < river.getMin() || river.getFlow() > river.getMax())
+					 labels.get(1).setForeground(Color.YELLOW);
+				 else
+					 labels.get(1).setForeground(Color.BLACK);
 				 labels.get(2).setText("Max: "
 							+ Float.toString(river.getMax()));
 				 labels.get(3).setText("Min: "
