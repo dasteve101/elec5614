@@ -10,6 +10,7 @@ import java.beans.PropertyChangeListener;
 import java.util.*;
 
 import javax.swing.*;
+import javax.swing.BorderFactory;
 import javax.swing.Timer;
 
 import controller.ControlRTS;
@@ -194,6 +195,7 @@ public class RealTimeDisplay {
 			ArrayList<JLabel> labels = new ArrayList<JLabel>();
 			// Create labels that will be used for each Dam field.
 			JLabel riverName = new JLabel(river.getName());
+			riverName.setFont(new Font("Tahoma", Font.BOLD, 16));
 			riverName.setForeground(Color.BLUE);
 			JLabel riverFlow = new JLabel("Flow: "
 					+ Float.toString(river.getFlow()));
@@ -276,7 +278,7 @@ public class RealTimeDisplay {
 			// for each one.
 			List<Pipe> schemePipes = system.getPipes();
 			// Create a new GridLayout for the JPanel.
-			setLayout(new GridLayout(0, 3, 20, 20));
+			setLayout(new GridLayout(0, 1, 20, 20));
 			// Create new linked hash map.
 			pipeLabels = new LinkedHashMap<Pipe, List<JLabel>>(schemePipes.size());
 			// Iterate through the Dam List and create an information panel for
@@ -301,6 +303,7 @@ public class RealTimeDisplay {
 			// Create labels that will be used for each Dam field.
 			JLabel pipeName = new JLabel(pipe.getName());
 			pipeName.setForeground(Color.GREEN);
+			pipeName.setFont(new Font("Tahoma", Font.BOLD, 16));
 			JLabel pipePower = new JLabel("Max Power: "
 					+ Float.toString(pipe.getMaxPower()));
 			JLabel pipeMaxWater = new JLabel("Max Water: "
@@ -432,7 +435,10 @@ public class RealTimeDisplay {
 		riverPanel = new riverMonitor();
 		pipePanel = new pipeMonitor();
 		abortScheme abortPanel = new abortScheme();
-		// TODO - add equivalent methods for Rivers. connections etc.
+		// Add borders to the different panels.
+		damPanel.setBorder(BorderFactory.createTitledBorder("Dams"));
+		riverPanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
+		pipePanel.setBorder(BorderFactory.createTitledBorder("Pipes"));
 		// Add the JPanels to the JFrame.
 		realTimeMonitor.add(damPanel);
 		realTimeMonitor.add(riverPanel);
