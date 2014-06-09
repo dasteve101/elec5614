@@ -28,7 +28,6 @@ public class RealTimeDisplay {
 	 * Member fields.
 	 */
 	private static SnowyScheme system;
-	private ControlRTS control;
 	private int counter = 10;
 	private Timer timer;
 	private JFrame realTimeMonitor;
@@ -87,6 +86,8 @@ public class RealTimeDisplay {
 			ArrayList<JLabel> labels = new ArrayList<JLabel>();
 			// Create labels that will be used for each Dam field.
 			JLabel damName = new JLabel(dam.getName());
+			if(dam.getMaxWaterForPower() > 0)
+				damName.setForeground(Color.RED);
 			JLabel damCapacity = new JLabel("Capacity: "
 					+ Float.toString(dam.getCapacity()));
 			JLabel damLevel = new JLabel("Level: "
@@ -275,17 +276,13 @@ public class RealTimeDisplay {
 		 * 
 		 */
 		private static final long serialVersionUID = -6454401343894962013L;
-		private JButton startButton;
 		private JButton abortButton;
 
 		private abortScheme() {
-			startButton = new JButton("Start");
 			abortButton = new JButton("ABORT!");
 
-			startButton.addActionListener(this);
 			abortButton.addActionListener(this);
 			add(abortButton);
-			add(startButton);
 
 		}
 
@@ -296,29 +293,7 @@ public class RealTimeDisplay {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// TODO - complete this function.
-			if (e.getSource() == startButton) {
-				Thread simulation = new Thread(new Runnable() {
-
-					@Override
-					public void run() {
-						try {
-							while (true) {
-								system.increment(100);
-								realTimeMonitor.remove(damPanel);
-								
-								damPanel = new damMonitor();
-								realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
-								realTimeMonitor.revalidate();
-								Thread.sleep(1000);
-							}
-						} catch (IncorrectLengthException | InterruptedException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-				simulation.start();
-			} else if (e.getSource() == abortButton) {
+			if (e.getSource() == abortButton) {
 				System.out.println("That seemed to work.");
 			} else {
 				System.out.println("That fucked up.");
@@ -341,9 +316,8 @@ public class RealTimeDisplay {
 	 * @param system - the Snowy Hydro Scheme that this GUI is supposed to
 	 *            monitor.
 	 */
-	public RealTimeDisplay(SnowyScheme scheme, ControlRTS control) {
+	public RealTimeDisplay(SnowyScheme scheme) {
 		system = scheme;
-		this.control = control;
 		// Create the JFrame needed.
 		realTimeMonitor = new JFrame("RTC Snowy Hydro");
 		realTimeMonitor.setLayout(new FlowLayout());

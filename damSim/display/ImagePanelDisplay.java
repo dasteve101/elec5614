@@ -10,6 +10,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import controller.ControlRTS;
+
 import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -26,6 +28,7 @@ import physicalObjects.*;
 public class ImagePanelDisplay {
 
 	private static SnowyScheme observedScheme;
+	private ControlRTS control;
 
 	/**
 	 * Graphically display the Snowy Scheme using the .jpeg images contained in
@@ -73,6 +76,7 @@ public class ImagePanelDisplay {
 		private JButton randomButton;
 		private JButton defaultButton;
 		private JButton incrementButton;
+		private JButton startButton;
 		private ArrayList<JTextField> rainLevels = new ArrayList<JTextField>();
 		private float powerDemand;
 
@@ -117,12 +121,14 @@ public class ImagePanelDisplay {
 			powerDemandButton = new JButton("Change Power Demand");
 			damRainLevelButton = new JButton("Set rain level (increment)");
 			incrementButton = new JButton("Increment");
+			startButton = new JButton("Start");
 			demandChange = new JTextField("Enter float value here");
 			// Add action listeners to the components.
 			waterDemandButton.addActionListener(this);
 			powerDemandButton.addActionListener(this);
 			damRainLevelButton.addActionListener(this);
 			incrementButton.addActionListener(this);
+			startButton.addActionListener(this);
 			// Add components to the JPanel.
 			demandPanel.add(powerDemandButton, BorderLayout.WEST);
 			demandPanel.add(waterDemandButton, BorderLayout.EAST);
@@ -130,6 +136,7 @@ public class ImagePanelDisplay {
 			demandPanel.add(demandChange, BorderLayout.NORTH);
 			demandPanel.add(label, BorderLayout.PAGE_START);
 			demandPanel.add(incrementButton, BorderLayout.PAGE_END);
+			demandPanel.add(startButton, BorderLayout.PAGE_END);
 // TODO - fix border layout.
 			return demandPanel;
 		}
@@ -296,6 +303,23 @@ public class ImagePanelDisplay {
 				// FIXME - Test variable.
 				powerDemand = 100;
 				incrementTheHydroScheme();
+			} else if (e.getSource() == startButton) {
+				Thread simulation = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							while (true) {
+								powerDemand = 100;
+								incrementTheHydroScheme();
+								Thread.sleep(1000);
+							}
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+				simulation.start();
 			} else {
 				System.out.println("Awkwards.");
 			}
@@ -333,6 +357,16 @@ public class ImagePanelDisplay {
 		simulation.pack();
 		// Make the two JFrames visible.
 		simulation.setVisible(true);
+		
+		control = null;
+		try {
+			// Start a new thread with the controller
+			control = new ControlRTS(observedScheme);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Controller initailized");
 
 	}
 }
