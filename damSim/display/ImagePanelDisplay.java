@@ -151,7 +151,7 @@ public class ImagePanelDisplay {
 			// Add components to the JPanel.
 			JPanel buttonContainer = new JPanel(new BorderLayout());
 			JLabel damName = new JLabel(dam.getName());
-			JTextField rainLevel = new JTextField("Enter rain level here");
+			JTextField rainLevel = new JTextField("0");
 			// Add all the components to the JPanel container.
 			buttonContainer.add(damName, BorderLayout.NORTH);
 			buttonContainer.add(rainLevel, BorderLayout.SOUTH);
