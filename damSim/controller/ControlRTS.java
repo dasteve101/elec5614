@@ -1,7 +1,9 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import physicalObjects.*;
 
@@ -100,7 +102,7 @@ public class ControlRTS implements Runnable {
 		List<Float> waterForPowerList;
 		List<Float> waterOutList;
 		List<Float> pumpPowerList;
-		MessageToPass m = new MessageToPass(0);
+		//MessageToPass m = new MessageToPass(0);
 		isRunning = true;
 		while(isRunning){
 			// Create a new set of lists so that the simulation doesn't use it until its ready
@@ -127,26 +129,40 @@ public class ControlRTS implements Runnable {
 						}
 					}
 				}
+				MessageToPass m = new MessageToPass(0);
 				m.setInflow(inflow);
+				d.send(m);
+			}
+			
+			// Collect responses from all dams
+			Map<DamThread, MessageToPass> responses = new HashMap<DamThread, MessageToPass>();
+			for(DamThread d : damThreads){
 				try {
-					d.sendWithTimeout(m);
-					for(int i = 0; i < s.getDams().size(); i++){
-						if(d.getDam().equals(s.getDams().get(i))){
-							if(d.getDam().getMaxWaterForPower() < m.getWaterOut()){
-								waterForPowerList.set(i, d.getDam().getMaxWaterForPower());
-								waterOutList.set(i, m.getWaterOut() - d.getDam().getMaxWaterForPower());
-							}
-							else
-								waterForPowerList.set(i, m.getWaterOut());
-							predictedPower += waterForPowerList.get(i)*d.getDam().getWattsPerLitre();
-						}
-					}
+					responses.put(d, d.waitForCompletion());
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					System.out.println("Could not read from sensor in dam " + d.getDam());
 				}
 			}
 			
+			for(DamThread d : damThreads){
+				for(int i = 0; i < s.getDams().size(); i++){
+					if(d.getDam().equals(s.getDams().get(i))){
+						MessageToPass response = responses.get(d);
+						if (response == null) {
+							// This dam did not respond in time.
+							continue;
+						}
+						if(d.getDam().getMaxWaterForPower() < response.getWaterOut()){
+							waterForPowerList.set(i, d.getDam().getMaxWaterForPower());
+							waterOutList.set(i, response.getWaterOut() - d.getDam().getMaxWaterForPower());
+						}
+						else
+							waterForPowerList.set(i, response.getWaterOut());
+						predictedPower += waterForPowerList.get(i)*d.getDam().getWattsPerLitre();
+					}
+				}
+			}
 			
 			// need to look at upstream/downstream needs more or less water
 			// Need to use pipes

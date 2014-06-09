@@ -78,10 +78,11 @@ public class DamThread implements Runnable {
 			try {
 				// Wait for message [expected inflow]
 				recieved = messages.take();
+				MessageToPass response = new MessageToPass(0);
 				// Calculate recommended params and set in message
-				recieved.setCapacity(d.getCapacity());
+				response.setCapacity(d.getCapacity());
 				float recommendedOut = 0;
-				float level = d.getLevel() + recieved.getInflow();
+				float level = d.getLevel() + response.getInflow();
 				if (d.getDownstream() instanceof River){
 					// River downstream
 					River downstream = ((River)d.getDownstream());
@@ -99,19 +100,22 @@ public class DamThread implements Runnable {
 					estimatedPower = recommendedOut * d.getWattsPerLitre();
 				else
 					estimatedPower = d.getMaxWaterForPower()* d.getWattsPerLitre();
-				recieved.setPowerOut(estimatedPower);
-				recieved.setWaterOut(recommendedOut);
+				response.setPowerOut(estimatedPower);
+				response.setWaterOut(recommendedOut);
 				// Send reply [capacity, recommended output (water), estimated power]
-				messages.offer(recieved, 1, TimeUnit.MILLISECONDS);
+				messages.offer(response, 10, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public MessageToPass sendWithTimeout(MessageToPass m) throws InterruptedException {
+	public void send(MessageToPass m) {
 		messages.offer(m);
-		return messages.poll(1, TimeUnit.MILLISECONDS);
+	}
+	
+	public MessageToPass waitForCompletion() throws InterruptedException {
+		return messages.poll(10, TimeUnit.MILLISECONDS);
 	}
 	
 	public Thread init(){
