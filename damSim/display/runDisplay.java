@@ -146,8 +146,6 @@ public class runDisplay {
 		SnowyScheme hydroScheme = constructSnowyScheme();
 
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);
-		// put control in here???
-		// NB: control.stop() to kill all the threads
 		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme);
 	}
 

@@ -237,8 +237,9 @@ public class SnowyScheme {
 	 * @param pumpPower - power for all the pumps
 	 * @throws IncorrectLengthException
 	 */
-	public void increment(float powerDemand) throws IncorrectLengthException {
+	public void increment(float powerDemand, float waterDemand) throws IncorrectLengthException {
 		this.powerDemand = powerDemand; 
+		this.waterDemand = waterDemand;
 		powerOut = 0;
 		rainfall(rainForDams);
 		generatePower(waterForPowerList);
