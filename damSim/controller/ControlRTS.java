@@ -20,6 +20,11 @@ public class ControlRTS implements Runnable {
 	private volatile boolean initialized;
 	private volatile String messageToBeDisplayed;
 	
+	/**
+	 * This creates a new controller for the snowy hydro scheme
+	 * @param s - scheme to control
+	 * @throws Exception
+	 */
 	public ControlRTS(SnowyScheme s) throws Exception{
 		if(!s.validateModel())
 			throw new Exception("This model is invalid! Cannot control invalid model");
@@ -34,23 +39,39 @@ public class ControlRTS implements Runnable {
 		while(!initialized);
 	}
 	
+	/**
+	 * Tell the controller that the power demand has changed
+	 * @param p
+	 */
 	public void setPowerDemand(float p){
 		powerDemand = p;
 	}
 	
+	/**
+	 * Tell the controller that the water demand has changed
+	 * @param w
+	 */
 	public void setWaterDemand(float w){
 		waterDemand = w;
 	}
 	
+	/**
+	 * Get any status msgs from the controller
+	 * @return
+	 */
 	public String getMessage(){
 		String tmp = messageToBeDisplayed;
 		messageToBeDisplayed = null;
 		return tmp;
 	}
 	
+	/**
+	 * Start a thread at each dam
+	 */
 	private void startDamThreads(){
 		damThreads = new ArrayList<DamThread>();
 		rootDams = new ArrayList<DamThread>();
+		// For each dam, create the thread
 		for(Dam d : s.getDams()){
 			List<Pipe> pipes = new ArrayList<Pipe>();
 			for(Pipe p : s.getPipes()){
@@ -71,6 +92,7 @@ public class ControlRTS implements Runnable {
 			if(d.equals(s.getWaterSupply()))
 				waterSupply = damThreads.get(damThreads.size() - 1);
 		}
+		// Find the upstream and downstream threads of each
 		for(DamThread d : damThreads){
 			for(DamThread d2: damThreads){
 				if(d.getDam().getDownstream().getDownstream().equals(d2.getDam())){
@@ -79,6 +101,7 @@ public class ControlRTS implements Runnable {
 				}
 			}
 		}
+		// Check pipes as well for up/downstream
 		for(Pipe p : s.getPipes()){
 			DamThread uphill = null;
 			DamThread downhill = null;
@@ -102,7 +125,6 @@ public class ControlRTS implements Runnable {
 		List<Float> waterForPowerList;
 		List<Float> waterOutList;
 		List<Float> pumpPowerList;
-		//MessageToPass m = new MessageToPass(0);
 		isRunning = true;
 		while(isRunning){
 			// Create a new set of lists so that the simulation doesn't use it until its ready
@@ -110,6 +132,7 @@ public class ControlRTS implements Runnable {
 			waterOutList = new ArrayList<Float>();
 			pumpPowerList = new ArrayList<Float>();
 			
+			// Fill them all with zeros
 			for(int i = 0; i < s.getDams().size(); i++){
 				waterForPowerList.add((float) 0);
 				waterOutList.add((float) 0);
@@ -118,6 +141,7 @@ public class ControlRTS implements Runnable {
 				pumpPowerList.add((float) 0);
 			}
 			float predictedPower = 0;
+			
 			// Look at all the threads and fill in the values in the list
 			for(DamThread d : damThreads){
 				float inflow = 0; 
@@ -151,6 +175,7 @@ public class ControlRTS implements Runnable {
 								pumpPowerList.set(index, -betweenPipe.getMaxWater());
 							else{
 								float diff = up.getDam().getPercentage() - d.getDam().getPercentage() - (float) 20;
+								// A linear increase to max
 								float waterToRel =  - (float) ((betweenPipe.getMaxWater()/30)*diff);
 								pumpPowerList.set(index, waterToRel);
 							}
@@ -170,7 +195,13 @@ public class ControlRTS implements Runnable {
 				}
 				MessageToPass m = new MessageToPass(0);
 				m.setInflow(inflow);
-				d.send(m);
+				try{
+					d.send(m);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					System.out.println("Could not send to sensor in dam " + d.getDam());
+				}
+				
 			}
 			
 			// Collect responses from all dams
@@ -184,6 +215,7 @@ public class ControlRTS implements Runnable {
 				}
 			}
 			
+			// Look at what the dams replied as an initial estimate of water to pump down
 			for(DamThread d : damThreads){
 				for(int i = 0; i < s.getDams().size(); i++){
 					if(d.getDam().equals(s.getDams().get(i))){
@@ -203,12 +235,7 @@ public class ControlRTS implements Runnable {
 				}
 			}
 			
-			// need to look at upstream/downstream needs more or less water
-			// Need to use pipes
-			
-			
-			
-			//	need to look at power/water demand
+			// Check there is enough water to drink
 			if(waterSupply.getDam().getCapacity() < waterDemand){
 				for(DamThread up: waterSupply.getUpstream()){
 					// increase upstream supply by 25%
@@ -243,10 +270,12 @@ public class ControlRTS implements Runnable {
 					}
 				}
 			}
+			// Update the predicted power so that we can guess how much we need
 			for(Float pumpP : pumpPowerList){
 				if(pumpP > 0)
 					predictedPower -= pumpP; 
 			}
+			// If we dont have enough power, generate some more
 			if(predictedPower < powerDemand){
 				messageToBeDisplayed = "Power Low: warning";
 				// calculate power that can gain
@@ -297,7 +326,7 @@ public class ControlRTS implements Runnable {
 				System.out.println(messageToBeDisplayed);
 			}
 			try{
-				// send the values
+				// send the control signals to the scheme
 				s.setWaterOut(waterOutList);
 				s.setWaterForPower(waterForPowerList);
 				s.setPumpPowers(pumpPowerList);
@@ -312,6 +341,9 @@ public class ControlRTS implements Runnable {
 		}
 	}
 	
+	/**
+	 * Method to stop the controller
+	 */
 	public void stop(){
 		// kill all damThreads and self
 		isRunning = false;

@@ -52,6 +52,19 @@ public class DamThread implements Runnable {
 		return downstream;
 	}
 	
+	/**
+	 * This method estimates how much water should be output
+	 * It is based on the levels required for the river
+	 * It is a discontinuous function. when the dam is below the level 0.5-delta
+	 * The river will start to dry up. When it is above 0.5+delta it will begin to flood
+	 * The middle it will increase the flow as the level rises and decrease as it falls
+	 * @param min
+	 * @param max
+	 * @param delta
+	 * @param k
+	 * @param l
+	 * @return
+	 */
 	private float calculateOut(float min, float max, float delta, float k, float l){
 		/*
 		 * linear for points below, then inverse tan, then linear above
@@ -78,11 +91,10 @@ public class DamThread implements Runnable {
 			try {
 				// Wait for message [expected inflow]
 				recieved = messages.take();
-				MessageToPass response = new MessageToPass(0);
 				// Calculate recommended params and set in message
-				response.setCapacity(d.getCapacity());
+				recieved.setCapacity(d.getCapacity());
 				float recommendedOut = 0;
-				float level = (d.getLevel() + response.getInflow())/d.getCapacity();
+				float level = (d.getLevel() + recieved.getInflow())/d.getCapacity();
 				if (d.getDownstream() instanceof River){
 					// River downstream
 					River downstream = ((River)d.getDownstream());
@@ -100,24 +112,38 @@ public class DamThread implements Runnable {
 					estimatedPower = recommendedOut * d.getWattsPerLitre();
 				else
 					estimatedPower = d.getMaxWaterForPower()* d.getWattsPerLitre();
-				response.setPowerOut(estimatedPower);
-				response.setWaterOut(recommendedOut);
+				recieved.setPowerOut(estimatedPower);
+				recieved.setWaterOut(recommendedOut);
 				// Send reply [capacity, recommended output (water), estimated power]
-				messages.offer(response, 10, TimeUnit.MILLISECONDS);
+				messages.offer(recieved, 10, TimeUnit.MILLISECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void send(MessageToPass m) {
-		messages.offer(m);
+	/**
+	 * Send a message to this thread
+	 * @param m - Message to pass to this thread
+	 * @throws InterruptedException 
+	 */
+	public void send(MessageToPass m) throws InterruptedException {
+		messages.offer(m, 1, TimeUnit.MILLISECONDS);
 	}
 	
+	/**
+	 * Wait for the thread to return
+	 * @return
+	 * @throws InterruptedException
+	 */
 	public MessageToPass waitForCompletion() throws InterruptedException {
 		return messages.poll(10, TimeUnit.MILLISECONDS);
 	}
 	
+	/**
+	 * Init thread
+	 * @return
+	 */
 	public Thread init(){
 		if(t == null){
 			t = new Thread(this);
@@ -126,6 +152,9 @@ public class DamThread implements Runnable {
 		return t;
 	}
 	
+	/**
+	 * Stop the dam thread
+	 */
 	public void stop(){
 		isRunning = false;
 		t.interrupt();
