@@ -38,6 +38,7 @@ public class SnowyScheme {
 		waterForPowerList = new ArrayList<Float>();
 		waterOutList = new ArrayList<Float>(); 
 		pumpPowerList = new ArrayList<Float>();
+		rainForDams = new ArrayList<Float>();
 	}
 
 	/**
