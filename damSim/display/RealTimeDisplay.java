@@ -34,6 +34,7 @@ public class RealTimeDisplay {
 	private JFrame realTimeMonitor;
 	private damMonitor damPanel;
 	private Runnable doWorkRunnable;
+	private riverMonitor riverPanel;
 
 	/**
 	 * 
@@ -158,7 +159,115 @@ public class RealTimeDisplay {
 		 * 
 		 */
 		private static final long serialVersionUID = 7277111165113017112L;
+		
+		private Map<River, List<JLabel>> riverLabels;
 
+		private riverMonitor() {
+			// Get the dam List from the scheme and create an information panel
+			// for each one.
+			List<River> schemeRivers = system.getRivers();
+			// Create a new GridLayout for the JPanel.
+			setLayout(new GridLayout(0, 3, 20, 20));
+			// Create new linked hash map.
+			riverLabels = new LinkedHashMap<River, List<JLabel>>(schemeRivers.size());
+			// Iterate through the Dam List and create an information panel for
+			// each dam.
+			for (River river: schemeRivers) {
+				// Create arrayList of JLabels based on the dam information.
+				List<JLabel> labels = createJLabels(river);
+				// Add labels and dam to the LinkedHashMap.
+				riverLabels.put(river, labels);
+				// Add each information panel to the main JPanel.
+				add(createRiverInformation(river, labels));
+			}
+		}
+
+		/**
+		 * Function to create a array list of JLabels for a particular dam.
+		 * @param dam
+		 * @return
+		 */
+		private List<JLabel> createJLabels(River river) {
+			ArrayList<JLabel> labels = new ArrayList<JLabel>();
+			// Create labels that will be used for each Dam field.
+			JLabel riverName = new JLabel(river.getName());
+			JLabel riverFlow = new JLabel("Flow: "
+					+ Float.toString(river.getFlow()));
+			JLabel riverMax = new JLabel("Max: "
+					+ Float.toString(river.getMax()));
+			JLabel riverMin = new JLabel("Min: "
+					+ Float.toString(river.getMin()));
+			JLabel riverLength = new JLabel("Length: "
+					+ Float.toString(river.getLength()));
+			// Set the alignment attributes for the JLabels.
+			riverName.setAlignmentX(CENTER_ALIGNMENT);
+			riverFlow.setAlignmentX(CENTER_ALIGNMENT);
+			riverMax.setAlignmentX(CENTER_ALIGNMENT);
+			riverMin.setAlignmentX(CENTER_ALIGNMENT);
+			riverLength.setAlignmentX(CENTER_ALIGNMENT);
+			// Add the JLabel elements to the Array List.
+			labels.add(riverName);
+			labels.add(riverFlow);
+			labels.add(riverMax);
+			labels.add(riverMin);
+			labels.add(riverLength);
+
+			return labels;
+		}
+
+		/**
+		 * Method to create a JPanel that provides information about a dam.
+		 * 
+		 * @param dam
+		 * @return
+		 */
+		private JPanel createRiverInformation(River river, List<JLabel> labels) {
+			// Create the JPanel to hold all the information.
+			JPanel riverInfo = new JPanel();
+			// Set layout attributes for the JPanel.
+			riverInfo.setLayout(new BoxLayout(riverInfo, BoxLayout.Y_AXIS));
+			// Attach the JLabels to the JPanel.
+			for (JLabel label : labels) {
+				riverInfo.add(label);
+			}
+
+			return riverInfo;
+		}
+		
+		/**
+		 * Function that updates the JLabels in the dam monitor panel.
+		 */
+		 public void updateTextLabels() {
+			 // Create place holders for the dam and JLabels list.
+			 River river;
+			 List<JLabel> labels;
+			 // Cycle though all the dams and update their respective JLabels.
+			 for (Map.Entry<River, List<JLabel>> entry : riverLabels.entrySet()) {
+				 river = entry.getKey();
+				 labels = entry.getValue();
+				 labels.get(0).setText(river.getName());
+				 labels.get(1).setText("Flow: "
+							+ Float.toString(river.getFlow()));
+				 labels.get(2).setText("Max: "
+							+ Float.toString(river.getMax()));
+				 labels.get(3).setText("Min: "
+							+ Float.toString(river.getMin()));
+				 labels.get(4).setText("Length: "
+							+ Float.toString(river.getLength()));
+			 }
+		 }
+	}
+	
+	/**
+	 * 
+	 * @author christopher
+	 *
+	 */
+	private class pipeMonitor extends JPanel {
+		
+		
+		
+		
 	}
 
 	private class abortScheme extends JPanel implements ActionListener {
@@ -224,8 +333,8 @@ public class RealTimeDisplay {
         	SwingUtilities.invokeLater(doWorkRunnable);
         	timer.start();
         }
-    }
-
+    }	
+    
 	/**
 	 * Constructor method for the class.
 	 * 
@@ -237,14 +346,17 @@ public class RealTimeDisplay {
 		this.control = control;
 		// Create the JFrame needed.
 		realTimeMonitor = new JFrame("RTC Snowy Hydro");
+		realTimeMonitor.setLayout(new FlowLayout());
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		// Create the JPanels needed.
 		damPanel = new damMonitor();
+		riverPanel = new riverMonitor();
 		abortScheme abortPanel = new abortScheme();
 		// TODO - add equivalent methods for Rivers. connections etc.
 		// Add the JPanels to the JFrame.
-		realTimeMonitor.add(damPanel, BorderLayout.PAGE_START);
-		realTimeMonitor.add(abortPanel, BorderLayout.PAGE_END);
+		realTimeMonitor.add(damPanel);
+		realTimeMonitor.add(riverPanel);
+		realTimeMonitor.add(abortPanel);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);
 
@@ -252,9 +364,14 @@ public class RealTimeDisplay {
 		// FIXME - need a method that is more efficient.
 		doWorkRunnable = new Runnable() {
 		    public void run() {
+		    	// Update the dam panel.
 		    	damPanel.updateTextLabels();
 		    	damPanel.revalidate();
 		    	damPanel.repaint();
+		    	// Update the river panel.
+		    	riverPanel.updateTextLabels();
+		    	riverPanel.revalidate();
+		    	riverPanel.repaint();
 		    }
 		};
 		SwingUtilities.invokeLater(doWorkRunnable);
@@ -263,6 +380,5 @@ public class RealTimeDisplay {
 		timer.start();	
 		//the actionPerformed method in this class
 	    //is called each time the Timer "goes off
-		
 	}
 }
