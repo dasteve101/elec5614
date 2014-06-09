@@ -108,7 +108,11 @@ public class Pipe{
 		return litres;
     }
     
-    public String toString(){
+    public String getName() {
+		return name;
+	}
+
+	public String toString(){
     	String s = "Pipe " + name + "\n";
     	s += "From " + uphill.getName() + "\n";
     	s += "To " + downhill.getName() + "\n";

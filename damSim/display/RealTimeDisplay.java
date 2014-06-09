@@ -34,6 +34,7 @@ public class RealTimeDisplay {
 	private damMonitor damPanel;
 	private Runnable doWorkRunnable;
 	private riverMonitor riverPanel;
+	private pipeMonitor pipePanel;
 
 	/**
 	 * 
@@ -266,7 +267,108 @@ public class RealTimeDisplay {
 	 */
 	private class pipeMonitor extends JPanel {
 		
+		private Map<Pipe, List<JLabel>> pipeLabels;
+
+		private pipeMonitor() {
+			// Get the dam List from the scheme and create an information panel
+			// for each one.
+			List<Pipe> schemePipes = system.getPipes();
+			// Create a new GridLayout for the JPanel.
+			setLayout(new GridLayout(0, 3, 20, 20));
+			// Create new linked hash map.
+			pipeLabels = new LinkedHashMap<Pipe, List<JLabel>>(schemePipes.size());
+			// Iterate through the Dam List and create an information panel for
+			// each dam.
+			for (Pipe pipe: schemePipes) {
+				// Create arrayList of JLabels based on the dam information.
+				List<JLabel> labels = createJLabels(pipe);
+				// Add labels and dam to the LinkedHashMap.
+				pipeLabels.put(pipe, labels);
+				// Add each information panel to the main JPanel.
+				add(createPipeInformation(pipe, labels));
+			}
+		}
+
+		/**
+		 * Function to create a array list of JLabels for a particular dam.
+		 * @param dam
+		 * @return
+		 */
+		private List<JLabel> createJLabels(Pipe pipe) {
+			ArrayList<JLabel> labels = new ArrayList<JLabel>();
+			// Create labels that will be used for each Dam field.
+			JLabel pipeName = new JLabel(pipe.getName());
+			JLabel pipePower = new JLabel("Max Power: "
+					+ Float.toString(pipe.getMaxPower()));
+			JLabel pipeMaxWater = new JLabel("Max Water: "
+					+ Float.toString(pipe.getMaxWater()));
+			JLabel pipeUphill = new JLabel("Uphill: "
+					+ (pipe.getUphill().getName()));
+			JLabel pipeDownhill = new JLabel("Downhill: "
+					+ (pipe.getDownhill().getName()));
+			JLabel pipeCoeff = new JLabel("Coefficient: "
+					+ Float.toString(pipe.getCoeff()));	
+			// Set the alignment attributes for the JLabels.
+			pipeName.setAlignmentX(CENTER_ALIGNMENT);
+			pipePower.setAlignmentX(CENTER_ALIGNMENT);
+			pipeMaxWater.setAlignmentX(CENTER_ALIGNMENT);
+			pipeUphill.setAlignmentX(CENTER_ALIGNMENT);
+			pipeDownhill.setAlignmentX(CENTER_ALIGNMENT);
+			pipeCoeff.setAlignmentX(CENTER_ALIGNMENT);
+			// Add the JLabel elements to the Array List.
+			labels.add(pipeName);
+			labels.add(pipePower);
+			labels.add(pipeMaxWater);
+			labels.add(pipeUphill);
+			labels.add(pipeDownhill);
+			labels.add(pipeCoeff);
+
+			return labels;
+		}
+
+		/**
+		 * Method to create a JPanel that provides information about a dam.
+		 * 
+		 * @param dam
+		 * @return
+		 */
+		private JPanel createPipeInformation(Pipe pipe, List<JLabel> labels) {
+			// Create the JPanel to hold all the information.
+			JPanel pipeInfo = new JPanel();
+			// Set layout attributes for the JPanel.
+			pipeInfo.setLayout(new BoxLayout(pipeInfo, BoxLayout.Y_AXIS));
+			// Attach the JLabels to the JPanel.
+			for (JLabel label : labels) {
+				pipeInfo.add(label);
+			}
+
+			return pipeInfo;
+		}
 		
+		/**
+		 * Function that updates the JLabels in the dam monitor panel.
+		 */
+		 public void updateTextLabels() {
+			 // Create place holders for the dam and JLabels list.
+			 Pipe pipe;
+			 List<JLabel> labels;
+			 // Cycle though all the dams and update their respective JLabels.
+			 for (Map.Entry<Pipe, List<JLabel>> entry : pipeLabels.entrySet()) {
+				 pipe = entry.getKey();
+				 labels = entry.getValue();
+				 labels.get(0).setText(pipe.getName());
+				 labels.get(1).setText("Max Water: "
+							+ Float.toString(pipe.getMaxWater()));
+				 labels.get(2).setText("Max Water: "
+							+ Float.toString(pipe.getMaxWater()));
+				 labels.get(3).setText("Uphill: "
+							+ (pipe.getUphill().getName()));
+				 labels.get(4).setText("Downhill: "
+							+ (pipe.getDownhill().getName()));
+				 labels.get(5).setText("Coefficient: "
+							+ Float.toString(pipe.getCoeff()));
+			 }
+		 }	
 		
 		
 	}
@@ -325,11 +427,13 @@ public class RealTimeDisplay {
 		// Create the JPanels needed.
 		damPanel = new damMonitor();
 		riverPanel = new riverMonitor();
+		pipePanel = new pipeMonitor();
 		abortScheme abortPanel = new abortScheme();
 		// TODO - add equivalent methods for Rivers. connections etc.
 		// Add the JPanels to the JFrame.
 		realTimeMonitor.add(damPanel);
 		realTimeMonitor.add(riverPanel);
+		realTimeMonitor.add(pipePanel);
 		realTimeMonitor.add(abortPanel);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);
@@ -346,6 +450,10 @@ public class RealTimeDisplay {
 		    	riverPanel.updateTextLabels();
 		    	riverPanel.revalidate();
 		    	riverPanel.repaint();
+		    	// Update the pipe panel.
+		    	pipePanel.updateTextLabels();
+		    	pipePanel.revalidate();
+		    	pipePanel.repaint();
 		    }
 		};
 		SwingUtilities.invokeLater(doWorkRunnable);
