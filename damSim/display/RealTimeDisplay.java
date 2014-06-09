@@ -367,8 +367,8 @@ public class RealTimeDisplay {
 				 pipe = entry.getKey();
 				 labels = entry.getValue();
 				 labels.get(0).setText(pipe.getName());
-				 labels.get(1).setText("Max Water: "
-							+ Float.toString(pipe.getMaxWater()));
+				 labels.get(1).setText("Max Power: "
+							+ Float.toString(pipe.getMaxPower()));
 				 labels.get(2).setText("Max Water: "
 							+ Float.toString(pipe.getMaxWater()));
 				 labels.get(3).setText("Uphill: "
