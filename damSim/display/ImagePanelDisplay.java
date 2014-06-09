@@ -234,19 +234,7 @@ public class ImagePanelDisplay {
 			} else if (buttonEvent == damRainLevelButton) {
 				// FIXME - Test variable.
 				powerDemand = 1234;
-				ArrayList<Float> rainForDams = getTextFieldRainValues();
-				System.out.println("rainForDams List size:" + rainForDams.size());
-				System.out.println("Dams List size:" + observedScheme.getDams().size());
-				// TODO - determine how to use previous values. Take into account variables being used for the first time.
-				// Increment the Hydro Scheme.
-				try {
-					observedScheme.increment(rainForDams, powerDemand);
-					//this.repaint();
-				} catch (IncorrectLengthException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					System.out.println("Good work dumbass!");
-				}
+				incrementTheHydroScheme();
 			} else if (buttonEvent == waterDemandButton) {
 				// TODO - determine whether this is ever going to be implemented or not.
 				String value = demandChange.getText();
@@ -255,24 +243,30 @@ public class ImagePanelDisplay {
 				// FIXME - make these common instructions more modular.
 				// FIXME - Test variable.
 				powerDemand = 1234;
-				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
-				ArrayList<Float> rainForDams = getTextFieldRainValues();
-				System.out.println("rainForDams List size:" + rainForDams.size());
-				System.out.println("Dams List size:" + observedScheme.getDams().size());
-				// TODO - determine how to use previous values. Take into account variables being used for the first time.
-				// Increment the Hydro Scheme.
-				try {
-					observedScheme.increment(rainForDams, powerDemand);
-					//this.repaint();
-				} catch (IncorrectLengthException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					System.out.println("Good work dumbass!");
-				}
+				incrementTheHydroScheme();
 			} else {
 				System.out.println("Awkwards.");
 			}
 
+		}
+
+		/**
+		 * Function that increments the observed hydro scheme.
+		 */
+		private void incrementTheHydroScheme() {
+			ArrayList<Float> rainForDams = getTextFieldRainValues();
+			// Debugging print functions.
+			System.out.println("rainForDams List size:" + rainForDams.size());
+			System.out.println("Dams List size:" + observedScheme.getDams().size());
+			// TODO - determine how to use previous values. Take into account variables being used for the first time.
+			// Increment the Hydro Scheme.
+			try {
+				observedScheme.increment(rainForDams, powerDemand);
+			} catch (IncorrectLengthException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				System.out.println("Good work dumbass!");
+			}
 		}
 
 		/**
