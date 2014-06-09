@@ -163,6 +163,7 @@ public class ControlRTS implements Runnable {
 					}
 				}
 			}
+
 			
 			// need to look at upstream/downstream needs more or less water
 			// Need to use pipes
@@ -210,18 +211,53 @@ public class ControlRTS implements Runnable {
 			}
 			if(predictedPower < powerDemand){
 				messageToBeDisplayed = "Power Low: warning";
-				System.out.println(messageToBeDisplayed);
+				// calculate power that can gain
+				float extraPower = 0;
+				ArrayList<Integer> powerGen = new ArrayList<Integer>();
 				for(int i = 0; i < s.getDams().size(); i++){
 					Dam currDam = s.getDams().get(i);
-					if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
-						if(waterForPowerList.get(i)*1.25 < currDam.getMaxWaterForPower())
-							waterForPowerList.set(i,(float) (waterForPowerList.get(i)*1.25));
-						else
-							waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+					float tmp =  currDam.getWattsPerLitre()*(currDam.getMaxWaterForPower()-waterForPowerList.get(i));
+					if(tmp > 0){
+						extraPower += tmp;
+						powerGen.add(i);
 					}
 				}
+				float diff = extraPower + predictedPower - powerDemand;
+				if(diff < 0){
+					messageToBeDisplayed += "\nCannot meet demand";
+					diff = 0;
+				}
+				extraPower -= diff;
+				// amount to increase power in each
+				
+				while(extraPower > 0){
+					// Keep increasing evenly until the extra power is met
+					int stationsRemaining = powerGen.size();
+					int removeIndex = -1;
+					for(int i : powerGen){
+						Dam currDam = s.getDams().get(i);
+						float amountToIncrease = extraPower/stationsRemaining;
+						float percentageIncrease = 1 + (float) (amountToIncrease/waterForPowerList.get(i));
+						if(waterForPowerList.get(i) < currDam.getMaxWaterForPower()){
+							if(waterForPowerList.get(i)*percentageIncrease < currDam.getMaxWaterForPower()){
+								extraPower -= (float) (waterForPowerList.get(i)*
+										percentageIncrease)*currDam.getWattsPerLitre();
+								waterForPowerList.set(i,(float) (waterForPowerList.get(i)*percentageIncrease));
+							}
+							else{
+								extraPower -= (float) (currDam.getMaxWaterForPower()-waterForPowerList.get(i))*
+										percentageIncrease*currDam.getWattsPerLitre();
+								waterForPowerList.set(i,(float) currDam.getMaxWaterForPower());
+								removeIndex = i;
+							}
+						}
+					}
+					if(removeIndex != -1){
+						powerGen.remove(removeIndex);
+					}
+				}
+				System.out.println(messageToBeDisplayed);
 			}
-			
 			try{
 				// send the values
 				s.setWaterOut(waterOutList);
