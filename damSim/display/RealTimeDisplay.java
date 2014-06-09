@@ -28,7 +28,6 @@ public class RealTimeDisplay {
 	 * Member fields.
 	 */
 	private static SnowyScheme system;
-	private ControlRTS control;
 	private int counter = 10;
 	private Timer timer;
 	private JFrame realTimeMonitor;
@@ -200,9 +199,8 @@ public class RealTimeDisplay {
 	 * @param system - the Snowy Hydro Scheme that this GUI is supposed to
 	 *            monitor.
 	 */
-	public RealTimeDisplay(SnowyScheme scheme, ControlRTS control) {
+	public RealTimeDisplay(SnowyScheme scheme) {
 		system = scheme;
-		this.control = control;
 		// Create the JFrame needed.
 		realTimeMonitor = new JFrame("RTC Snowy Hydro");
 		realTimeMonitor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

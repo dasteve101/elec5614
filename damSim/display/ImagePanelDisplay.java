@@ -10,6 +10,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+import controller.ControlRTS;
+
 import java.util.*;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -26,6 +28,7 @@ import physicalObjects.*;
 public class ImagePanelDisplay {
 
 	private static SnowyScheme observedScheme;
+	private ControlRTS control;
 
 	/**
 	 * Graphically display the Snowy Scheme using the .jpeg images contained in
@@ -354,6 +357,16 @@ public class ImagePanelDisplay {
 		simulation.pack();
 		// Make the two JFrames visible.
 		simulation.setVisible(true);
+		
+		control = null;
+		try {
+			// Start a new thread with the controller
+			control = new ControlRTS(observedScheme);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+		System.out.println("Controller initailized");
 
 	}
 }

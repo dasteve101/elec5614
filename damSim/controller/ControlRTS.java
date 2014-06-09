@@ -163,7 +163,6 @@ public class ControlRTS implements Runnable {
 					}
 				}
 			}
-
 			
 			// need to look at upstream/downstream needs more or less water
 			// Need to use pipes

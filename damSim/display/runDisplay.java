@@ -144,20 +144,11 @@ public class runDisplay {
 	public static void main(String[] args) {
 
 		SnowyScheme hydroScheme = constructSnowyScheme();
-		ControlRTS control = null;
-		try {
-			// Start a new thread with the controller
-			control = new ControlRTS(hydroScheme);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return;
-		}
-		System.out.println("Controller initailized");
 
 		ImagePanelDisplay schemeDisplay = new ImagePanelDisplay(hydroScheme);
 		// put control in here???
 		// NB: control.stop() to kill all the threads
-		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme, control);
+		RealTimeDisplay schemeMonitor = new RealTimeDisplay(hydroScheme);
 	}
 
 }
