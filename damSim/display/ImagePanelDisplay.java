@@ -121,8 +121,6 @@ public class ImagePanelDisplay {
 			// Create JPanel to change the water and power demand of the entire
 			// scheme.
 			add(createDemandController(), c);
-			
-			
 		}
 
 		/**

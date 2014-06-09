@@ -375,41 +375,8 @@ public class RealTimeDisplay {
 							+ Float.toString(pipe.getCoeff()));
 			 }
 		 }	
-		
-		
 	}
 
-	private class abortScheme extends JPanel implements ActionListener {
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -6454401343894962013L;
-		private JButton abortButton;
-
-		private abortScheme() {
-			abortButton = new JButton("ABORT!");
-
-			abortButton.addActionListener(this);
-			add(abortButton);
-
-		}
-
-		// TODO - implement run continuously and by one increment buttons.
-		// TODO - Create JPanel to manually input rain levels into each dam.
-		// TODO - Create JButton to create random distribution for rain levels.
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO - complete this function.
-			if (e.getSource() == abortButton) {
-				System.out.println("That seemed to work.");
-			} else {
-				System.out.println("That fucked up.");
-			}
-		}
-
-	}
-	
     private class TimerListener implements ActionListener {
         public void actionPerformed(ActionEvent evt) {
         	timer.stop();
@@ -437,7 +404,6 @@ public class RealTimeDisplay {
 		damPanel = new damMonitor();
 		riverPanel = new riverMonitor();
 		pipePanel = new pipeMonitor();
-		abortScheme abortPanel = new abortScheme();
 		// Add borders to the different panels.
 		damPanel.setBorder(BorderFactory.createTitledBorder("Dams"));
 		riverPanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
@@ -455,10 +421,6 @@ public class RealTimeDisplay {
 		c.gridy = 1;
 		c.gridwidth = 2;
 		realTimeMonitor.add(pipePanel, c);
-		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 2;
-		realTimeMonitor.add(abortPanel, c);
 		realTimeMonitor.pack();
 		realTimeMonitor.setVisible(true);
 
