@@ -175,7 +175,7 @@ public class SnowyScheme {
 			throw new IncorrectLengthException(dams.size(), waterOut.size());
 		float water = 0;
 
-		for (int i = 0; i <= dams.size() - 1; i++) {
+		for (int i = 0; i < dams.size(); i++) {
 			water += dams.get(i).waterOut(waterOut.get(i));
 		}
 		return water;
@@ -185,8 +185,9 @@ public class SnowyScheme {
 	 * 
 	 */
 	private void timeStepRivers() {
-		for (int i = 0; i <= rivers.size() - 1; i++) {
+		for (int i = 0; i < rivers.size(); i++) {
 			rivers.get(i).timeStep();
+			System.out.println(rivers.get(i));
 		}
 	}
 

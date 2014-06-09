@@ -254,7 +254,7 @@ public class ImagePanelDisplay {
 			} else if (buttonEvent == incrementButton) {
 				// FIXME - make these common instructions more modular.
 				// FIXME - Test variable.
-				powerDemand = 1234;
+				powerDemand = 100;
 				// Go through all the rain level values and create a new Float ArrayList from the rain level values.
 				ArrayList<Float> rainForDams = getTextFieldRainValues();
 				System.out.println("rainForDams List size:" + rainForDams.size());

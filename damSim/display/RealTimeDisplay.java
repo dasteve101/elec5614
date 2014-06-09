@@ -7,11 +7,8 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
-
 import javax.swing.*; 
-
 import controller.ControlRTS;
-
 import physicalObjects.*;
 
 /**
