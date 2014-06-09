@@ -131,7 +131,8 @@ public class ImagePanelDisplay {
 		 */
 		private JPanel createDemandController() {
 			// Create the necessary components.
-			JPanel demandPanel = new JPanel();		// Use the GridBagLayout manager for this.
+			JPanel demandPanel = new JPanel(new GridBagLayout());		// Use the GridBagLayout manager for this.
+			GridBagConstraints c = new GridBagConstraints();
 			JLabel label = new JLabel("Demand Control");
 			waterDemandButton = new JButton("Change Water Demand");
 			powerDemandButton = new JButton("Change Power Demand");
@@ -146,14 +147,39 @@ public class ImagePanelDisplay {
 			incrementButton.addActionListener(this);
 			startButton.addActionListener(this);
 			// Add components to the JPanel.
-			demandPanel.add(powerDemandButton, BorderLayout.WEST);
-			demandPanel.add(waterDemandButton, BorderLayout.EAST);
-			demandPanel.add(damRainLevelButton, BorderLayout.SOUTH);
-			demandPanel.add(demandChange, BorderLayout.NORTH);
-			demandPanel.add(label, BorderLayout.PAGE_START);
-			demandPanel.add(incrementButton, BorderLayout.PAGE_END);
-			demandPanel.add(startButton, BorderLayout.PAGE_END);
-// TODO - fix border layout.
+			c.gridx = 0;
+			c.gridy = 1;
+			c.weightx = 0.5;
+			demandPanel.add(powerDemandButton, c);
+			c.gridx = 1;
+			c.gridy = 1;
+			c.weightx = 0.5;
+			demandPanel.add(waterDemandButton, c);
+			c.gridx = 0;
+			c.gridy = 3;
+			c.weightx = 0.5;
+			c.gridwidth = 2;
+			demandPanel.add(damRainLevelButton, c);
+			c.gridx = 0;
+			c.gridy = 2;
+			c.gridwidth = 2;
+			c.weightx = 0.5;
+			demandPanel.add(demandChange, c);
+			c.gridx = 0;
+			c.gridy = 0;
+			c.gridwidth = 2;
+			c.weightx = 0.5;
+			demandPanel.add(label, c);
+			c.gridx = 1;
+			c.gridy = 4;
+			c.gridwidth = 1;
+			c.weightx = 0.5;
+			demandPanel.add(incrementButton, c);
+			c.gridx = 0;
+			c.gridy = 4;
+			c.weightx = 0.5;
+			demandPanel.add(startButton, c);
+
 			return demandPanel;
 		}
 
@@ -311,8 +337,9 @@ public class ImagePanelDisplay {
 			} else if (buttonEvent == damRainLevelButton) {
 				incrementTheHydroScheme();
 			} else if (buttonEvent == waterDemandButton) {
-				// TODO - determine whether this is ever going to be implemented or not.
+				// Get the string value from the JTextField.
 				String value = demandChange.getText();
+				// Convert the value to a float value.
 				float floatValue = Float.parseFloat(value);
 				waterDemand = floatValue;
 				control.setWaterDemand(waterDemand);
