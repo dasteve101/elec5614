@@ -144,10 +144,7 @@ public class ControlRTS implements Runnable {
 								break;
 							}
 						}
-						System.out.println(up.getDam());
-						System.out.println(up.getDam().getPercentage());
-						System.out.println(d.getDam());
-						System.out.println(d.getDam().getPercentage());						
+						// if up has 20% more than down put water down
 						if(up.getDam().getPercentage() > (d.getDam().getPercentage() + 20)){
 							// release water downhill so -ve
 							if(up.getDam().getPercentage() > (d.getDam().getPercentage() + 50))
@@ -158,12 +155,13 @@ public class ControlRTS implements Runnable {
 								pumpPowerList.set(index, waterToRel);
 							}
 						}
+						// if down has 20% more than up pump water up
 						if(up.getDam().getPercentage() < (d.getDam().getPercentage() - 20)){
 							if(up.getDam().getPercentage() < (d.getDam().getPercentage() - 70))
 								pumpPowerList.set(index, betweenPipe.getMaxPower());
 							else{
 								float diff =  - up.getDam().getPercentage() + d.getDam().getPercentage() - (float) 20;
-								float powerToPump = (float) ((betweenPipe.getMaxWater()/50)*diff);
+								float powerToPump = (float) ((betweenPipe.getMaxPower()/50)*diff);
 								pumpPowerList.set(index, powerToPump);
 							}
 						}
