@@ -89,6 +89,7 @@ public class RealTimeDisplay {
 			JLabel damName = new JLabel(dam.getName());
 			if(dam.getMaxWaterForPower() > 0)
 				damName.setForeground(Color.RED);
+			damName.setFont(new Font("Tahoma", Font.BOLD, 16));
 			JLabel damCapacity = new JLabel("Capacity: "
 					+ Float.toString(dam.getCapacity()));
 			JLabel damLevel = new JLabel("Level: "
