@@ -217,6 +217,14 @@ public class RealTimeDisplay {
 		}
 
 	}
+	
+    private class TimerListener implements ActionListener {
+        public void actionPerformed(ActionEvent evt) {
+        	timer.stop();
+        	SwingUtilities.invokeLater(doWorkRunnable);
+        	timer.start();
+        }
+    }
 
 	/**
 	 * Constructor method for the class.
@@ -257,13 +265,4 @@ public class RealTimeDisplay {
 	    //is called each time the Timer "goes off
 		
 	}
-
-    private class TimerListener implements ActionListener {
-        public void actionPerformed(ActionEvent evt) {
-        	timer.stop();
-        	SwingUtilities.invokeLater(doWorkRunnable);
-        	timer.start();
-        }
-    }
-
 }
