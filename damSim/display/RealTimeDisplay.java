@@ -278,7 +278,7 @@ public class RealTimeDisplay {
 			// for each one.
 			List<Pipe> schemePipes = system.getPipes();
 			// Create a new GridLayout for the JPanel.
-			setLayout(new GridLayout(0, 1, 20, 20));
+			setLayout(new GridLayout(0, 3, 20, 20));
 			// Create new linked hash map.
 			pipeLabels = new LinkedHashMap<Pipe, List<JLabel>>(schemePipes.size());
 			// Iterate through the Dam List and create an information panel for
@@ -438,7 +438,7 @@ public class RealTimeDisplay {
 		// Add borders to the different panels.
 		damPanel.setBorder(BorderFactory.createTitledBorder("Dams"));
 		riverPanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
-		pipePanel.setBorder(BorderFactory.createTitledBorder("Pipes"));
+		pipePanel.setBorder(BorderFactory.createTitledBorder("Rivers"));
 		// Add the JPanels to the JFrame.
 		realTimeMonitor.add(damPanel);
 		realTimeMonitor.add(riverPanel);
